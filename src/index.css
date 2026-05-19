@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;     /* #F8F9FA */
+    --foreground: 0 0% 10%;     /* #1A1A1A */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --primary: 160 100% 10%;    /* #003322 – vert profond */
+    --primary-foreground: 0 0% 97%;
+    --secondary: 45 70% 50%;    /* #D4AF37 – or */
+    --secondary-foreground: 160 100% 10%;
+    --accent: 45 70% 50%;
+    --accent-foreground: 160 100% 10%;
+    --border: 45 70% 50%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-primary;
+  }
+}
