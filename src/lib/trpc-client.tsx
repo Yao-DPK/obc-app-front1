@@ -5,14 +5,14 @@ import { trpc } from './trpc';
 import { useAuth } from '../hooks/useAuth';
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const { access_token } = useAuth();
+  const { accessToken } = useAuth();
   const queryClient = new QueryClient();
   const trpcClient = trpc.createClient({
     links: [
       httpBatchLink({
         url: '/trpc',
         headers() {
-          return access_token ? { Authorization: `Bearer ${access_token}` } : {};
+          return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
         },
       }),
     ],
