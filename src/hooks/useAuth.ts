@@ -1,6 +1,6 @@
 // src/hooks/useAuth.ts
 import { create } from 'zustand';
-import axios from '@/lib/axios';
+import axios from 'src/lib/axios';
 
 interface User {
   id: number;
@@ -19,7 +19,7 @@ interface AuthStore {
   restoreSession: () => Promise<void>;
 }
 
-export const useAuth = create<AuthStore>((set, get) => ({
+export const useAuth = create<AuthStore>((set) => ({
   user: null,
   accessToken: null,
   isLoading: true,

@@ -67,13 +67,16 @@ const attestationSchema = z.object({
 type JoueurFormData = z.infer<typeof joueurInfoSchema>;
 type AttestationData = z.infer<typeof attestationSchema>;
 
+// Union type for the whole form (both steps)
+type FullFormData = JoueurFormData & AttestationData;
+
 export default function InscriptionJoueur() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isSelfManaged, setIsSelfManaged] = useState(false);
-  const [signatureFile, setSignatureFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Use a single form with the union type, but conditionally apply resolver
   const {
     register,
     control,
@@ -82,8 +85,9 @@ export default function InscriptionJoueur() {
     watch,
     setValue,
     getValues,
-  } = useForm<JoueurFormData & AttestationData>({
-    resolver: zodResolver(step === 1 ? joueurInfoSchema : attestationSchema),
+  } = useForm<FullFormData>({
+    // Cast resolver to any to avoid union type mismatch
+    resolver: (step === 1 ? zodResolver(joueurInfoSchema) : zodResolver(attestationSchema)) as any,
     defaultValues: {
       gender: 'M',
       isSelfManaged: false,
@@ -101,20 +105,21 @@ export default function InscriptionJoueur() {
     name: 'guardians',
   });
 
-  const onNextStep = (data: JoueurFormData) => {
-    // On passe à l’étape 2
+  const onNextStep = (_data: JoueurFormData) => {
     setStep(2);
   };
 
-  const onSubmitFinal = async (data: AttestationData) => {
+  const onSubmitFinal = async (_data: AttestationData) => {
     const step1Data = getValues() as JoueurFormData;
+    const step2Data = getValues() as AttestationData;
     const payload = {
       step1: step1Data,
-      step2: data,
+      step2: step2Data,
     };
     const formData = new FormData();
     formData.append('data', JSON.stringify(payload));
-    if (signatureFile) formData.append('signature', signatureFile);
+    const file = getValues('signatureFile');
+    if (file) formData.append('signature', file);
 
     setIsSubmitting(true);
     try {
@@ -267,7 +272,6 @@ export default function InscriptionJoueur() {
 
   const step2Fields = (
     <div className="space-y-6">
-      {/* Règlement */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="font-bold text-primary">Règlement</h3>
         <p className="text-sm">
@@ -276,7 +280,6 @@ export default function InscriptionJoueur() {
         </p>
       </div>
 
-      {/* Signataire */}
       <div>
         <Label>Signataire de l'attestation</Label>
         <Select
@@ -308,7 +311,6 @@ export default function InscriptionJoueur() {
         </Select>
       </div>
 
-      {/* Choix du garant (si guardian) */}
       {watch('signatoryType') === 'guardian' && (
         <div className="mt-2">
           <Label>Choisir le garant</Label>
@@ -363,8 +365,7 @@ export default function InscriptionJoueur() {
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            setSignatureFile(file || null);
-            setValue('signatureFile', file);
+            setValue('signatureFile', file as any); // force accept undefined, but schema will catch
           }}
         />
         {errors.signatureFile && <p className="text-red-500 text-sm">{errors.signatureFile.message}</p>}
@@ -388,7 +389,7 @@ export default function InscriptionJoueur() {
         </CardHeader>
         <CardContent>
           <form
-            onSubmit={handleSubmit(step === 1 ? onNextStep : onSubmitFinal)}
+            onSubmit={handleSubmit(step === 1 ? onNextStep as any : onSubmitFinal as any)}
             className="space-y-6"
           >
             {step === 1 ? step1Fields : step2Fields}
