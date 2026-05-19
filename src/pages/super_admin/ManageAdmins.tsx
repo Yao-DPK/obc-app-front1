@@ -3,9 +3,9 @@ import { PageHeader } from './ui/PageHeader';
 import { DataTable } from './ui/DataTable';
 import { useReactTable, getCoreRowModel, createColumnHelper } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 'src/components/ui/dialog';
+import { Input } from 'src/components/ui/input';
+import { Label } from 'src/components/ui/label';
 import { toast } from 'sonner';
 
 // Type Admin

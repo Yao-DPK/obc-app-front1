@@ -6,7 +6,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-  } from '@/components/ui/table';
+  } from 'src/components/ui/table';
   import type { flexRender, Table as TanStackTable } from '@tanstack/react-table';
   
   interface DataTableProps<TData> {

@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
-import { useAuth } from 'src/hooks/useAuth';
+//import { useAuth } from 'src/hooks/useAuth';
 
 export default function PlayerDashboard() {
-  const { user } = useAuth();
+  //const { user } = useAuth();
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-heading text-primary">Mon espace</h1>

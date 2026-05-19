@@ -2,12 +2,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from '@/hooks/useAuth';
-import axios from '@/lib/axios';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from 'src/hooks/useAuth';
+import axios from 'src/lib/axios';
+import { Button } from 'src/components/ui/button';
+import { Input } from 'src/components/ui/input';
+import { Label } from 'src/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
 import { toast } from 'sonner';
 
 const profileSchema = z.object({

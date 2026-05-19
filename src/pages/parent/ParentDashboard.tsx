@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
-import { useAuth } from 'src/hooks/useAuth';
+//import { useAuth } from 'src/hooks/useAuth';
 
 const mockChildren = [
   { id: 1, name: 'Thomas', status: 'inscrit', documents: 2, paiement: 'à jour' },
@@ -7,7 +7,7 @@ const mockChildren = [
 ];
 
 export default function ParentDashboard() {
-  const { user } = useAuth();
+  //const { user } = useAuth();
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-heading text-primary">Tableau de bord</h1>

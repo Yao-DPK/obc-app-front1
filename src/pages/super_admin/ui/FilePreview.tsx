@@ -1,8 +1,8 @@
 // src/components/admin/FilePreview.tsx
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Eye, FileText, Image } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from 'src/components/ui/dialog';
+import { Button } from 'src/components/ui/button';
+import { Eye } from 'lucide-react';
 
 interface FilePreviewProps {
   url: string;

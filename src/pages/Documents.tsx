@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 's
 import { toast } from 'sonner';
 import { Upload, FileText, CheckCircle, Clock } from 'lucide-react';
 import axios from 'axios';
+import { trpc } from 'src/lib/trpc';
 
 export default function Documents() {
   const { user } = useAuth();

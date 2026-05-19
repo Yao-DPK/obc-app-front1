@@ -1,10 +1,4 @@
 // src/components/layout/Header.tsx
-import { Link } from 'react-router-dom';
-import { Menu, X, LogOut, User } from 'lucide-react';
-import { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { Button } from '../ui/button';
-import logo from '../../assets/OBC.png'
 
 export function Footer() {
 

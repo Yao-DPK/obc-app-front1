@@ -1,5 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 import { Users, Shield, FileText, CreditCard, TrendingUp } from 'lucide-react';
 import { PageHeader } from './ui/PageHeader';
 import { StatCard } from '../../components/ui/StatCard';
