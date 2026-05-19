@@ -14,7 +14,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "types": ["node"],
-    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "files": [],
   "references": [

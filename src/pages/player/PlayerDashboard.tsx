@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/useAuth';
+import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
+import { useAuth } from 'src/hooks/useAuth';
 
 export default function PlayerDashboard() {
   const { user } = useAuth();

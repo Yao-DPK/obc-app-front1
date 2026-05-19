@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/useAuth';
+import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
+import { useAuth } from 'src/hooks/useAuth';
 
 const mockChildren = [
   { id: 1, name: 'Thomas', status: 'inscrit', documents: 2, paiement: 'à jour' },

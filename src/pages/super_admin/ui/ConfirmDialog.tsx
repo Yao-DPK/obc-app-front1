@@ -8,7 +8,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-  } from '@/components/ui/alert-dialog';
+  } from 'src/components/ui/alert-dialog';
   
   // Si vous n'avez pas alert-dialog, installez-le :
   // npx shadcn-ui@latest add alert-dialog
