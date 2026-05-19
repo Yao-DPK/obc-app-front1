@@ -8,7 +8,7 @@ import { Input } from 'src/components/ui/input';
 import { Label } from 'src/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select';
 import { toast } from 'sonner';
-import { Upload, FileText, CheckCircle, Clock } from 'lucide-react';
+import { Upload, CheckCircle, Clock } from 'lucide-react';
 import axios from 'axios';
 import { trpc } from 'src/lib/trpc';
 
@@ -35,7 +35,7 @@ export default function Documents() {
       setDocType('certificat_medical');
       setIsObligatory(false);
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err: any) => toast.error(err.message),
   });
 
   const handleUpload = async () => {
@@ -138,7 +138,7 @@ export default function Documents() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {documents?.map((doc) => (
+                {documents?.map((doc: any) => (
                   <TableRow key={doc.id}>
                     <TableCell>{doc.type}</TableCell>
                     <TableCell className="flex items-center gap-2">
