@@ -5,21 +5,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { trpc } from '@/lib/trpc';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+import axios from 'axios';
+import { Button } from 'src/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
+import { Input } from 'src/components/ui/input';
+import { Label } from 'src/components/ui/label';
+import { Checkbox } from 'src/components/ui/checkbox';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea'; // si shadcn fournit Textarea
-import axios from 'axios';
+} from 'src/components/ui/select';
 
 // Schéma de la première étape
 const joueurInfoSchema = z.object({
@@ -66,12 +64,6 @@ const attestationSchema = z.object({
   }),
 });
 
-// Union des deux schémas
-const fullRegistrationSchema = z.object({
-  step1: joueurInfoSchema,
-  step2: attestationSchema,
-});
-
 type JoueurFormData = z.infer<typeof joueurInfoSchema>;
 type AttestationData = z.infer<typeof attestationSchema>;
 
@@ -80,6 +72,7 @@ export default function InscriptionJoueur() {
   const [step, setStep] = useState(1);
   const [isSelfManaged, setIsSelfManaged] = useState(false);
   const [signatureFile, setSignatureFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -108,23 +101,12 @@ export default function InscriptionJoueur() {
     name: 'guardians',
   });
 
-  const mutation = trpc.inscription.preRegister.useMutation({
-    onSuccess: () => {
-      toast.success('Inscription soumise ! Vérifiez votre email pour la suite.');
-      navigate('/login');
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
   const onNextStep = (data: JoueurFormData) => {
-    // Stocker les données de l’étape 1 dans le state (ou via le formulaire)
     // On passe à l’étape 2
-    console.log("step: ", step );
     setStep(2);
   };
 
   const onSubmitFinal = async (data: AttestationData) => {
-    console.log("step2: ", step );
     const step1Data = getValues() as JoueurFormData;
     const payload = {
       step1: step1Data,
@@ -133,9 +115,9 @@ export default function InscriptionJoueur() {
     const formData = new FormData();
     formData.append('data', JSON.stringify(payload));
     if (signatureFile) formData.append('signature', signatureFile);
-    try {
 
-      console.log("Form Data to be sent: ", formData.get('data'));
+    setIsSubmitting(true);
+    try {
       await axios.post('/api/inscription/pre-register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -143,13 +125,14 @@ export default function InscriptionJoueur() {
       navigate('/login');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Erreur');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const step1Fields = (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* ... tous les champs existants ... */}
         <div>
           <Label>Email</Label>
           <Input {...register('email')} />
@@ -267,7 +250,6 @@ export default function InscriptionJoueur() {
         </div>
       )}
 
-      {/* Contact d'urgence (affiché seulement si isSelfManaged) */}
       {isSelfManaged && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -285,6 +267,7 @@ export default function InscriptionJoueur() {
 
   const step2Fields = (
     <div className="space-y-6">
+      {/* Règlement */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="font-bold text-primary">Règlement</h3>
         <p className="text-sm">
@@ -293,6 +276,7 @@ export default function InscriptionJoueur() {
         </p>
       </div>
 
+      {/* Signataire */}
       <div>
         <Label>Signataire de l'attestation</Label>
         <Select
@@ -305,7 +289,6 @@ export default function InscriptionJoueur() {
               setValue('signatoryFullName', `${firstName} ${lastName}`);
               setValue('selectedGuardianIndex', undefined);
             } else {
-              // Sélectionner le premier garant par défaut
               const guardians = getValues('guardians');
               if (guardians && guardians.length > 0) {
                 const firstGuardian = guardians[0];
@@ -325,6 +308,7 @@ export default function InscriptionJoueur() {
         </Select>
       </div>
 
+      {/* Choix du garant (si guardian) */}
       {watch('signatoryType') === 'guardian' && (
         <div className="mt-2">
           <Label>Choisir le garant</Label>
@@ -358,7 +342,7 @@ export default function InscriptionJoueur() {
         <Input {...register('signatoryFullName')} placeholder="ex: Jean Dupont" />
         {errors.signatoryFullName && <p className="text-red-500 text-sm">{errors.signatoryFullName.message}</p>}
       </div>
-      
+
       <div className="border p-4 rounded-lg">
         <p className="font-serif italic">
           Je soussigné(e) <strong>{watch('signatoryFullName') || '___________'}</strong>,<br />
@@ -380,7 +364,7 @@ export default function InscriptionJoueur() {
           onChange={(e) => {
             const file = e.target.files?.[0];
             setSignatureFile(file || null);
-            setValue('signatureFile', file);   // 👈 clé : injecter la valeur dans le formulaire
+            setValue('signatureFile', file);
           }}
         />
         {errors.signatureFile && <p className="text-red-500 text-sm">{errors.signatureFile.message}</p>}
@@ -418,12 +402,12 @@ export default function InscriptionJoueur() {
               <Button
                 variant="secondary"
                 type="submit"
-                disabled={mutation.isLoading}
+                disabled={step === 2 && isSubmitting}
                 className={step === 2 ? 'flex-1' : 'w-full'}
               >
                 {step === 1
                   ? 'Suivant'
-                  : mutation.isLoading
+                  : isSubmitting
                   ? 'Envoi en cours...'
                   : 'Soumettre l’inscription'}
               </Button>
