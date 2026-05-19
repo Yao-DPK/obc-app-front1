@@ -33,7 +33,7 @@ const columns = [
   columnHelper.display({
     id: 'actions',
     header: 'Actions',
-    cell: (info) => (
+    cell: () => (
       <Button variant="destructive" size="sm" onClick={() => toast.info('Fonction à implémenter')}>
         Supprimer
       </Button>
