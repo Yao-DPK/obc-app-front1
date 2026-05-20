@@ -19,7 +19,7 @@ const processQueue = (error: any, token: string | null = null) => {
 
 api.interceptors.request.use((config) => {
   const { accessToken } = useAuth.getState();
-  config.withCredentials = true; // ✅ important for cookies
+  config.withCredentials = true; 
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
