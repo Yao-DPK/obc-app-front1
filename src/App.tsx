@@ -1,6 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './AppRouter';
-import { TRPCProvider } from './lib/trpc-client';
 import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
 
@@ -17,10 +16,9 @@ export default function App() {
   }
   
   return (
-    <TRPCProvider>
       <BrowserRouter>
         <AppRouter />
       </BrowserRouter>
-    </TRPCProvider>
+
   );
 }

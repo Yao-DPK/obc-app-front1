@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from 'src/hooks/useAuth';
 import { Button } from 'src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
@@ -10,7 +10,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 's
 import { toast } from 'sonner';
 import { Upload, CheckCircle, Clock } from 'lucide-react';
 import axios from 'axios';
-import { trpc } from 'src/lib/trpc';
+
+// Types locaux (à adapter selon votre schéma)
+interface Document {
+  id: number;
+  type: string;
+  fileId: string;
+  publicUrl: string;
+  isObligatory: boolean;
+  validatedAt: string | null;
+  uploadedAt: string;
+}
 
 export default function Documents() {
   const { user } = useAuth();
@@ -19,24 +29,26 @@ export default function Documents() {
   const [file, setFile] = useState<File | null>(null);
   const [docType, setDocType] = useState('certificat_medical');
   const [isObligatory, setIsObligatory] = useState(false);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  // Récupération des documents
-  const { data: documents, refetch } = trpc.document.findByUser.useQuery(
-    { userId: user!.id },
-    { enabled: !!user }
-  );
+  // Charger les documents à l'affichage
+  const fetchDocuments = async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const res = await axios.get(`/api/documents/user/${user.id}`);
+      setDocuments(res.data);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Erreur lors du chargement des documents');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const createDocument = trpc.document.create.useMutation({
-    onSuccess: () => {
-      refetch();
-      toast.success('Document ajouté avec succès');
-      setOpen(false);
-      setFile(null);
-      setDocType('certificat_medical');
-      setIsObligatory(false);
-    },
-    onError: (err: any) => toast.error(err.message),
-  });
+  useEffect(() => {
+    fetchDocuments();
+  }, [user]);
 
   const handleUpload = async () => {
     if (!file) {
@@ -45,30 +57,38 @@ export default function Documents() {
     }
     setUploading(true);
     try {
-      // 1. Upload du fichier vers Google Drive via endpoint REST
+      // 1. Upload du fichier vers Google Drive via l'endpoint REST
       const formData = new FormData();
       formData.append('file', file);
-      const uploadRes = await axios.post('/api/upload', formData, {
+      const uploadRes = await axios.post('/api/upload/file', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       const { fileId, publicUrl } = uploadRes.data;
 
-      // 2. Enregistrement des métadonnées via tRPC
-      await createDocument.mutateAsync({
+      // 2. Enregistrement des métadonnées via l'endpoint REST /api/documents
+      await axios.post('/api/documents', {
         userId: user!.id,
         type: docType,
         fileId,
         publicUrl,
         isObligatory,
       });
+
+      toast.success('Document ajouté avec succès');
+      setOpen(false);
+      setFile(null);
+      setDocType('certificat_medical');
+      setIsObligatory(false);
+      // Recharger la liste
+      fetchDocuments();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Erreur lors de l\'upload');
+      toast.error(err.response?.data?.message || 'Erreur lors de l\'upload');
     } finally {
       setUploading(false);
     }
   };
 
-  const getStatusIcon = (doc: any) => {
+  const getStatusIcon = (doc: Document) => {
     return doc.validatedAt ? <CheckCircle className="text-green-500" size={16} /> : <Clock className="text-orange-500" size={16} />;
   };
 
@@ -125,7 +145,9 @@ export default function Documents() {
           <CardTitle>Liste des documents</CardTitle>
         </CardHeader>
         <CardContent>
-          {documents?.length === 0 ? (
+          {loading ? (
+            <p className="text-muted-foreground">Chargement...</p>
+          ) : documents.length === 0 ? (
             <p className="text-muted-foreground">Aucun document pour le moment.</p>
           ) : (
             <Table>
@@ -138,7 +160,7 @@ export default function Documents() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {documents?.map((doc: any) => (
+                {documents.map((doc) => (
                   <TableRow key={doc.id}>
                     <TableCell>{doc.type}</TableCell>
                     <TableCell className="flex items-center gap-2">
