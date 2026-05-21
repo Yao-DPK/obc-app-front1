@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAuth } from 'src/hooks/useAuth';
 
-const api = axios.create({
+const api = await axios.create({
   baseURL: import.meta.env.VITE_API_URL || '',
   withCredentials: true,
 });

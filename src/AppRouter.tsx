@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import SuperAdminDashboard from "./pages/super_admin/SuperAdminDashboard";
 import ManageAdmins from "./pages/super_admin/ManageAdmins";
 import Unauthorized from "./pages/Unauthorized";
+import InscriptionJoueur from "./pages/InscriptionJoueur";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -26,6 +27,7 @@ export function AppRouter() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<InscriptionJoueur />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Route>
 
