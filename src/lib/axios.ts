@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuth } from 'src/hooks/useAuth';
 
 const api = await axios.create({
-  baseURL: 'dvcobc-app-back1.vercel.app',
+  baseURL: import.meta.env.VITE_API_URL || '',
   withCredentials: true,
 });
 
