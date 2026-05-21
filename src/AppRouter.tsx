@@ -25,8 +25,8 @@ export function AppRouter() {
     <Routes>
       {/* Routes publiques */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<InscriptionJoueur />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Route>
