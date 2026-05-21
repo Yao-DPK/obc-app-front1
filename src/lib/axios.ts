@@ -1,25 +1,25 @@
 import axios from 'axios';
 import { useAuth } from 'src/hooks/useAuth';
 
-const api = await axios.create({
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
   withCredentials: true,
 });
 
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach(prom => {
     if (error) prom.reject(error);
-    else prom.resolve(token);
+    else if (token) prom.resolve(token);
   });
   failedQueue = [];
 };
 
 api.interceptors.request.use((config) => {
   const { accessToken } = useAuth.getState();
-  config.withCredentials = true; 
+  config.withCredentials = true;
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
@@ -37,12 +37,17 @@ api.interceptors.response.use(
           return api(originalRequest);
         }).catch(err => Promise.reject(err));
       }
+
       originalRequest._retry = true;
       isRefreshing = true;
+
       try {
-        const res = await axios.post('/auth/refresh', {}, { withCredentials: true });
+        // Appel au refresh – utiliser axios directement pour éviter l’intercepteur
+        const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
         const newAccessToken = res.data.accessToken;
-        useAuth.getState().setAccessToken(newAccessToken);
+        const user = res.data.user; // si le backend renvoie l’utilisateur
+
+        useAuth.getState().setAuth(user, newAccessToken);
         processQueue(null, newAccessToken);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
