@@ -1,16 +1,16 @@
 import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './AppRouter';
 import { useAuth } from './hooks/useAuth';
-//import { useEffect } from 'react';
+import { useEffect } from 'react';
 
 
 export default function App() {
-  const { isLoading } = useAuth();
+  const { restoreSession, isLoading } = useAuth();
 
-  /* useEffect(() => {
+  useEffect(() => {
     restoreSession();
   }, []);
- */
+
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Chargement...</div>;
   }
