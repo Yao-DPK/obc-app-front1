@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: /*`${process.env.VITE_API_URL}`*/ 'https://obc-app-back1.vercel.app',
+        target: `${process.env.VITE_API_URL}`,
         changeOrigin: true,
       },
 
