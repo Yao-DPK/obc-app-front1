@@ -1,5 +1,6 @@
+// src/hooks/useAuth.ts
 import { create } from 'zustand';
-import api from 'src/lib/axios';
+import axios from 'src/lib/axios';
 
 interface User {
   id: number;
@@ -28,9 +29,8 @@ export const useAuth = create<AuthStore>((set) => ({
   restoreSession: async () => {
     set({ isLoading: true });
     try {
-      // Utilisation de l'instance api avec withCredentials: true
-      const res = await api.post('/auth/refresh', {});
-      const { accessToken, user } = res.data;
+      const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+      const { accessToken, user } = res.data; // si backend renvoie user
       if (accessToken) {
         set({ user, accessToken, isLoading: false });
       } else {
