@@ -1,6 +1,5 @@
 // src/hooks/useAuth.ts
 import { create } from 'zustand';
-import axios from 'src/lib/axios';
 import api from 'src/lib/axios';
 
 interface User {
