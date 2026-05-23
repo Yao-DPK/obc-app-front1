@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 
 
 export default function App() {
-  const { restoreSession, isLoading } = useAuth();
+  const { isLoading } = useAuth();
 
-  useEffect(() => {
+  /* useEffect(() => {
     restoreSession();
   }, []);
-
+ */
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Chargement...</div>;
   }
