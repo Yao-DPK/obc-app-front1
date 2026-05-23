@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import axios from 'axios';
 import { Button } from 'src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
 import { Input } from 'src/components/ui/input';
@@ -18,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/select';
+import api from 'src/lib/axios';
 
 // Schéma de la première étape
 const joueurInfoSchema = z.object({
@@ -123,7 +123,7 @@ export default function InscriptionJoueur() {
 
     setIsSubmitting(true);
     try {
-      await axios.post('/api/inscription/pre-register', formData, {
+      await api.post('/api/inscription/pre-register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       toast.success('Inscription soumise !');
