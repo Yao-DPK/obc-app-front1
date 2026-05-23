@@ -17,7 +17,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await api.post('/auth/login', { email, password });
+      const res = await api.post('/api/auth/login', { email, password });
       setAuth(res.data.user, res.data.accessToken);
       navigate('/dashboard');
     } catch (err) {
