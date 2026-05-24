@@ -17,8 +17,10 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
+// ✅ Fix #5 — accès défensif au store
 api.interceptors.request.use((config) => {
-  const { accessToken } = useAuth.getState();
+  const state = useAuth.getState();
+  const accessToken = state?.accessToken;
   config.withCredentials = true;
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
@@ -28,11 +30,20 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
+
+    // ✅ Fix #1 — ne pas tenter un refresh sur /auth/login ou /auth/refresh
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes('/auth/login') &&
+      !originalRequest.url?.includes('/auth/refresh')
+    ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then(token => {
+          // ✅ Fix #6 — headers potentiellement undefined
+          originalRequest.headers = originalRequest.headers ?? {};
           originalRequest.headers.Authorization = `Bearer ${token}`;
           return api(originalRequest);
         }).catch(err => Promise.reject(err));
@@ -42,24 +53,34 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Appel au refresh – utiliser axios directement pour éviter l’intercepteur
-        const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        // ✅ Fix #2 — URL absolue avec baseURL + Fix #4 — timeout sur le refresh
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
+          {},
+          { withCredentials: true, timeout: 5000 }
+        );
+
         const newAccessToken = res.data.accessToken;
-        const user = res.data.user; // si le backend renvoie l’utilisateur
+        const user = res.data.user;
 
         useAuth.getState().setAuth(user, newAccessToken);
         processQueue(null, newAccessToken);
+
+        // ✅ Fix #6 — headers potentiellement undefined
+        originalRequest.headers = originalRequest.headers ?? {};
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         useAuth.getState().logout();
+        // ✅ Fix #3 — event dispatch (assure-toi que le listener est monté dans App.tsx dès le démarrage)
         window.dispatchEvent(new Event('auth:logout'));
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
       }
     }
+
     return Promise.reject(error);
   }
 );
