@@ -1,4 +1,4 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import { PublicLayout } from "./components/layout/PublicLayout";
 import Login from "./pages/Login";
@@ -8,6 +8,7 @@ import SuperAdminDashboard from "./pages/super_admin/SuperAdminDashboard";
 import ManageAdmins from "./pages/super_admin/ManageAdmins";
 import Unauthorized from "./pages/Unauthorized";
 import InscriptionJoueur from "./pages/InscriptionJoueur";
+import { useEffect } from "react";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -20,7 +21,18 @@ function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   return <Outlet />;
 }
 
+
+
 export function AppRouter() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handler = () => navigate('/login');
+    window.addEventListener('auth:logout', handler);
+    return () => window.removeEventListener('auth:logout', handler);
+  }, []);
+  
+
   return (
     <Routes>
       {/* Routes publiques */}

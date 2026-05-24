@@ -11,17 +11,23 @@ import api from '../lib/axios';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLogging, setIsLogging] = useState(false);
   const navigate = useNavigate();
   const { setAuth } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setIsLogging(true);
       const res = await api.post('/api/auth/login', { email, password });
       setAuth(res.data.user, res.data.accessToken);
       navigate('/dashboard');
-    } catch (err) {
-      toast.error('Échec de la connexion');
+    } catch (err:any) {
+      if(err.status == 401){
+        toast.error('Email ou Mot de Passe Incorrect');
+        setIsLogging(false);
+      }
+      
     }
   };
 
@@ -47,7 +53,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <Button type="submit" className="w-full bg-secondary text-primary hover:bg-secondary/90">
+            <Button type="submit" className="w-full bg-secondary text-primary hover:bg-secondary/90" disabled={isLogging}>
               Se connecter
             </Button>
             <p className="text-center text-sm">
