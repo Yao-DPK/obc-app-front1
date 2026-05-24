@@ -25,8 +25,8 @@ export default function Login() {
     } catch (err:any) {
       if(err.status == 401){
         toast.error('Email ou Mot de Passe Incorrect');
-        setIsLogging(false);
       }
+      setIsLogging(false);
       
     }
   };

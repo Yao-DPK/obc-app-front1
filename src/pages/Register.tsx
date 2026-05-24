@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '../components/ui/select';
 import { toast } from 'sonner';
+import api from 'src/lib/axios';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ export default function Register() {
     }
     setIsLoading(true);
     try {
-      await axios.post('/auth/register', { email, password, role });
+      await api.post('/api/auth/register', { email, password, role });
       toast.success('Inscription réussie ! Vous pouvez vous connecter.');
       navigate('/login');
     } catch (err: any) {
