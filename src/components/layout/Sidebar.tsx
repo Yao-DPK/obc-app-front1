@@ -2,8 +2,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
-  LayoutDashboard, FileText, CreditCard, Users, Shield, 
-  UserCircle, Crown, UserPlus, ChevronLeft, ChevronRight, LogOut 
+  LayoutDashboard, Crown, UserPlus, ChevronLeft, ChevronRight, LogOut 
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { Avatar, AvatarFallback } from '../ui/avatar';
