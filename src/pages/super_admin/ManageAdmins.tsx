@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { PageHeader } from './ui/PageHeader';
-import { DataTable } from './ui/DataTable';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { DataTable } from '../../components/ui/DataTable';
 import { useReactTable, getCoreRowModel, createColumnHelper } from '@tanstack/react-table';
 import { Button } from 'src/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 'src/components/ui/dialog';

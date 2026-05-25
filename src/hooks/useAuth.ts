@@ -4,6 +4,8 @@ import axios from 'src/lib/axios';
 
 interface User {
   id: number;
+  firstName: string;
+  lastName: string;
   email: string;
   role: string;
   phone?: string;
@@ -30,7 +32,7 @@ export const useAuth = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
-      const { accessToken, user } = res.data; // si backend renvoie user
+      const { user, accessToken } = res.data; // si backend renvoie user
       if (accessToken) {
         set({ user, accessToken, isLoading: false });
       } else {
