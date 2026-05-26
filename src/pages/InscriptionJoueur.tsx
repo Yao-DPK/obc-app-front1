@@ -18,6 +18,10 @@ import {
   SelectValue,
 } from 'src/components/ui/select';
 import api from 'src/lib/axios';
+import type { inscriptionFile } from '@/types';
+
+
+
 
 // Schéma de la première étape
 const joueurInfoSchema = z.object({
@@ -64,8 +68,22 @@ const attestationSchema = z.object({
   }),
 });
 
+// Schéma pour les documents liés à l'inscription du joueur
+const inscriptionFileSchema = z.object({
+  fileType: z.enum(['Extrait de Naissance', 'Photo d\'Identité']),
+  file:  z.instanceof(File).refine((file) => file.size > 0, {
+    message: 'Le fichier de signature est requis',
+  }),
+  isObligatory: z.boolean(),
+})
+
+//const inscriptionFilesSchema = z.array(inscriptionFileSchema);
+
+
+
 type JoueurFormData = z.infer<typeof joueurInfoSchema>;
 type AttestationData = z.infer<typeof attestationSchema>;
+//type InscriptionFilesData = z.infer<typeof inscriptionFilesSchema>
 
 // Union type for the whole form (both steps)
 type FullFormData = JoueurFormData & AttestationData;
@@ -75,6 +93,7 @@ export default function InscriptionJoueur() {
   const [step, setStep] = useState(1);
   const [isSelfManaged, setIsSelfManaged] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [requiredFiles, setRequiredFiles] = useState<inscriptionFile[]>([]);
 
   // Use a single form with the union type, but conditionally apply resolver
   const {
@@ -105,21 +124,25 @@ export default function InscriptionJoueur() {
     name: 'guardians',
   });
 
-  const onNextStep = (_data: JoueurFormData) => {
-    setStep(2);
+  const onNextStep = () => {
+     handleSubmit(() => setStep(step + 1))();
   };
 
-  const onSubmitFinal = async (_data: AttestationData) => {
+  const onSubmitFinal = async () => {
     const step1Data = getValues() as JoueurFormData;
     const step2Data = getValues() as AttestationData;
     const payload = {
       step1: step1Data,
       step2: step2Data,
+      step3: {
+      documents: requiredFiles.map(f => ({ fileType: f.fileType, isObligatory: f.isObligatory }))
+    }
     };
     const formData = new FormData();
     formData.append('data', JSON.stringify(payload));
-    const file = getValues('signatureFile');
-    if (file) formData.append('signature', file);
+    const signatureFile = getValues('signatureFile');
+    if (signatureFile) formData.append('signature', signatureFile);
+    requiredFiles.forEach(f => formData.append(f.fileType, f.file))
 
     setIsSubmitting(true);
     try {
@@ -134,6 +157,21 @@ export default function InscriptionJoueur() {
       setIsSubmitting(false);
     }
   };
+
+  // Fonction pour ajouter/mettre à jour un fichier
+  const updateRequiredFile = (fileType: inscriptionFile['fileType'], file: File | null) => {
+  if (file) {
+    setRequiredFiles(prev => {
+      const existing = prev.find(f => f.fileType === fileType);
+      if (existing) {
+        return prev.map(f => f.fileType === fileType ? { ...f, file } : f);
+      }
+      return [...prev, { fileType, file, isObligatory: true }];
+    });
+  } else {
+    setRequiredFiles(prev => prev.filter(f => f.fileType !== fileType));
+  }
+};
 
   const step1Fields = (
     <>
@@ -379,39 +417,63 @@ export default function InscriptionJoueur() {
     </div>
   );
 
+  const step3Fields = (
+  <div className="space-y-4">
+    <div>
+      <Label>Extrait de naissance (obligatoire) - PDF ou image</Label>
+      <Input
+        type="file"
+        accept=".pdf,.jpg,.jpeg,.png"
+        onChange={(e) => updateRequiredFile('Extrait de Naissance', e.target.files?.[0] || null)}
+      />
+    </div>
+    <div>
+      <Label>Photo d'identité (obligatoire) - PDF ou image</Label>
+      <Input
+        type="file"
+        accept=".pdf,.jpg,.jpeg,.png"
+        onChange={(e) => updateRequiredFile('Photo d\'identité', e.target.files?.[0] || null)}
+      />
+    </div>
+  </div>
+);
+
+
   return (
     <div className="container max-w-3xl mx-auto py-10">
       <Card>
         <CardHeader>
           <CardTitle className="text-primary text-center">
-            {step === 1 ? 'Inscription joueur – Étape 1/2' : 'Attestation – Étape 2/2'}
+            {step === 1 ? 'Inscription joueur – Étape 1/3' : step === 2 ? 'Attestation – Étape 2/3' : 'Documents – Étape 3/3'}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            onSubmit={handleSubmit(step === 1 ? onNextStep as any : onSubmitFinal as any)}
-            className="space-y-6"
-          >
-            {step === 1 ? step1Fields : step2Fields}
+          <form className="space-y-6">
+            {step === 1 && step1Fields}
+            {step === 2 && step2Fields}
+            {step === 3 && step3Fields}
 
             <div className="flex justify-between gap-4">
-              {step === 2 && (
-                <Button type="button" variant="outline" onClick={() => setStep(1)}>
+              {step > 1 && (
+                <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
                   Retour
                 </Button>
               )}
-              <Button
-                variant="secondary"
-                type="submit"
-                disabled={step === 2 && isSubmitting}
-                className={step === 2 ? 'flex-1' : 'w-full'}
-              >
-                {step === 1
-                  ? 'Suivant'
-                  : isSubmitting
-                  ? 'Envoi en cours...'
-                  : 'Soumettre l’inscription'}
-              </Button>
+              {step < 3 ? (
+                <Button type="button" variant="secondary" onClick={onNextStep}>
+                  Suivant
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={onSubmitFinal}
+                  disabled={isSubmitting}
+                  className="flex-1"
+                >
+                  {isSubmitting ? 'Envoi en cours...' : 'Soumettre l’inscription'}
+                </Button>
+              )}
             </div>
           </form>
           <p className="text-center text-sm m-6">
