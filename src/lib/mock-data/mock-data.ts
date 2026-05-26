@@ -105,7 +105,7 @@ export const mockDocuments: Document[] = [
   {
     id: 1,
     userId: 2,
-    type: 'certificat_medical',
+    type: 'Certificat Médical',
     fileId: 'drive_123',
     publicUrl: 'https://drive.google.com/...',
     isObligatory: true,
@@ -115,7 +115,7 @@ export const mockDocuments: Document[] = [
   {
     id: 2,
     userId: 2,
-    type: 'photo_identite',
+    type: 'Photo d\'identité',
     fileId: 'drive_456',
     publicUrl: 'https://drive.google.com/...',
     isObligatory: true,

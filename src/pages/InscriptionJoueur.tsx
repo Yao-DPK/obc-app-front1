@@ -69,14 +69,14 @@ const attestationSchema = z.object({
 });
 
 // Schéma pour les documents liés à l'inscription du joueur
-const inscriptionFileSchema = z.object({
+/* const inscriptionFileSchema = z.object({
   fileType: z.enum(['Extrait de Naissance', 'Photo d\'Identité']),
   file:  z.instanceof(File).refine((file) => file.size > 0, {
     message: 'Le fichier de signature est requis',
   }),
   isObligatory: z.boolean(),
 })
-
+ */
 //const inscriptionFilesSchema = z.array(inscriptionFileSchema);
 
 
