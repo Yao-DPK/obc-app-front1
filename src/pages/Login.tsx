@@ -62,6 +62,12 @@ export default function Login() {
                 Inscription
               </Link>
             </p>
+            <p className="text-center text-sm">
+              Mot de passe oublié ?{' '}
+              <Link to="/forgot-password" className="text-secondary hover:underline">
+                Réinitialiser
+              </Link>
+            </p>
           </form>
         </CardContent>
       </Card>

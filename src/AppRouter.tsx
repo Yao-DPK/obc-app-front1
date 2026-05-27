@@ -9,6 +9,8 @@ import ManageAdmins from "./pages/super_admin/ManageAdmins";
 import Unauthorized from "./pages/Unauthorized";
 import InscriptionJoueur from "./pages/InscriptionJoueur";
 import { useEffect } from "react";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -41,6 +43,8 @@ export function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<InscriptionJoueur />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
 
       {/* Routes privées */}
