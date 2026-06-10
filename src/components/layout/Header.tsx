@@ -5,11 +5,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../ui/button';
 import logo from '../../assets/OBC.png';
+import { headerNavItems } from '@/lib/navigation';
+import type { UserRole } from '@/types/user.type';
 
 export function Header() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navLinks = user ? headerNavItems(user.role as UserRole) : [];
+
 
   // Fermer le menu au clic en dehors
   useEffect(() => {
@@ -37,21 +41,21 @@ export function Header() {
   };
 
   return (
-    <header className="bg-primary text-white sticky top-0 z-50 shadow-md">
+    <header className="bg-primary text-white fixed top-0 left-0 right-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/dashboard" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-secondary rounded">
           <img src={logo} alt="Logo OBC" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center gap-6" aria-label="Navigation principale">
-          <NavLink to="/dashboard">Dashboard</NavLink>
-          <NavLink to="/documents">Documents</NavLink>
-          <NavLink to="/payments">Paiements</NavLink>
-          {user?.role === 'parent' && <NavLink to="/children">Mes enfants</NavLink>}
-          {(user?.role === 'admin' || user?.role === 'super_admin') && <NavLink to="/admin">Administration</NavLink>}
-          {user?.role === 'super_admin' && <NavLink to="/super-admin/stats">Super Admin</NavLink>}
-        </nav>
+        <nav className="hidden md:flex items-center gap-6">
+        {navLinks.map((item) => (
+          <NavLink key={item.to} to={item.to}>{item.label}</NavLink>
+        ))}
+        {/* Lien spécifique pour l'administration (si rôle admin ou super_admin) */}
+        {user?.role === 'admin' && <NavLink to="/admin">Administration</NavLink>}
+        {user?.role === 'super_admin' && <NavLink to="/super-admin">Super Admin</NavLink>}
+      </nav>
 
         {/* User menu & mobile toggle */}
         <div className="flex items-center gap-4">

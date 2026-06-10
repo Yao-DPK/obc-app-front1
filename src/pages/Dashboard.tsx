@@ -3,6 +3,7 @@ import PlayerDashboard from "./player/PlayerDashboard";
 import ParentDashboard from "./parent/ParentDashboard";
 import AdminDashboard from "./admin/AdminDashboard";
 import { useAuth } from "../hooks/useAuth";
+import SuperAdminDashboard from "./super_admin/SuperAdminDashboard";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -16,7 +17,7 @@ export default function Dashboard() {
     case 'admin':
       return <AdminDashboard />;
     case 'super_admin':
-      return <AdminDashboard />;
+      return <SuperAdminDashboard/>;
     default:
       return <Navigate to="/unauthorized" replace />;
   }

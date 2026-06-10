@@ -19,6 +19,7 @@ import {
 } from 'src/components/ui/select';
 import api from 'src/lib/axios';
 import type { inscriptionFile } from '@/types';
+import { PaymentComponent } from '@/components/payment';
 
 
 
@@ -437,6 +438,12 @@ export default function InscriptionJoueur() {
     </div>
   </div>
 );
+
+  const step4Fields = (
+    <div className="space-y-4">
+      <PaymentComponent></PaymentComponent>
+    </div>
+  );
 
 
   return (

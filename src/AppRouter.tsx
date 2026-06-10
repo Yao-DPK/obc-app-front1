@@ -11,6 +11,10 @@ import InscriptionJoueur from "./pages/InscriptionJoueur";
 import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import { RegistrationTable } from "./components/ui/RegistrationTable";
+import AdminRegistrations from "./pages/admin/AdminRegistrations";
+import SuperAdminRegistrations from "./pages/super_admin/SuperAdminRegistrations";
+import Test from "./pages/Test";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -39,12 +43,12 @@ export function AppRouter() {
     <Routes>
       {/* Routes publiques */}
       <Route element={<PublicLayout />}>
-        {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
-        <Route path="/login" element={<Login />} />
+       <Route path="/login" element={<Login />} />
         <Route path="/register" element={<InscriptionJoueur />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        
       </Route>
 
       {/* Routes privées */}
@@ -52,18 +56,27 @@ export function AppRouter() {
         {/* Tous les rôles connectés */}
         <Route element={<ProtectedRoute allowedRoles={['player', 'parent', 'admin', 'super_admin']} />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          {/* Ajouter /documents, /payments, /profile plus tard */}
         </Route>
 
         {/* Super Admin uniquement */}
         <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
+          <Route path="/test" element={<Test/>} />
           <Route path="/super-admin/stats" element={<SuperAdminDashboard />} />
           <Route path="/super-admin/admins" element={<ManageAdmins />} />
+          <Route path="/super-admin/registrations" element={<SuperAdminRegistrations />} />
         </Route>
+        
+        {/* Admin uniquement */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/admin/registrations" element={<AdminRegistrations />} />
+        </Route>
+
       </Route>
 
+      
+
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }
