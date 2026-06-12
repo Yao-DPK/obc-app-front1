@@ -15,6 +15,8 @@ import { RegistrationTable } from "./components/ui/RegistrationTable";
 import AdminRegistrations from "./pages/admin/AdminRegistrations";
 import SuperAdminRegistrations from "./pages/super_admin/SuperAdminRegistrations";
 import Test from "./pages/Test";
+import { UserLoader } from "./components/UserLoader";
+import { RegistrationValidationPage } from "./pages/super_admin/RegistrationValidationPage";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -64,6 +66,11 @@ export function AppRouter() {
           <Route path="/super-admin/stats" element={<SuperAdminDashboard />} />
           <Route path="/super-admin/admins" element={<ManageAdmins />} />
           <Route path="/super-admin/registrations" element={<SuperAdminRegistrations />} />
+          <Route path="/super-admin/registrations/validate/:userId" element={
+            <UserLoader userIdParam="userId">
+            {(user) => <RegistrationValidationPage user={user} />}
+          </UserLoader>
+        } />
         </Route>
         
         {/* Admin uniquement */}

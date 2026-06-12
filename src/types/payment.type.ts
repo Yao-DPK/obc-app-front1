@@ -16,3 +16,32 @@ export interface Payment {
   verifiedBy?: number | null;
   verifiedAt?: string | null;
 }
+
+export interface PaymentEvent {
+  id: number;
+  name: string;
+  description: string;
+  amount: string;       // montant hors frais
+  allowInstallments: boolean;
+  startDate?: string;
+  endDate?: string;
+  isActive: boolean;
+}
+
+export interface CreateIntentPayload {
+  eventId: number;
+  paymentMethod: 'momo' | 'card';
+  playerIds?: number[];
+}
+
+export interface IntentResponse {
+  intentId: number;
+  amountToPay: string;
+  feesAmount: string;
+  totalAmount: string;
+  publicKey: string;
+}
+
+export interface IntentStatus {
+  status: 'pending' | 'paid' | 'failed' | 'expired';
+}

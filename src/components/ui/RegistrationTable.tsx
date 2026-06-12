@@ -5,10 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+
 import api from '@/lib/axios';
+import { useNavigate } from 'react-router-dom';
 
 export function RegistrationTable() {
   const { users, fetchUsers, updateUserStatus } = useUserStore();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const pendingUsers = users.filter(
@@ -18,9 +21,15 @@ export function RegistrationTable() {
   const handleValidate = async (userId: number) => {
     setLoading(true);
     try {
-      await api.patch(`/api/users/${userId}/validate-registration`);
+      const selected_user = users.find((u) => u.id == userId);
+      if (!selected_user){
+        toast.error("Cet utilisateur n'existe pas");
+      }
+      
+      navigate(`validate/${userId}`);
+      /* await api.patch(`/api/users/${userId}/validate-registration`);
       toast.success('Inscription validée');
-      await fetchUsers(); // rafraîchir la liste
+      await fetchUsers(); // rafraîchir la liste */
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Erreur');
     } finally {
