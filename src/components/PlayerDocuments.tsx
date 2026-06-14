@@ -2,13 +2,12 @@
 import { DOCUMENT_STATUSES, type Document, type DocumentStatus } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { FileCheck, FileX, Clock, AlertTriangle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { FilePreview } from '@/components/ui/FilePreview';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from './ui/input';
 import { documentService } from '@/lib/services/document.service';
 import { useAuth } from '@/hooks/useAuth';
@@ -19,6 +18,8 @@ interface PlayerDocumentsProps {
   documents: Document[];
   isLoading: boolean;
   onSuccess?: () => void;
+  onValidChange?: (isValid: boolean) => void; // Nouvelle prop
+
 }
 
 type RequiredDoc = {
@@ -31,7 +32,7 @@ const REQUIRED_DOCS: RequiredDoc[] = [
   { type: "Photo d'identite", label: "Photo d'identité" },
 ];
 
-export function PlayerDocuments({ userId, documents, isLoading, onSuccess }: PlayerDocumentsProps) {
+export function PlayerDocuments({ userId, documents, isLoading, onSuccess, onValidChange }: PlayerDocumentsProps) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [uploadingDocType, setUploadingDocType] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
@@ -47,6 +48,10 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess }: Pla
   const allUploaded = missingDocs.length === 0;
   const allValidated = allUploaded && uploadedDocs.every((doc) => doc.documentStatus === DOCUMENT_STATUSES.VALID);
   const isSectionValid = allValidated;
+
+  useEffect(() => {
+    onValidChange?.(isSectionValid);
+  }, [isSectionValid, onValidChange]);
 
   const handleStatusChange = async (documentId: number, newStatus: DocumentStatus) => {
     setUpdatingId(documentId);
@@ -208,7 +213,7 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess }: Pla
         })}
       </div>
 
-      {!allUploaded && (
+      {/* {!allUploaded && (
         <Badge variant="secondary" className="w-full">
           En attente de téléversement des documents
         </Badge>
@@ -220,7 +225,7 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess }: Pla
       )}
       {allValidated && (
         <Badge className="w-full bg-green-600 hover:bg-green-700">Documents validés</Badge>
-      )}
+      )} */}
     </div>
   );
 }

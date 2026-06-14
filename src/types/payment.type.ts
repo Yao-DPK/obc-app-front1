@@ -1,7 +1,9 @@
 // packages/shared/src/types/payment.types.ts
 
-export type PaymentMethod = 'wave' | 'orange_money' | 'cash';
+export type PaymentMethod = 'momo' | 'card' | 'cash';
 export type PaymentStatus = 'pending' | 'verified' | 'rejected';
+export type PaymentObligationStatus = 'pending' | 'paid' | 'overdue' | 'cancelled';
+
 
 export interface Payment {
   id: number;
@@ -28,6 +30,18 @@ export interface PaymentEvent {
   isActive: boolean;
 }
 
+
+export interface CreatePaymentEventDto {
+  name: string;
+  description: string;
+  amount: number;
+  startDate: string;
+  endDate: string;
+  isActive?: boolean;
+}
+
+export type UpdatePaymentEventDto = Partial<CreatePaymentEventDto>;
+
 export interface CreateIntentPayload {
   eventId: number;
   paymentMethod: 'momo' | 'card';
@@ -36,12 +50,47 @@ export interface CreateIntentPayload {
 
 export interface IntentResponse {
   intentId: number;
-  amountToPay: string;
-  feesAmount: string;
-  totalAmount: string;
+  amountToPay: number;
+  feesAmount: number;
+  totalAmount: number;
   publicKey: string;
 }
 
 export interface IntentStatus {
   status: 'pending' | 'paid' | 'failed' | 'expired';
 }
+
+export interface IntentStatusResponse {
+  status: string;
+}
+
+export interface PaymentObligation {
+  id: number;
+  playerId: number | null;
+  amount: number;
+  dueDate: string; // YYYY-MM-DD
+  description: string;
+  status: PaymentObligationStatus;
+  createdAt: string;
+}
+
+export interface CreatePaymentObligationDto {
+  playerId?: number | null;
+  amount: number;
+  dueDate: string;
+  description: string;
+  status?: PaymentObligationStatus;
+}
+
+export interface UpdatePaymentObligationDto extends Partial<CreatePaymentObligationDto> {}
+
+// Payment Intent (Kadev Pay)
+export interface CreateIntentDto {
+  amount: number;
+  description: string;
+  playerId?: number;
+}
+
+
+
+

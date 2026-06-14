@@ -1,31 +1,39 @@
+// src/pages/RegistrationValidationPage.tsx
 import { useState, useEffect, useRef } from 'react';
 import type { User } from '@/types/user.type';
 import { useDocumentStore } from '@/stores/useDocumentStore';
+import { usePaymentStore } from '@/stores/usePaymentStore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlayerInfoForm } from '@/components/PlayerInfoForm';
 import { PlayerDocuments } from '@/components/PlayerDocuments';
 import { PaymentSection } from '@/components/PaymentSection';
+import { Badge } from '@/components/ui/badge';
 
 interface RegistrationValidationPageProps {
   user: User;
 }
 
 export function RegistrationValidationPage({ user }: RegistrationValidationPageProps) {
-  const [infoComplete, setInfoComplete] = useState(
-    !!user.firstName && !!user.lastName && !!user.birthDate
-  );
   const { documents, isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
+  const { obligations, fetchObligations, isLoadingObligations } = usePaymentStore();
   const documentsRef = useRef<HTMLDivElement>(null);
   const paymentRef = useRef<HTMLDivElement>(null);
+  const [isInfoValid, setIsInfoValid] = useState(false);
+  const [isDocsValid, setIsDocsValid] = useState(false);
+  const [isPaymentValid, setIsPaymentValid] = useState(false);
 
   useEffect(() => {
     fetchUserDocuments(user.id);
-  }, [user.id, fetchUserDocuments]);
+    fetchObligations(user.id);
+  }, [user.id, fetchUserDocuments, fetchObligations]);
 
-  const hasDocuments = documents.length > 0;
 
   const handlePaymentSuccess = () => {
-    window.location.href = '/dashboard';
+    fetchObligations(user.id);
+    // Optionnel : attendre un moment puis rediriger
+    setTimeout(() => {
+      window.location.href = '/dashboard';
+    }, 2000);
   };
 
   return (
@@ -33,29 +41,51 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
       {/* Section Informations */}
       <Card>
         <CardHeader>
-          <CardTitle>1. Informations du joueur</CardTitle>
+          <CardTitle className='flex gap-2'>
+            Informations du joueur
+
+            <div className="flex items-center gap-2">
+            {isInfoValid ? (
+              <Badge className="bg-green-600">Valide</Badge>
+            ) : (
+              <Badge variant="destructive">Invalide</Badge>
+            )}
+          </div>
+
+          </CardTitle>
           <CardDescription>
-            Complétez les informations personnelles du joueur.
+            Vérifier les informations personnelles du joueur.
           </CardDescription>
+
+          
         </CardHeader>
         <CardContent>
-          <PlayerInfoForm user={user} />
+          <PlayerInfoForm user={user} onValidChange={setIsInfoValid}/>
         </CardContent>
       </Card>
 
       {/* Section Documents */}
       <Card ref={documentsRef}>
         <CardHeader>
-          <CardTitle>2. Documents du joueur</CardTitle>
+          <CardTitle className='flex gap-2'>
+            Documents du joueur
+          <div className="flex items-center gap-2">
+            {isDocsValid ? <Badge className="bg-green-600">Valide</Badge> : <Badge variant="secondary">Invalide</Badge>}
+          </div>
+          </CardTitle>
+          
           <CardDescription>
             Téléversez les documents requis (certificat de naissance, certificat médical, photo).
           </CardDescription>
+          
         </CardHeader>
         <CardContent>
           <PlayerDocuments
             userId={user.id}
             documents={documents}
             isLoading={docsLoading}
+            onSuccess={() => fetchUserDocuments(user.id)}
+            onValidChange={setIsDocsValid}
           />
         </CardContent>
       </Card>
@@ -63,20 +93,31 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
       {/* Section Paiement */}
       <Card ref={paymentRef}>
         <CardHeader>
-          <CardTitle>3. Paiement</CardTitle>
+          <CardTitle className='flex gap-2'>
+            Paiement
+
+            <div className="flex items-center gap-2">
+            {isPaymentValid ? (
+              <Badge className="bg-green-600">Valide</Badge>
+            ) : (
+              <Badge variant="secondary">Invalide</Badge>
+            )}
+          </div>
+
+          </CardTitle>
           <CardDescription>
-            Choisissez l'événement et le moyen de paiement pour finaliser l'inscription.
+            Vérifiez les paiements de l'utilisateur
           </CardDescription>
         </CardHeader>
         <CardContent>
           <PaymentSection
-            userId={user.id}
-            playerIds={[user.id]}
-            onSuccess={handlePaymentSuccess}
-            disabled={!infoComplete || !hasDocuments}
+            playerId={user.id}
+            onValidChange={setIsPaymentValid}
           />
         </CardContent>
       </Card>
+
+
     </div>
   );
 }

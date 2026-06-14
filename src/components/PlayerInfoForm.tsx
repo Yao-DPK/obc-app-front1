@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,6 +17,7 @@ import {
   FieldError,
 } from '@/components/ui/field'; // Assurez-vous d'avoir installé les composants field
 import type { User } from '@/types';
+import api from '@/lib/axios';
 
 const infoSchema = z.object({
   firstName: z.string().min(1, 'Prénom requis'),
@@ -32,12 +33,12 @@ type InfoFormValues = z.infer<typeof infoSchema>;
 
 interface PlayerInfoFormProps {
   user: User;
+  onValidChange?: (isValid: boolean) => void;
   onSuccess?: () => void;
 }
 
-export function PlayerInfoForm({ user }: PlayerInfoFormProps) {
+export function PlayerInfoForm({ user, onValidChange, onSuccess }: PlayerInfoFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<InfoFormValues>({
     resolver: zodResolver(infoSchema),
     defaultValues: {
@@ -49,17 +50,24 @@ export function PlayerInfoForm({ user }: PlayerInfoFormProps) {
       school: user.school || '',
       class: user.class || '',
     },
+    mode: 'onChange', // pour valider en temps réel
   });
+
+  const { formState: { isValid, dirtyFields } } = form;
+
+  // Notifier le parent dès que la validité change
+  useEffect(() => {
+    onValidChange?.(isValid);
+  }, [isValid, onValidChange]);
 
   const onSubmit = async (values: InfoFormValues) => {
     setIsSubmitting(true);
     try {
-      // Appel API pour mettre à jour l'utilisateur
-      // await api.patch(`/users/${user.id}`, values);
+      await api.patch(`/api/users/${user.id}`, values);
       toast.success('Informations enregistrées');
-      //onSuccess();
-    } catch (error) {
-      toast.error("Erreur lors de l'enregistrement");
+      onSuccess?.();
+    } catch (error: any) {
+      toast.error(error.message || "Erreur lors de l'enregistrement");
     } finally {
       setIsSubmitting(false);
     }
@@ -214,7 +222,7 @@ export function PlayerInfoForm({ user }: PlayerInfoFormProps) {
       </div>
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Enregistrement...' : 'Valider et continuer'}
+        {isSubmitting ? 'Enregistrement...' : 'Valider'}
       </Button>
     </form>
   );
