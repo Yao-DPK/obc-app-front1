@@ -426,11 +426,6 @@ export default function InscriptionJoueur() {
   </div>
 );
 
-  const step4Fields = (
-    <div className="space-y-4">
-      <PaymentComponent></PaymentComponent>
-    </div>
-  );
 
 
   return (

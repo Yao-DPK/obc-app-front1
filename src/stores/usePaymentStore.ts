@@ -14,7 +14,7 @@ interface PaymentStore {
   updateObligationStatus: (id: number, status: PaymentObligationStatus) => Promise<void>;
 }
 
-export const usePaymentStore = create<PaymentStore>((set, get) => ({
+export const usePaymentStore = create<PaymentStore>((set) => ({
   payments: [],
   obligations: [],
   isLoadingPayments: false,

@@ -1,14 +1,13 @@
 // apps/web/src/pages/dashboard/AdminDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Shield, FileText, CreditCard, DollarSign, Clock, UserPlus } from 'lucide-react';
+import { Users, Shield, FileText, CreditCard, DollarSign, UserPlus } from 'lucide-react';
 import { StatCard } from '@/components/ui/StatCard';
 import { useUserStore } from '@/stores/useUserStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+
 
 export default function AdminDashboard() {
   const { users, fetchUsers } = useUserStore();

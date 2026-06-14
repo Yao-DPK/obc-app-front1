@@ -97,7 +97,7 @@ export default function ParentDashboard() {
             <div className="space-y-4">
               {playersDetails.map((player) => {
                 const playerDocs = documents.filter(d => d.userId === player!.id);
-                const hasValidMedCert = playerDocs.some(d => d.type === 'Certificat Médical' && d.validatedAt);
+                const hasValidMedCert = playerDocs.some(d => d.type === 'Certificat Medical' && d.validatedAt);
                 const hasPaymentUpToDate = payments.some(p => p.playerIds.includes(player!.id) && p.status === 'verified');
                 return (
                   <div key={player!.id} className="flex items-center justify-between border-b pb-3">

@@ -1,7 +1,6 @@
 // apps/web/src/stores/useUserStore.ts
 import { create } from 'zustand';
 import type { User } from '@/types/user.type';
-import { mockUsers } from '@/lib/mock-data/mock-data';
 import api from '@/lib/axios';
 
 

@@ -1,6 +1,6 @@
 // apps/web/src/lib/mock-data.ts
 
-import type { GuardianRelationship, Payment, User } from "@/types";
+import type { GuardianRelationship, User } from "@/types";
 import type { Document } from "@/types";
 // Utilisateurs mockés
 export const mockUsers: User[] = [
@@ -136,32 +136,3 @@ export const mockGuardianRelationships: GuardianRelationship[] = [
   },
 ];
 
-// Paiements mockés
-export const mockPayments: Payment[] = [
-  {
-    id: 1,
-    userId: 1,
-    amount: 50000,
-    method: 'wave',
-    transactionReference: 'WAVE123',
-    reason: 'Inscription annuelle',
-    playerIds: [2],
-    status: 'verified',
-    declaredAt: (new Date() as unknown) as string,
-    verifiedBy: 3,
-    verifiedAt: (new Date() as unknown) as string,
-  },
-  {
-    id: 2,
-    userId: 1,
-    amount: 15000,
-    method: 'orange_money',
-    transactionReference: 'OM456',
-    reason: 'Mensualité mai',
-    playerIds: [2],
-    status: 'pending',
-    declaredAt: (new Date() as unknown) as string,
-    verifiedBy: null,
-    verifiedAt: null,
-  },
-];

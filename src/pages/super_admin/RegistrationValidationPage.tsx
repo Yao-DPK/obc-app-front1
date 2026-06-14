@@ -15,7 +15,7 @@ interface RegistrationValidationPageProps {
 
 export function RegistrationValidationPage({ user }: RegistrationValidationPageProps) {
   const { documents, isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
-  const { obligations, fetchObligations, isLoadingObligations } = usePaymentStore();
+  const { fetchObligations } = usePaymentStore();
   const documentsRef = useRef<HTMLDivElement>(null);
   const paymentRef = useRef<HTMLDivElement>(null);
   const [isInfoValid, setIsInfoValid] = useState(false);
@@ -26,15 +26,6 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
     fetchUserDocuments(user.id);
     fetchObligations(user.id);
   }, [user.id, fetchUserDocuments, fetchObligations]);
-
-
-  const handlePaymentSuccess = () => {
-    fetchObligations(user.id);
-    // Optionnel : attendre un moment puis rediriger
-    setTimeout(() => {
-      window.location.href = '/dashboard';
-    }, 2000);
-  };
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl space-y-8">

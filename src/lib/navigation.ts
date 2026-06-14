@@ -2,7 +2,7 @@
 import type { UserRole } from '@/types/user.type';
 import { 
   LayoutDashboard, FileText, CreditCard, Users, UserCog, 
-  Shield, Crown, LogOut, UserPlus, Settings, BarChart3,
+  Shield, Crown, UserPlus, BarChart3,
   type LucideIcon
 } from 'lucide-react';
 

@@ -53,7 +53,7 @@ export function PlayerInfoForm({ user, onValidChange, onSuccess }: PlayerInfoFor
     mode: 'onChange', // pour valider en temps réel
   });
 
-  const { formState: { isValid, dirtyFields } } = form;
+  const { formState: { isValid } } = form;
 
   // Notifier le parent dès que la validité change
   useEffect(() => {

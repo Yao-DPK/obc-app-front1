@@ -2,13 +2,6 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Label } from '../components/ui/label';
 import { Input } from "./ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../components/ui/select';
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { PaymentMethodSelector } from "./ui/paymentMethodSelector";

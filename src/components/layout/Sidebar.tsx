@@ -1,7 +1,7 @@
 // src/components/layout/Sidebar.tsx
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LogOut, ChevronDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
@@ -11,7 +11,7 @@ import type { UserRole } from '@/types/user.type';
 import { cn } from '@/lib/utils';
 
 export function Sidebar() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
