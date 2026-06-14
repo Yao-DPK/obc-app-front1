@@ -19,7 +19,6 @@ import {
 } from 'src/components/ui/select';
 import api from 'src/lib/axios';
 import type { inscriptionFile } from '@/types';
-import { PaymentComponent } from '@/components/payment';
 
 
 
