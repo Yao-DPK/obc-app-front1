@@ -116,7 +116,7 @@ export default function Documents() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="certificat_medical">Certificat médical</SelectItem>
-                    <SelectItem value="photo_identite">Photo d'identité</SelectItem>
+                    <SelectItem value="photo_identite">Photo d'identite</SelectItem>
                     <SelectItem value="paiement_reçu">Reçu de paiement</SelectItem>
                     <SelectItem value="autre">Autre</SelectItem>
                   </SelectContent>

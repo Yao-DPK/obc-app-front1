@@ -17,7 +17,7 @@ export function PublicLayout() {
           </Link>
         </div>
       </header>
-      <main id="main-content" className="flex-1 flex items-center justify-center p-6 overflow-hidden">
+      <main id="main-content" className="flex-1 flex items-center justify-center p-10 overflow-hidden">
         <div className="w-full">
           <Outlet />
         </div>

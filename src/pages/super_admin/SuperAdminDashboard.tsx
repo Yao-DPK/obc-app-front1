@@ -7,24 +7,22 @@ import { useUserStore } from '@/stores/useUserStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+
 
 export default function SuperAdminDashboard() {
   const { users, fetchUsers } = useUserStore();
-  const { documents, fetchDocuments } = useDocumentStore();
+  const { pendingDocuments, fetchPendingDocuments } = useDocumentStore();
   const { payments, fetchPayments } = usePaymentStore();
 
   useEffect(() => {
     fetchUsers();
-    fetchDocuments();
+    fetchPendingDocuments();
     fetchPayments();
   }, []);
 
   const totalUsers = users.length;
   const totalAdmins = users.filter(u => u.role === 'admin' || u.role === 'super_admin').length;
   const pendingRegistrations = users.filter(u => u.registrationStatus === 'pre_inscrit' || u.registrationStatus === 'attestation_signee').length;
-  const pendingDocuments = documents.filter(d => !d.validatedAt).length;
   const pendingPayments = payments.filter(p => p.status === 'pending').length;
   const totalRevenue = payments
     .filter(p => p.status === 'verified')

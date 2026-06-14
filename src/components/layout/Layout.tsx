@@ -12,11 +12,11 @@ export function Layout() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-primary/5">
       <Header />
-      <div className="flex flex-1 overflow-hidden pt-16">
+      <div className="flex flex-1 pt-16"> {/* Supprimer overflow-hidden */}
         {user && <Sidebar />}
         <main
           id="main-content"
-          className="flex-1 p-4 md:p-6 overflow-y-auto transition-all duration-300 pb-20"
+          className="flex-1 p-4 md:p-6 overflow-y-auto h-[calc(100vh-4rem)]" /* Hauteur calculée pour le scroll */
         >
           <div className="mx-auto max-w-7xl">
             <Outlet />

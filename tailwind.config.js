@@ -6,9 +6,9 @@ export default {
     extend: {
       colors: {
         // Vert profond (principal)
-        primary: "#003322",
+        primary: "#048a5d",
         // Or métallisé (actions, survols)
-        secondary: "#D4AF37",
+        secondary: "#F5E46C",
         // Blanc cassé (fond clair)
         background: "#F8F9FA",
         // Noir anthracite (textes)
@@ -25,7 +25,7 @@ export default {
         },
       },
       fontFamily: {
-        heading: ["Playfair Display", "serif"],
+        heading: ["Arimo", "serif"],
         body: ["Inter", "sans-serif"],
       },
     },

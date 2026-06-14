@@ -69,22 +69,9 @@ const attestationSchema = z.object({
   }),
 });
 
-// Schéma pour les documents liés à l'inscription du joueur
-/* const inscriptionFileSchema = z.object({
-  fileType: z.enum(['Extrait de Naissance', 'Photo d\'Identité']),
-  file:  z.instanceof(File).refine((file) => file.size > 0, {
-    message: 'Le fichier de signature est requis',
-  }),
-  isObligatory: z.boolean(),
-})
- */
-//const inscriptionFilesSchema = z.array(inscriptionFileSchema);
-
-
 
 type JoueurFormData = z.infer<typeof joueurInfoSchema>;
 type AttestationData = z.infer<typeof attestationSchema>;
-//type InscriptionFilesData = z.infer<typeof inscriptionFilesSchema>
 
 // Union type for the whole form (both steps)
 type FullFormData = JoueurFormData & AttestationData;
@@ -433,7 +420,7 @@ export default function InscriptionJoueur() {
       <Input
         type="file"
         accept=".pdf,.jpg,.jpeg,.png"
-        onChange={(e) => updateRequiredFile('Photo d\'identité', e.target.files?.[0] || null)}
+        onChange={(e) => updateRequiredFile('Photo d\'identite', e.target.files?.[0] || null)}
       />
     </div>
   </div>

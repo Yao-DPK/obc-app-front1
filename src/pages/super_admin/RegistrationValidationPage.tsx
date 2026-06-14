@@ -14,24 +14,15 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
   const [infoComplete, setInfoComplete] = useState(
     !!user.firstName && !!user.lastName && !!user.birthDate
   );
-  const { documents, isLoading: docsLoading, fetchDocuments } = useDocumentStore();
+  const { documents, isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
   const documentsRef = useRef<HTMLDivElement>(null);
   const paymentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchDocuments(user.id);
-  }, [user.id, fetchDocuments]);
+    fetchUserDocuments(user.id);
+  }, [user.id, fetchUserDocuments]);
 
   const hasDocuments = documents.length > 0;
-
-  const handleInfoValidated = () => {
-    setInfoComplete(true);
-    documentsRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleDocumentsValidated = () => {
-    paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const handlePaymentSuccess = () => {
     window.location.href = '/dashboard';
@@ -48,7 +39,7 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <PlayerInfoForm user={user} onSuccess={handleInfoValidated} />
+          <PlayerInfoForm user={user} />
         </CardContent>
       </Card>
 
@@ -65,7 +56,6 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
             userId={user.id}
             documents={documents}
             isLoading={docsLoading}
-            onSuccess={handleDocumentsValidated}
           />
         </CardContent>
       </Card>

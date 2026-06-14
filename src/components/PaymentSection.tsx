@@ -32,12 +32,12 @@ export function PaymentSection({ userId, playerIds, onSuccess, disabled = false 
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   // Charger les événements actifs
-  useEffect(() => {
+  /* useEffect(() => {
     paymentService.getActiveEvents().then(setEvents).catch(console.error);
-  }, []);
+  }, []); */
 
   // Charger le script Kadev Pay
-  useEffect(() => {
+  /* useEffect(() => {
     if (document.querySelector('script[src="https://pay.kadev.ci/js/v1/kadev-pay.js"]')) {
       setIsScriptLoaded(true);
       return;
@@ -48,7 +48,7 @@ export function PaymentSection({ userId, playerIds, onSuccess, disabled = false 
     script.onload = () => setIsScriptLoaded(true);
     script.onerror = () => toast.error('Erreur de chargement du module de paiement');
     document.body.appendChild(script);
-  }, []);
+  }, []); */
 
   const selectedEvent = events.find(e => e.id === selectedEventId);
   const feeRate = paymentMethod === 'momo' ? 0.023 : 0.045;

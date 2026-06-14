@@ -32,10 +32,10 @@ type InfoFormValues = z.infer<typeof infoSchema>;
 
 interface PlayerInfoFormProps {
   user: User;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
-export function PlayerInfoForm({ user, onSuccess }: PlayerInfoFormProps) {
+export function PlayerInfoForm({ user }: PlayerInfoFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<InfoFormValues>({
@@ -57,7 +57,7 @@ export function PlayerInfoForm({ user, onSuccess }: PlayerInfoFormProps) {
       // Appel API pour mettre à jour l'utilisateur
       // await api.patch(`/users/${user.id}`, values);
       toast.success('Informations enregistrées');
-      onSuccess();
+      //onSuccess();
     } catch (error) {
       toast.error("Erreur lors de l'enregistrement");
     } finally {
