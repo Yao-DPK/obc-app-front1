@@ -8,6 +8,9 @@ import { PlayerInfoForm } from '@/components/PlayerInfoForm';
 import { PlayerDocuments } from '@/components/PlayerDocuments';
 import { PaymentSection } from '@/components/PaymentSection';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { inscriptionService } from '@/lib/services/inscription.service';
+import { toast } from 'sonner';
 
 interface RegistrationValidationPageProps {
   user: User;
@@ -27,8 +30,19 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
     fetchObligations(user.id);
   }, [user.id, fetchUserDocuments, fetchObligations]);
 
+  const allValidated = isInfoValid && isDocsValid && isPaymentValid;
+
+  const validateRegistration = async ()=> {
+    try {
+      await inscriptionService.validateRegistration(user.id);
+      toast.success("Inscription Validée");
+    } catch (error: any) {
+      toast.error(error.message || 'Erreur lors de l\'inscription');
+    }
+  }
+
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl space-y-8">
+    <div className="container mx-auto py-8 px-4 max-w-4xl space-y-8 mb-5">
       {/* Section Informations */}
       <Card>
         <CardHeader>
@@ -107,7 +121,10 @@ export function RegistrationValidationPage({ user }: RegistrationValidationPageP
           />
         </CardContent>
       </Card>
-
+      
+      <Button onClick={validateRegistration} disabled={!allValidated}>
+        Valider l'inscription
+      </Button>
 
     </div>
   );

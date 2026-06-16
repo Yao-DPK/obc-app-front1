@@ -20,12 +20,12 @@ export const paymentService = {
   },
 
   async getAllObligations(): Promise<PaymentObligation[]> {
-    const response = await api.get('/payment-obligations');
+    const response = await api.get('/api/payment-obligations');
     return response.data;
   },
 
   async getObligationsByPlayer(playerId: number): Promise<PaymentObligation[]> {
-    const response = await api.get(`/payment-obligations/player/${playerId}`);
+    const response = await api.get(`/api/payment-obligations/player/${playerId}`);
     return response.data;
   },
 

@@ -25,7 +25,7 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
     try {
       // Appel API réel
       const params = userId ? { userId } : {};
-      const response = await api.get('/payments', { params });
+      const response = await api.get('/api/payments', { params });
       set({ payments: response.data, isLoadingPayments: false });
     } catch (error) {
       console.error('Erreur lors du chargement des paiements', error);

@@ -1,17 +1,19 @@
 // src/components/layout/Sidebar.tsx
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, ChevronDown, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
-import { groupedNavItems } from '@/lib/navigation';
 import type { UserRole } from '@/types/user.type';
 import { cn } from '@/lib/utils';
+import logo from '@/assets/OBC.png';
+import { groupedNavItems } from '@/lib/navigation';
 
 export function Sidebar() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
@@ -35,51 +37,41 @@ export function Sidebar() {
     return (first + last).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U';
   };
 
-  // Aplatir tous les éléments de navigation pour le mode réduit
   const allNavItems = Object.values(grouped).flat();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
 
   return (
     <aside
       className={cn(
-        'hidden md:flex flex-col bg-white border-r border-gray-200 shadow-sm transition-all duration-500 ',
+        'hidden md:flex flex-col bg-white border-r border-gray-200 shadow-sm transition-all duration-500 h-screen sticky top-0',
         isCollapsed ? 'w-20' : 'w-64'
       )}
     >
-      {/* Bouton de réduction */}
-      <div className="flex justify-end p-2 border-b border-gray-100">
+      {/* Section Logo + réduction (fixe) */}
+      <div className="flex items-center gap-2 p-3 border-b border-gray-100 shrink-0">
+        <img src={logo} alt="Logo OBC" className={cn('h-8 w-auto', isCollapsed ? 'mx-auto' : '')} />
+        {!isCollapsed && (
+          <span className="font-heading text-lg font-bold text-primary truncate flex-1">
+            Olympic Basket
+          </span>
+        )}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="h-8 w-8 p-0 text-gray-500 hover:bg-gray-100 rounded-full"
+          className="h-8 w-8 p-0 text-gray-500 hover:bg-gray-100 rounded-full shrink-0"
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </Button>
       </div>
 
-      {/* Profil utilisateur (visible uniquement en mode normal) */}
-      {!isCollapsed && (
-        <div className="flex items-center gap-3 p-4 border-b border-gray-100 mb-2">
-          <Avatar className="h-10 w-10 bg-gradient-to-br from-primary to-primary/70 text-white shadow-sm">
-            <AvatarFallback>{getInitials()}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-800 truncate">
-              {user.firstName} {user.lastName}
-            </p>
-            <p className="text-xs text-gray-500 truncate">
-              {user.role === 'super_admin' ? 'Super Admin' :
-               user.role === 'admin' ? 'Administrateur' :
-               user.role === 'parent' ? 'Parent' : 'Joueur'}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Zone de navigation scrollable */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
         {isCollapsed ? (
-          // Mode réduit : afficher uniquement les icônes avec tooltip CSS
           <div className="space-y-2">
             {allNavItems.map((item) => (
               <NavLink
@@ -95,7 +87,6 @@ export function Sidebar() {
                 }
               >
                 <item.icon size={20} className="shrink-0" />
-                {/* Tooltip CSS personnalisé */}
                 <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
                   {item.label}
                 </span>
@@ -103,7 +94,6 @@ export function Sidebar() {
             ))}
           </div>
         ) : (
-          // Mode étendu : affichage avec sections collapsables
           Object.entries(grouped).map(([section, items]) => {
             const isOpen = openSections[section] ?? true;
             return (
@@ -147,25 +137,43 @@ export function Sidebar() {
         )}
       </nav>
 
-      {/* Déconnexion */}
-      {/* <div className={cn('border-t border-gray-100 p-3', isCollapsed ? 'flex justify-center' : '')}>
+      {/* Section bas : Profil + Déconnexion (fixe) */}
+      <div className="border-t border-gray-200 p-3 shrink-0 bg-white">
+        {!isCollapsed ? (
+          <div className="flex items-center gap-3 mb-2">
+            <Avatar className="h-9 w-9 bg-gradient-to-br from-primary to-primary/70 text-white shadow-sm">
+              <AvatarFallback>{getInitials()}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-800 truncate">
+                {user.firstName} {user.lastName}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
+                {user.role === 'super_admin' ? 'Super Admin' :
+                 user.role === 'admin' ? 'Administrateur' :
+                 user.role === 'parent' ? 'Parent' : 'Joueur'}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex justify-center mb-2">
+            <Avatar className="h-8 w-8 bg-gradient-to-br from-primary to-primary/70 text-white shadow-sm">
+              <AvatarFallback>{getInitials()}</AvatarFallback>
+            </Avatar>
+          </div>
+        )}
         <Button
           variant="ghost"
           className={cn(
-            'text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors relative group',
-            isCollapsed ? 'justify-center p-2 w-full' : 'w-full justify-start'
+            'text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors w-full',
+            isCollapsed ? 'justify-center px-2' : 'justify-start'
           )}
-          onClick={logout}
+          onClick={handleLogout}
         >
           <LogOut size={18} className={cn(isCollapsed ? '' : 'mr-2')} />
           {!isCollapsed && 'Déconnexion'}
-          {isCollapsed && (
-            <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-              Déconnexion
-            </span>
-          )}
         </Button>
-      </div> */}
+      </div>
     </aside>
   );
 }

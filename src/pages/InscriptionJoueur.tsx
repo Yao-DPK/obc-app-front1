@@ -1,431 +1,30 @@
 // apps/web/src/pages/InscriptionJoueur.tsx
-import { useState } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { Button } from 'src/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
-import { Input } from 'src/components/ui/input';
-import { Label } from 'src/components/ui/label';
-import { Checkbox } from 'src/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from 'src/components/ui/select';
-import api from 'src/lib/axios';
-import type { inscriptionFile } from '@/types';
-
-
-
-
-// Schéma de la première étape
-const joueurInfoSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  confirmPassword: z.string().min(6),
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  gender: z.enum(['M', 'F']),
-  phone: z.string().optional(),
-  address: z.string().optional(),
-  school: z.string().optional(),
-  class: z.string().optional(),
-  emergencyContactName: z.string().optional(),
-  emergencyContactPhone: z.string().optional(),
-  isSelfManaged: z.boolean().default(false),
-  guardians: z
-    .array(
-      z.object({
-        email: z.string().email(),
-        firstName: z.string().min(1),
-        lastName: z.string().min(1),
-        phone: z.string().optional(),
-        relationship: z.enum(['Père', 'Mère', 'Tuteur']),
-      })
-    )
-    .optional(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
-  path: ['confirmPassword'],
-});
-
-// Schéma de l’attestation
-const attestationSchema = z.object({
-  signatoryType: z.enum(['self', 'guardian']),
-  selectedGuardianIndex: z.number().optional(),
-  signatoryFullName: z.string().min(2),
-  acceptedTerms: z.boolean().refine((val) => val === true, {
-    message: 'Vous devez accepter les conditions',
-  }),
-  signatureFile: z.instanceof(File).refine((file) => file.size > 0, {
-    message: 'Le fichier de signature est requis',
-  }),
-});
-
-
-type JoueurFormData = z.infer<typeof joueurInfoSchema>;
-type AttestationData = z.infer<typeof attestationSchema>;
-
-// Union type for the whole form (both steps)
-type FullFormData = JoueurFormData & AttestationData;
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useInscriptionForm } from '@/hooks/useInscriptionForm';
+import { Step1 } from './Inscription/Step1';
+import { Step2 } from './Inscription/Step2';
+import { Step3 } from './Inscription/Step3';
 
 export default function InscriptionJoueur() {
-  const navigate = useNavigate();
-  const [step, setStep] = useState(1);
-  const [isSelfManaged, setIsSelfManaged] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [requiredFiles, setRequiredFiles] = useState<inscriptionFile[]>([]);
-
-  // Use a single form with the union type, but conditionally apply resolver
   const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-    getValues,
-  } = useForm<FullFormData>({
-    // Cast resolver to any to avoid union type mismatch
-    resolver: (step === 1 ? zodResolver(joueurInfoSchema) : zodResolver(attestationSchema)) as any,
-    defaultValues: {
-      gender: 'M',
-      isSelfManaged: false,
-      guardians: [
-        { email: '', firstName: '', lastName: '', phone: '', relationship: 'Mère' },
-      ],
-      signatoryType: 'self',
-      acceptedTerms: true,
-      signatureFile: undefined,
-    },
-  });
+    step,
+    isSelfManaged,
+    setIsSelfManaged,
+    isSubmitting,
+    form,
+    fields,
+    append,
+    remove,
+    onNextStep,
+    onPreviousStep,
+    updateRequiredFile,
+    onSubmitFinal,
+  } = useInscriptionForm();
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'guardians',
-  });
-
-  const onNextStep = () => {
-     handleSubmit(() => setStep(step + 1))();
-  };
-
-  const onSubmitFinal = async () => {
-    const step1Data = getValues() as JoueurFormData;
-    const step2Data = getValues() as AttestationData;
-    const payload = {
-      step1: step1Data,
-      step2: step2Data,
-      step3: {
-      documents: requiredFiles.map(f => ({ fileType: f.fileType, isObligatory: f.isObligatory }))
-    }
-    };
-    const formData = new FormData();
-    formData.append('data', JSON.stringify(payload));
-    const signatureFile = getValues('signatureFile');
-    if (signatureFile) formData.append('signature', signatureFile);
-    requiredFiles.forEach(f => formData.append(f.fileType, f.file))
-
-    setIsSubmitting(true);
-    try {
-      await api.post('/api/inscription/pre-register', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      toast.success('Inscription soumise !');
-      navigate('/login');
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Erreur');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Fonction pour ajouter/mettre à jour un fichier
-  const updateRequiredFile = (fileType: inscriptionFile['fileType'], file: File | null) => {
-  if (file) {
-    setRequiredFiles(prev => {
-      const existing = prev.find(f => f.fileType === fileType);
-      if (existing) {
-        return prev.map(f => f.fileType === fileType ? { ...f, file } : f);
-      }
-      return [...prev, { fileType, file, isObligatory: true }];
-    });
-  } else {
-    setRequiredFiles(prev => prev.filter(f => f.fileType !== fileType));
-  }
-};
-
-  const step1Fields = (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label>Email</Label>
-          <Input {...register('email')} />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-        </div>
-        <div>
-          <Label>Mot de passe</Label>
-          <Input type="password" {...register('password')} />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-        </div>
-        <div>
-          <Label>Confirmer mot de passe</Label>
-          <Input type="password" {...register('confirmPassword')} />
-          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
-        </div>
-        <div>
-          <Label>Nom</Label>
-          <Input {...register('lastName')} />
-          {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
-        </div>
-        <div>
-          <Label>Prénom(s)</Label>
-          <Input {...register('firstName')} />
-          {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
-        </div>
-        <div>
-          <Label>Date de naissance</Label>
-          <Input type="date" {...register('birthDate')} />
-          {errors.birthDate && <p className="text-red-500 text-sm">{errors.birthDate.message}</p>}
-        </div>
-        <div>
-          <Label>Sexe</Label>
-          <select {...register('gender')} className="w-full border rounded p-2">
-            <option value="M">Masculin</option>
-            <option value="F">Féminin</option>
-          </select>
-        </div>
-        <div>
-          <Label>Téléphone</Label>
-          <Input {...register('phone')} />
-        </div>
-        <div>
-          <Label>Lieu de résidence</Label>
-          <Input {...register('address')} />
-        </div>
-        <div>
-          <Label>Établissement scolaire</Label>
-          <Input {...register('school')} />
-        </div>
-        <div>
-          <Label>Classe / Niveau</Label>
-          <Input {...register('class')} />
-        </div>
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="selfManaged"
-          {...register('isSelfManaged')}
-          onCheckedChange={(checked) => setIsSelfManaged(checked as boolean)}
-        />
-        <Label htmlFor="selfManaged">Je gère moi-même mes paiements (sans garant)</Label>
-      </div>
-
-      {!isSelfManaged && (
-        <div className="space-y-4">
-          <Label>Garants (parents ou tuteurs)</Label>
-          {fields.map((field, index) => (
-            <div key={field.id} className="border p-4 rounded space-y-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <Input placeholder="Email du garant" {...register(`guardians.${index}.email`)} />
-                <Input placeholder="Nom" {...register(`guardians.${index}.lastName`)} />
-                <Input placeholder="Prénom" {...register(`guardians.${index}.firstName`)} />
-                <Input placeholder="Téléphone" {...register(`guardians.${index}.phone`)} />
-                <div>
-                  <Select
-                    value={watch(`guardians.${index}.relationship`)}
-                    onValueChange={(value: 'Père' | 'Mère' | 'Tuteur') =>
-                      setValue(`guardians.${index}.relationship`, value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Relation" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Père">Père</SelectItem>
-                      <SelectItem value="Mère">Mère</SelectItem>
-                      <SelectItem value="Tuteur">Tuteur</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              {index > 0 && (
-                <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
-                  Supprimer
-                </Button>
-              )}
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() =>
-              append({
-                email: '',
-                firstName: '',
-                lastName: '',
-                phone: '',
-                relationship: 'Mère',
-              })
-            }
-          >
-            + Ajouter un garant
-          </Button>
-        </div>
-      )}
-
-      {isSelfManaged && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label>Contact d'urgence (nom)</Label>
-            <Input {...register('emergencyContactName')} />
-          </div>
-          <div>
-            <Label>Contact d'urgence (téléphone)</Label>
-            <Input {...register('emergencyContactPhone')} />
-          </div>
-        </div>
-      )}
-    </>
-  );
-
-  const step2Fields = (
-    <div className="space-y-6">
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-bold text-primary">Règlement</h3>
-        <p className="text-sm">
-          FCFA 50.000 à l’inscription annuelle + FCFA 15.000/mois (à payer au plus tard le 05 du mois en cours). 
-          Prévoir à l’inscription 3 photos d’identité ainsi qu’un extrait de naissance.
-        </p>
-      </div>
-
-      <div>
-        <Label>Signataire de l'attestation</Label>
-        <Select
-          value={watch('signatoryType')}
-          onValueChange={(val: 'self' | 'guardian') => {
-            setValue('signatoryType', val);
-            if (val === 'self') {
-              const firstName = getValues('firstName');
-              const lastName = getValues('lastName');
-              setValue('signatoryFullName', `${firstName} ${lastName}`);
-              setValue('selectedGuardianIndex', undefined);
-            } else {
-              const guardians = getValues('guardians');
-              if (guardians && guardians.length > 0) {
-                const firstGuardian = guardians[0];
-                setValue('signatoryFullName', `${firstGuardian.firstName} ${firstGuardian.lastName}`);
-                setValue('selectedGuardianIndex', 0);
-              }
-            }
-          }}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Choisir le signataire" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="self">Moi-même (le joueur)</SelectItem>
-            <SelectItem value="guardian">Un parent / garant</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {watch('signatoryType') === 'guardian' && (
-        <div className="mt-2">
-          <Label>Choisir le garant</Label>
-          <Select
-            value={watch('selectedGuardianIndex')?.toString()}
-            onValueChange={(val) => {
-              const idx = parseInt(val);
-              const guardians = getValues('guardians');
-              if (guardians && guardians[idx]) {
-                setValue('selectedGuardianIndex', idx);
-                setValue('signatoryFullName', `${guardians[idx].firstName} ${guardians[idx].lastName}`);
-              }
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionner un garant" />
-            </SelectTrigger>
-            <SelectContent>
-              {(watch('guardians') || []).map((g, idx) => (
-                <SelectItem key={idx} value={idx.toString()}>
-                  {g.firstName} {g.lastName} ({g.relationship})
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      <div className="mt-3">
-        <Label>Nom complet du signataire (tel qu’il apparaîtra sur l’attestation)</Label>
-        <Input {...register('signatoryFullName')} placeholder="ex: Jean Dupont" />
-        {errors.signatoryFullName && <p className="text-red-500 text-sm">{errors.signatoryFullName.message}</p>}
-      </div>
-
-      <div className="border p-4 rounded-lg">
-        <p className="font-serif italic">
-          Je soussigné(e) <strong>{watch('signatoryFullName') || '___________'}</strong>,<br />
-          <span className="text-sm">
-            Après avoir pris connaissance des conditions précitées et les ayant acceptées, 
-            demande l’inscription de mon enfant aux séances de basket-ball initiées par Olympic Basket-ball Center (à partir de 4 ans).
-          </span>
-        </p>
-        <p className="mt-4 text-right">
-          Fait à Abidjan, le <strong>{new Date().toLocaleDateString()}</strong>
-        </p>
-      </div>
-
-      <div>
-        <Label>Signature manuscrite scannée (PDF ou image)</Label>
-        <Input
-          type="file"
-          accept=".pdf,.jpg,.jpeg,.png"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            setValue('signatureFile', file as any); // force accept undefined, but schema will catch
-          }}
-        />
-        {errors.signatureFile && <p className="text-red-500 text-sm">{errors.signatureFile.message}</p>}
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Checkbox id="acceptTerms" {...register('acceptedTerms')} />
-        <Label htmlFor="acceptTerms">J’accepte les conditions générales et l’attestation ci‑dessus</Label>
-      </div>
-      {errors.acceptedTerms && <p className="text-red-500 text-sm">{errors.acceptedTerms.message}</p>}
-    </div>
-  );
-
-  const step3Fields = (
-  <div className="space-y-4">
-    <div>
-      <Label>Extrait de naissance (obligatoire) - PDF ou image</Label>
-      <Input
-        type="file"
-        accept=".pdf,.jpg,.jpeg,.png"
-        onChange={(e) => updateRequiredFile('Extrait de Naissance', e.target.files?.[0] || null)}
-      />
-    </div>
-    <div>
-      <Label>Photo d'identité (obligatoire) - PDF ou image</Label>
-      <Input
-        type="file"
-        accept=".pdf,.jpg,.jpeg,.png"
-        onChange={(e) => updateRequiredFile('Photo d\'identite', e.target.files?.[0] || null)}
-      />
-    </div>
-  </div>
-);
-
-
+  const { register, watch, setValue, getValues, formState } = form;
+  const { errors } = formState;
 
   return (
     <div className="container max-w-3xl mx-auto py-10">
@@ -437,13 +36,33 @@ export default function InscriptionJoueur() {
         </CardHeader>
         <CardContent>
           <form className="space-y-6">
-            {step === 1 && step1Fields}
-            {step === 2 && step2Fields}
-            {step === 3 && step3Fields}
+            {step === 1 && (
+              <Step1
+                isSelfManaged={isSelfManaged}
+                setIsSelfManaged={setIsSelfManaged}
+                fields={fields}
+                append={append}
+                remove={remove}
+                watch={watch}
+                setValue={setValue}
+                errors={errors}
+                register={register}
+              />
+            )}
+            {step === 2 && (
+              <Step2
+                register={register}
+                watch={watch}
+                setValue={setValue}
+                getValues={getValues}
+                errors={errors}
+              />
+            )}
+            {step === 3 && <Step3 updateRequiredFile={updateRequiredFile} />}
 
             <div className="flex justify-between gap-4">
               {step > 1 && (
-                <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
+                <Button type="button" variant="outline" onClick={onPreviousStep}>
                   Retour
                 </Button>
               )}

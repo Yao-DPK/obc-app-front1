@@ -6,18 +6,12 @@ import {
   type LucideIcon
 } from 'lucide-react';
 
-
 export interface NavItem {
   to: string;
   label: string;
   icon: LucideIcon;
   roles: UserRole[];
-  /** Section de regroupement (optionnel) */
-  section?: 'principal' | 'gestion' | 'parametres' | 'admin';
-  /** Affichage uniquement dans Sidebar (pas dans Header) */
-  sidebarOnly?: boolean;
-  /** Affichage uniquement dans Header (pas dans Sidebar) */
-  headerOnly?: boolean;
+  section: 'principal' | 'gestion' | 'admin' | 'parametres';
 }
 
 const navItems: NavItem[] = [
@@ -25,28 +19,25 @@ const navItems: NavItem[] = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
   { to: '/documents', label: 'Documents', icon: FileText, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
   { to: '/payments', label: 'Paiements', icon: CreditCard, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
-  { to: '/children', label: 'Mes enfants', icon: Users, roles: ['parent'], section: 'principal', sidebarOnly: true },
+  { to: '/children', label: 'Mes enfants', icon: Users, roles: ['parent'], section: 'principal' },
   
   // Section Gestion (pour admin et super admin)
-  { to: '/admin/registrations', label: 'Valider inscriptions', icon: UserPlus, roles: ['admin'], section: 'gestion', sidebarOnly: true },
-  { to: '/super-admin/registrations', label: 'Valider inscriptions', icon: UserPlus, roles: ['super_admin'], section: 'gestion', sidebarOnly: true },
-  { to: '/admin/documents', label: 'Valider documents', icon: FileText, roles: ['admin', 'super_admin'], section: 'gestion', sidebarOnly: true },
-  { to: '/admin/payments', label: 'Valider paiements', icon: CreditCard, roles: ['admin', 'super_admin'], section: 'gestion', sidebarOnly: true },
+  { to: '/admin/registrations', label: 'Valider inscriptions', icon: UserPlus, roles: ['admin'], section: 'gestion' },
+  { to: '/super-admin/registrations', label: 'Gestion inscriptions', icon: UserPlus, roles: ['super_admin'], section: 'gestion' },
+  { to: '/admin/documents', label: 'Valider documents', icon: FileText, roles: ['admin', 'super_admin'], section: 'gestion' },
+  { to: '/admin/payments', label: 'Valider paiements', icon: CreditCard, roles: ['admin', 'super_admin'], section: 'gestion' },
   
   // Section Administration (réservée super admin)
-  { to: '/super-admin/admins', label: 'Gérer les admins', icon: UserCog, roles: ['super_admin'], section: 'admin', sidebarOnly: true },
-  { to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin', sidebarOnly: true },
+  { to: '/super-admin/admins', label: 'Gérer les admins', icon: UserCog, roles: ['super_admin'], section: 'admin' },
+  { to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin' },
 
-  // Lien "Administration" pour la barre de navigation rapide (Header)
-  { to: '/admin', label: 'Administration', icon: Shield, roles: ['admin', 'super_admin'], section: 'admin', headerOnly: true },
-  { to: '/super-admin', label: 'Super Admin', icon: Crown, roles: ['super_admin'], section: 'admin', headerOnly: true },
+  // Lien "Administration" pour accès rapide (visible pour admin et super_admin)
+  { to: '/admin', label: 'Administration', icon: Shield, roles: ['admin', 'super_admin'], section: 'admin' },
+  { to: '/super-admin', label: 'Super Admin', icon: Crown, roles: ['super_admin'], section: 'admin' },
 ];
 
-// Optionnel : grouper par section pour la Sidebar
 export const groupedNavItems = (role: UserRole) => {
-  const filtered = navItems.filter(item => 
-    item.roles.includes(role) && !item.headerOnly
-  );
+  const filtered = navItems.filter(item => item.roles.includes(role));
   
   return filtered.reduce((acc, item) => {
     const section = item.section || 'principal';
@@ -55,13 +46,5 @@ export const groupedNavItems = (role: UserRole) => {
     return acc;
   }, {} as Record<string, NavItem[]>);
 };
-
-// Pour le Header (liens principaux, sans section admin si déjà dans un sous‑menu)
-export const headerNavItems = (role: UserRole) => 
-  navItems.filter(item => 
-    item.roles.includes(role) && 
-    !item.sidebarOnly &&
-    item.section !== 'admin' // on gère les liens admin séparément dans le Header
-  );
 
 export default navItems;

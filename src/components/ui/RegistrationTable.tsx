@@ -1,5 +1,5 @@
 // src/components/admin/RegistrationTable.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useUserStore } from '@/stores/useUserStore';
 import { Button } from '@/components/ui/button';
@@ -11,14 +11,24 @@ import { CheckCircle, XCircle, Users, Loader2 } from 'lucide-react';
 import api from '@/lib/axios';
 import { useNavigate } from 'react-router-dom';
 
-export function RegistrationTable() {
-  const { users, fetchUsers } = useUserStore();
+interface RegistrationTableProps {
+  status: string;
+}
+
+
+export function RegistrationTable({status}: RegistrationTableProps) {
+  const { users, fetchPlayers} = useUserStore();
   const navigate = useNavigate();
   const [loadingId, setLoadingId] = useState<number | null>(null);
 
   const pendingUsers = users.filter(
-    (u) => u.registrationStatus === 'pre_inscrit' || u.registrationStatus === 'attestation_signee'
+    (u) => u.registrationStatus === status
   );
+
+  useEffect(() => {
+      fetchPlayers();
+    }, []);
+  
 
   const handleValidate = async (userId: number) => {
     setLoadingId(userId);
@@ -41,7 +51,7 @@ export function RegistrationTable() {
     try {
       await api.patch(`/api/users/${userId}/reject-registration`);
       toast.success('Inscription rejetée');
-      await fetchUsers();
+      await fetchPlayers();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Erreur');
     } finally {
@@ -54,7 +64,19 @@ export function RegistrationTable() {
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <Users className="h-12 w-12 text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">Aucune inscription en attente.</p>
+          <p className="text-muted-foreground">
+            {status == 'pre_inscrit' && 
+              'Aucune inscription en attente.'
+            }
+
+            {status == 'inscrit' && 
+              'Aucune inscription validée'
+            }
+            
+            {status == 'rejeté' && 
+              'Aucune inscription rejetée.'
+            }
+          </p>
           <p className="text-sm text-muted-foreground">Les nouvelles inscriptions apparaîtront ici.</p>
         </CardContent>
       </Card>
@@ -71,7 +93,17 @@ export function RegistrationTable() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-xl font-heading text-primary">
-            Inscriptions en attente ({pendingUsers.length})
+            {status == 'pre_inscrit' && 
+              `Inscriptions en attente (${pendingUsers.length})`
+            }
+
+            {status == 'inscrit' && 
+              'Inscriptions validées'
+            }
+            
+            {status == 'rejeté' && 
+              'Inscriptions rejetée'
+            }
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             Validez ou rejetez les demandes d'inscription.
