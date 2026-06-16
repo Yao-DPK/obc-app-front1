@@ -29,7 +29,7 @@ type AdminFormData = z.infer<typeof adminSchema>;
 
 export default function ManageAdmins() {
   const { user } = useAuth();
-   const { users, isLoading, fetchUsers, updateUserStatus } = useUserStore();
+   const { users, isLoading, fetchUsers } = useUserStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -92,11 +92,11 @@ export default function ManageAdmins() {
 
   // Ajouter un admin
   const onSubmit = async (data: AdminFormData) => {
-    setIsSubmitting(true);
+    /* setIsSubmitting(true);
     try {
       // Appel API pour créer un admin (à implémenter)
       // Exemple: await api.post('/api/admin/create', data);
-      
+
       toast.success('Administrateur créé avec succès');
       setIsDialogOpen(false);
       reset();
@@ -105,12 +105,12 @@ export default function ManageAdmins() {
       toast.error(error.response?.data?.message || 'Erreur lors de la création');
     } finally {
       setIsSubmitting(false);
-    }
+    } */
   };
 
   // Supprimer un admin
   const handleDelete = async (userId: number) => {
-    if (!confirm('Voulez-vous vraiment supprimer cet administrateur ?')) return;
+    /* if (!confirm('Voulez-vous vraiment supprimer cet administrateur ?')) return;
     try {
       // Appel API pour supprimer un admin (à implémenter)
       // Exemple: await api.delete(`/api/admin/${userId}`);
@@ -118,7 +118,7 @@ export default function ManageAdmins() {
       fetchUsers();
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Erreur lors de la suppression');
-    }
+    } */
   };
 
   if (isLoading) {

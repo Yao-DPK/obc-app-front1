@@ -1,8 +1,7 @@
 // src/config/navigation.ts
 import type { UserRole } from '@/types/user.type';
 import { 
-  LayoutDashboard, UserCog, 
-  Shield, UserPlus,
+  LayoutDashboard, UserPlus,
   type LucideIcon
 } from 'lucide-react';
 
