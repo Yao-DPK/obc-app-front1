@@ -4,12 +4,14 @@ import { RegistrationTable } from '@/components/ui/RegistrationTable';
 
 export default function AdminRegistrations() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-20">
       <PageHeader
         title="Gestion des inscriptions"
         description="Validez ou rejetez les demandes d'inscription des joueurs"
       />
-      <RegistrationTable />
+      <RegistrationTable status="pre_inscrit"/>
+      <RegistrationTable status="inscrit"/>
+      <RegistrationTable status="rejeté"/>
     </div>
   );
 }
