@@ -44,7 +44,7 @@ export const paymentService = {
   },
 
   async updateObligationStatus(id: number, status: string): Promise<PaymentObligation> {
-    const response = await api.patch(`/payment-obligations/${id}/status`, { status });
+    const response = await api.patch(`/api/payment-obligations/${id}/status`, { status });
     return response.data;
   },
 

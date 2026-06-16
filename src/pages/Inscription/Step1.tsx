@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FieldError } from '@/components/ui/field';
 import type { FieldArrayWithId } from 'react-hook-form';
 
 interface Step1Props {
@@ -30,78 +31,86 @@ export function Step1({
   register,
 }: Step1Props) {
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label>Email</Label>
-          <Input {...register('email')} />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="space-y-1.5">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" {...register('email')} className="h-10" />
+          {errors.email && <FieldError errors={errors.email} />}
         </div>
-        <div>
-          <Label>Mot de passe</Label>
-          <Input type="password" {...register('password')} />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+        <div className="space-y-1.5">
+          <Label htmlFor="password">Mot de passe</Label>
+          <Input id="password" type="password" {...register('password')} className="h-10" />
+          {errors.password && <FieldError errors={errors.password} />}
         </div>
-        <div>
-          <Label>Confirmer mot de passe</Label>
-          <Input type="password" {...register('confirmPassword')} />
-          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+        <div className="space-y-1.5">
+          <Label htmlFor="confirmPassword">Confirmer</Label>
+          <Input id="confirmPassword" type="password" {...register('confirmPassword')} className="h-10" />
+          {errors.confirmPassword && <FieldError errors={errors.confirmPassword} />}
         </div>
-        <div>
-          <Label>Nom</Label>
-          <Input {...register('lastName')} />
-          {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
+        <div className="space-y-1.5">
+          <Label htmlFor="lastName">Nom</Label>
+          <Input id="lastName" {...register('lastName')} className="h-10" />
+          {errors.lastName && <FieldError errors={errors.lastName} />}
         </div>
-        <div>
-          <Label>Prénom(s)</Label>
-          <Input {...register('firstName')} />
-          {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
+        <div className="space-y-1.5">
+          <Label htmlFor="firstName">Prénom(s)</Label>
+          <Input id="firstName" {...register('firstName')} className="h-10" />
+          {errors.firstName && <FieldError errors={errors.firstName} />}
         </div>
-        <div>
-          <Label>Date de naissance</Label>
-          <Input type="date" {...register('birthDate')} />
-          {errors.birthDate && <p className="text-red-500 text-sm">{errors.birthDate.message}</p>}
+        <div className="space-y-1.5">
+          <Label htmlFor="birthDate">Date de naissance</Label>
+          <Input id="birthDate" type="date" {...register('birthDate')} className="h-10" />
+          {errors.birthDate && <FieldError errors={errors.birthDate} />}
         </div>
-        <div>
-          <Label>Sexe</Label>
-          <select {...register('gender')} className="w-full border rounded p-2">
-            <option value="M">Masculin</option>
-            <option value="F">Féminin</option>
-          </select>
+        <div className="space-y-1.5">
+          <Label htmlFor="gender">Sexe</Label>
+          <Select
+            value={watch('gender')}
+            onValueChange={(val) => setValue('gender', val)}
+          >
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Choisir" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="M">Masculin</SelectItem>
+              <SelectItem value="F">Féminin</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <div>
-          <Label>Téléphone</Label>
-          <Input {...register('phone')} />
+        <div className="space-y-1.5">
+          <Label htmlFor="phone">Téléphone</Label>
+          <Input id="phone" {...register('phone')} className="h-10" />
         </div>
-        <div>
-          <Label>Lieu de résidence</Label>
-          <Input {...register('address')} />
+        <div className="space-y-1.5">
+          <Label htmlFor="address">Lieu de résidence</Label>
+          <Input id="address" {...register('address')} className="h-10" />
         </div>
-        <div>
-          <Label>Établissement scolaire</Label>
-          <Input {...register('school')} />
+        <div className="space-y-1.5">
+          <Label htmlFor="school">Établissement scolaire</Label>
+          <Input id="school" {...register('school')} className="h-10" />
         </div>
-        <div>
-          <Label>Classe / Niveau</Label>
-          <Input {...register('class')} />
+        <div className="space-y-1.5">
+          <Label htmlFor="class">Classe / Niveau</Label>
+          <Input id="class" {...register('class')} className="h-10" />
         </div>
       </div>
 
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
         <Checkbox
           id="selfManaged"
           {...register('isSelfManaged')}
           onCheckedChange={(checked) => setIsSelfManaged(checked as boolean)}
         />
-        <Label htmlFor="selfManaged">Je gère moi-même mes paiements (sans garant)</Label>
+        <Label htmlFor="selfManaged" className="text-sm">Je gère moi‑même mes paiements (sans garant)</Label>
       </div>
 
       {!isSelfManaged && (
         <div className="space-y-4">
-          <Label>Garants (parents ou tuteurs)</Label>
+          <Label className="font-semibold">Garants (parents ou tuteurs)</Label>
           {fields.map((field, index) => (
-            <div key={field.id} className="border p-4 rounded space-y-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div key={field.id} className="border border-gray-200 p-4 rounded-lg space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Input placeholder="Email du garant" {...register(`guardians.${index}.email`)} />
                 <Input placeholder="Nom" {...register(`guardians.${index}.lastName`)} />
                 <Input placeholder="Prénom" {...register(`guardians.${index}.firstName`)} />
@@ -126,7 +135,7 @@ export function Step1({
               </div>
               {index > 0 && (
                 <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
-                  Supprimer
+                  Supprimer ce garant
                 </Button>
               )}
             </div>
@@ -134,6 +143,7 @@ export function Step1({
           <Button
             type="button"
             variant="outline"
+            className="w-full"
             onClick={() =>
               append({
                 email: '',
@@ -150,17 +160,17 @@ export function Step1({
       )}
 
       {isSelfManaged && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label>Contact d'urgence (nom)</Label>
-            <Input {...register('emergencyContactName')} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <Label htmlFor="emergencyContactName">Contact d'urgence (nom)</Label>
+            <Input id="emergencyContactName" {...register('emergencyContactName')} className="h-10" />
           </div>
-          <div>
-            <Label>Contact d'urgence (téléphone)</Label>
-            <Input {...register('emergencyContactPhone')} />
+          <div className="space-y-1.5">
+            <Label htmlFor="emergencyContactPhone">Contact d'urgence (téléphone)</Label>
+            <Input id="emergencyContactPhone" {...register('emergencyContactPhone')} className="h-10" />
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

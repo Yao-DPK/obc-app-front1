@@ -117,7 +117,7 @@ export function SidebarContent({ mobile, onClose }: SidebarContentProps) {
               {user.firstName} {user.lastName}
             </p>
             <p className="text-xs text-gray-500 truncate">
-              {user.role === 'super_admin' ? 'Super Admin' :
+              {user.role === 'super_admin' ? 'Superviseur' :
                user.role === 'admin' ? 'Administrateur' :
                user.role === 'parent' ? 'Parent' : 'Joueur'}
             </p>

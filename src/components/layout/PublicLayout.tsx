@@ -6,10 +6,13 @@ import { Footer } from './Footer';
 
 export function PublicLayout() {
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/10">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary/5 via-background to-secondary/10">
+      {/* Lien d'accessibilité */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white p-2 rounded z-50">
         Aller au contenu principal
       </a>
+
+      {/* Header fixe */}
       <header className="bg-primary shadow-md sticky top-0 z-50 flex-shrink-0">
         <div className="container mx-auto px-4 py-4 flex justify-center md:justify-start">
           <Link to="/" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-secondary rounded">
@@ -17,11 +20,15 @@ export function PublicLayout() {
           </Link>
         </div>
       </header>
-      <main id="main-content" className="flex-1 flex items-center justify-center p-10 overflow-hidden">
-        <div className="w-full">
+
+      {/* Contenu principal */}
+      <main id="main-content" className="flex-1 flex items-center justify-center p-6 md:p-10">
+        <div className="w-full max-w-5xl">
           <Outlet />
         </div>
       </main>
+
+      {/* Footer (collé en bas via mt-auto) */}
       <Footer />
       <Toaster position="top-right" richColors closeButton />
     </div>

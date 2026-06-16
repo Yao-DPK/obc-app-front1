@@ -7,7 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import SuperAdminDashboard from "./pages/super_admin/SuperAdminDashboard";
 import ManageAdmins from "./pages/super_admin/ManageAdmins";
 import Unauthorized from "./pages/Unauthorized";
-import InscriptionJoueur from "./pages/InscriptionJoueur";
+import InscriptionJoueur from "./pages/Inscription/InscriptionJoueur";
 import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -59,7 +59,7 @@ export function AppRouter() {
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
-        {/* Super Admin uniquement */}
+        {/* Superviseur uniquement */}
         <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
           {/* <Route path="/test" element={<Test/>} /> */}
           <Route path="/super-admin/stats" element={<SuperAdminDashboard />} />

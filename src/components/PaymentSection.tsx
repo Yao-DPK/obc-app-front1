@@ -1,9 +1,11 @@
 // src/components/PaymentSection.tsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePaymentStore } from '@/stores/usePaymentStore';
+import { toast } from 'sonner';
 
 interface PaymentSectionProps {
   playerId: number;
@@ -12,9 +14,10 @@ interface PaymentSectionProps {
 }
 
 export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps) {
-  const { obligations, isLoadingObligations, fetchObligations } = usePaymentStore();
+  const { obligations, isLoadingObligations, fetchObligations, updateObligationStatus } = usePaymentStore();
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
   const invalid_obligations = obligations.filter(o => o.status !== 'paid');
-  const isSectionValid = invalid_obligations.length > 0;
+  const isSectionValid = invalid_obligations.length === 0; // valid si aucune non payée
 
   useEffect(() => {
     if (playerId) {
@@ -22,12 +25,23 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
     }
   }, [playerId, fetchObligations]);
 
-
   useEffect(() => {
     onValidChange?.(isSectionValid);
   }, [isSectionValid, onValidChange]);
 
-  
+  const handleStatusChange = async (obligationId: number, newStatus: string) => {
+    setUpdatingId(obligationId);
+    try {
+      await updateObligationStatus(obligationId, newStatus as any);
+      toast.success(`Statut mis à jour : ${newStatus}`);
+      await fetchObligations(playerId);
+    } catch (error) {
+      toast.error('Erreur lors de la mise à jour du statut');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   if (isLoadingObligations) {
     return (
       <div className="space-y-4">
@@ -54,27 +68,46 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
               <CardTitle className="text-lg">{obligation.description}</CardTitle>
-              <Badge
-                variant={
-                  obligation.status === 'paid'
-                    ? 'default'
+              <div className="flex items-center gap-2">
+                <Badge
+                  variant={
+                    obligation.status === 'paid'
+                      ? 'default'
+                      : obligation.status === 'overdue'
+                      ? 'secondary'
+                      : 'secondary'
+                  }
+                >
+                  {obligation.status === 'paid'
+                    ? 'Payé'
                     : obligation.status === 'overdue'
-                    ? 'destructive'
-                    : 'secondary'
-                }
-              >
-                {obligation.status === 'paid'
-                  ? 'Payé'
-                  : obligation.status === 'overdue'
-                  ? 'En retard'
-                  : 'En attente'}
-              </Badge>
+                    ? 'En retard'
+                    : obligation.status === 'cancelled'
+                    ? 'Annulé'
+                    : 'En attente'}
+                </Badge>
+                <Select
+                  value={obligation.status}
+                  onValueChange={(val) => handleStatusChange(obligation.id, val)}
+                  disabled={updatingId === obligation.id}
+                >
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">En attente</SelectItem>
+                    <SelectItem value="paid">Payé</SelectItem>
+                    <SelectItem value="overdue">En retard</SelectItem>
+                    <SelectItem value="cancelled">Annulé</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between text-sm">
               <span>Montant : {obligation.amount.toLocaleString()} FCFA</span>
-              <span>Date limite : {new Date(obligation.dueDate).toLocaleDateString()}</span>
+              <span>Date limite : {obligation.dueDate ? new Date(obligation.dueDate).toLocaleDateString() : 'Non définie'}</span>
             </div>
           </CardContent>
         </Card>
