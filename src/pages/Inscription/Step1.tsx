@@ -96,14 +96,14 @@ export function Step1({
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
+      {/* <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
         <Checkbox
           id="selfManaged"
           {...register('isSelfManaged')}
           onCheckedChange={(checked) => setIsSelfManaged(checked as boolean)}
         />
         <Label htmlFor="selfManaged" className="text-sm">Je gère moi‑même mes paiements (sans garant)</Label>
-      </div>
+      </div> */}
 
       {!isSelfManaged && (
         <div className="space-y-4">
