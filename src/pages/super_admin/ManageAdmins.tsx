@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { toast } from 'sonner';
+//import { toast } from 'sonner';
 import { useUserStore } from '@/stores/useUserStore';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DataTable } from '@/components/ui/DataTable';
@@ -31,12 +31,12 @@ export default function ManageAdmins() {
   const { user } = useAuth();
    const { users, isLoading, fetchUsers } = useUserStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, /* setIsSubmitting */] = useState(false);
 
   const {
     register,
     handleSubmit,
-    reset,
+    /* reset, */
     formState: { errors },
   } = useForm<AdminFormData>({
     resolver: zodResolver(adminSchema),
@@ -69,7 +69,7 @@ export default function ManageAdmins() {
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => handleDelete(admin.id)}
+            onClick={() => handleDelete(/* admin.id */)}
             disabled={isSelf}
           >
             {isSelf ? 'Vous' : <Trash2 className="h-4 w-4" />}
@@ -91,7 +91,7 @@ export default function ManageAdmins() {
   }, []);
 
   // Ajouter un admin
-  const onSubmit = async (data: AdminFormData) => {
+  const onSubmit = async (/* data: AdminFormData */) => {
     /* setIsSubmitting(true);
     try {
       // Appel API pour créer un admin (à implémenter)
@@ -109,7 +109,7 @@ export default function ManageAdmins() {
   };
 
   // Supprimer un admin
-  const handleDelete = async (userId: number) => {
+  const handleDelete = async (/* userId: number */) => {
     /* if (!confirm('Voulez-vous vraiment supprimer cet administrateur ?')) return;
     try {
       // Appel API pour supprimer un admin (à implémenter)

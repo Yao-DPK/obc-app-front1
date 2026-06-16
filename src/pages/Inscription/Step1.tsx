@@ -1,7 +1,7 @@
 // apps/web/src/components/inscription/Step1.tsx
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+//import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FieldError } from '@/components/ui/field';
@@ -21,7 +21,7 @@ interface Step1Props {
 
 export function Step1({
   isSelfManaged,
-  setIsSelfManaged,
+  /* setIsSelfManaged, */
   fields,
   append,
   remove,
