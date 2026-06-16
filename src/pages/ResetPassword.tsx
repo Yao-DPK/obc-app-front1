@@ -5,9 +5,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import api from '../lib/axios';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { KeyRound, CheckCircle2 } from 'lucide-react';
 
 const resetPasswordSchema = z.object({
   password: z.string().min(6, 'Au moins 6 caractères'),
@@ -37,7 +38,6 @@ export default function ResetPassword() {
       setValidToken(false);
       return;
     }
-    // Optionnel : vérifier la validité du token auprès du backend
     setValidToken(true);
   }, [token]);
 
@@ -63,13 +63,18 @@ export default function ResetPassword() {
 
   if (validToken === false) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+        <Card className="w-full max-w-md shadow-2xl border-destructive/20 rounded-2xl backdrop-blur-sm bg-white/95">
           <CardHeader>
-            <CardTitle className="text-center text-primary">Lien invalide</CardTitle>
+            <div className="flex justify-center">
+              <div className="bg-destructive/10 p-3 rounded-full shadow-md">
+                <KeyRound className="h-8 w-8 text-destructive" />
+              </div>
+            </div>
+            <CardTitle className="text-center text-2xl text-destructive">Lien invalide</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-center mb-4">
+          <CardContent className="space-y-4">
+            <p className="text-center text-muted-foreground">
               Le lien de réinitialisation est manquant ou invalide.
             </p>
             <Link to="/forgot-password" className="text-secondary hover:underline block text-center">
@@ -82,19 +87,26 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center text-primary">Nouveau mot de passe</CardTitle>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <Card className="w-full max-w-md shadow-2xl border-primary/20 rounded-2xl backdrop-blur-sm bg-white/95">
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center">
+            <div className="bg-primary/10 p-3 rounded-full shadow-md">
+              <CheckCircle2 className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <CardTitle className="text-center text-2xl text-primary">Nouveau mot de passe</CardTitle>
+          <p className="text-center text-muted-foreground">Choisissez un mot de passe sécurisé</p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <Input
                 type="password"
                 placeholder="Nouveau mot de passe"
                 {...register('password')}
                 disabled={isLoading}
+                className="h-11 px-4 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
               />
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
@@ -106,19 +118,24 @@ export default function ResetPassword() {
                 placeholder="Confirmer le mot de passe"
                 {...register('confirmPassword')}
                 disabled={isLoading}
+                className="h-11 px-4 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
               />
               {errors.confirmPassword && (
                 <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
               )}
             </div>
-            <Button type="submit" className="w-full bg-secondary text-primary hover:bg-secondary/90" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full h-11 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-md hover:shadow-lg transition-all"
+              disabled={isLoading}
+            >
               {isLoading ? 'Modification en cours...' : 'Modifier le mot de passe'}
             </Button>
-            <p className="text-center text-sm">
-              <Link to="/login" className="text-secondary hover:underline">
-                Retour à la connexion
+            <div className="text-center">
+              <Link to="/login" className="text-sm text-muted-foreground hover:text-secondary transition">
+                ← Retour à l’accueil
               </Link>
-            </p>
+            </div>
           </form>
         </CardContent>
       </Card>

@@ -6,9 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import api from '../lib/axios';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { KeyRound, MailCheck } from 'lucide-react';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Email invalide'),
@@ -43,17 +44,22 @@ export default function ForgotPassword() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-center text-primary">Email envoyé</CardTitle>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+        <Card className="w-full max-w-md shadow-2xl border-primary/20 rounded-2xl backdrop-blur-sm bg-white/95">
+          <CardHeader className="space-y-4">
+            <div className="flex justify-center">
+              <div className="bg-green-500 p-3 rounded-full shadow-md">
+                <MailCheck className="h-8 w-8 text-white" />
+              </div>
+            </div>
+            <CardTitle className="text-center text-2xl text-primary">Email envoyé</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-center mb-4">
+          <CardContent className="space-y-4">
+            <p className="text-center text-muted-foreground">
               Si un compte existe avec cet email, vous recevrez un lien pour réinitialiser votre mot de passe.
             </p>
             <Link to="/login" className="text-secondary hover:underline block text-center">
-              Retour à la connexion
+              Retour à l’accueil
             </Link>
           </CardContent>
         </Card>
@@ -62,33 +68,43 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center text-primary">Mot de passe oublié</CardTitle>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <Card className="w-full max-w-md shadow-2xl border-primary/20 rounded-2xl backdrop-blur-sm bg-white/95">
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center">
+            <div className="bg-primary/10 p-3 rounded-full shadow-md">
+              <KeyRound className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <CardTitle className="text-center text-2xl text-primary">Mot de passe oublié</CardTitle>
+          <p className="text-center text-muted-foreground">Saisissez votre email pour recevoir un lien</p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <Input
                 type="email"
-                placeholder="Votre adresse email"
+                placeholder="adresse@email.com"
                 {...register('email')}
                 disabled={isLoading}
+                className="h-11 px-4 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
-            <Button type="submit" className="w-full bg-secondary text-primary hover:bg-secondary/90" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full h-11 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-md hover:shadow-lg transition-all"
+              disabled={isLoading}
+            >
               {isLoading ? 'Envoi en cours...' : 'Envoyer le lien'}
             </Button>
-            <p className="text-center text-sm">
-              Vous vous souvenez de votre mot de passe ?{' '}
-              <Link to="/login" className="text-secondary hover:underline">
-                Connexion
+            <div className="text-center">
+              <Link to="/login" className="text-sm text-muted-foreground hover:text-secondary transition">
+                ← Retour à l’accueil
               </Link>
-            </p>
+            </div>
           </form>
         </CardContent>
       </Card>

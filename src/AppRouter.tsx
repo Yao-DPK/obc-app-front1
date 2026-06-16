@@ -16,6 +16,7 @@ import SuperAdminRegistrations from "./pages/super_admin/SuperAdminRegistrations
 //import Test from "./pages/Test";
 import { UserLoader } from "./components/UserLoader";
 import { RegistrationValidationPage } from "./pages/super_admin/RegistrationValidationPage";
+import AdminLogin from "./pages/AdminLogin";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -44,8 +45,9 @@ export function AppRouter() {
     <Routes>
       {/* Routes publiques */}
       <Route element={<PublicLayout />}>
-       <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<InscriptionJoueur />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/admin" element={<AdminLogin />} />
+        <Route path="/inscription/joueur" element={<InscriptionJoueur />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
