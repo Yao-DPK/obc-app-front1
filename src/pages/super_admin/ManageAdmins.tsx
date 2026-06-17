@@ -69,7 +69,7 @@ export default function ManageAdmins() {
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => handleDelete(/* admin.id */)}
+            onClick={() => handleDelete(/* w */)}
             disabled={isSelf}
           >
             {isSelf ? 'Vous' : <Trash2 className="h-4 w-4" />}
