@@ -5,7 +5,7 @@ import { UserPlus, LogIn, KeyRound, Clock } from 'lucide-react';
 
 export default function Login() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+    <div className="min-h-screen flex items-center justify-center  p-4">
       <div className="w-full max-w-5xl">
         <div className="text-center mb-10">
           <div className="inline-flex bg-gradient-to-r from-primary to-primary/70 p-3 rounded-full shadow-md mb-4">
@@ -90,10 +90,6 @@ export default function Login() {
             </CardContent>
           </Card>
         </div>
-
-        <p className="text-center text-xs text-muted-foreground mt-10">
-          &copy; {new Date().getFullYear()} Olympic Basket-ball Center – Tous droits réservés
-        </p>
       </div>
     </div>
   );

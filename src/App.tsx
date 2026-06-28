@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './AppRouter';
 import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
+import CustomLoader from './components/CustomLoader';
 
 
 export default function App() {
@@ -12,8 +13,8 @@ export default function App() {
   }, []);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen">Chargement...</div>;
-  }
+    return <CustomLoader />;
+}
 
   return (
       <BrowserRouter>
