@@ -13,7 +13,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AdminRegistrations from "./pages/admin/AdminRegistrations";
 import SuperAdminRegistrations from "./pages/super_admin/SuperAdminRegistrations";
-import Test from "./pages/Test";
+//import Test from "./pages/Test";
 import { UserLoader } from "./components/UserLoader";
 import { RegistrationValidationPage } from "./pages/super_admin/RegistrationValidationPage";
 import AdminLogin from "./pages/AdminLogin";
@@ -72,7 +72,7 @@ export function AppRouter() {
 
         {/* Superviseur uniquement */}
         <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
-          <Route path="/test" element={<Test/>} />
+          {/* <Route path="/test" element={<Test/>} /> */}
           <Route path="/super-admin/stats" element={<SuperAdminDashboard />} />
           <Route path="/super-admin/admins" element={<ManageAdmins />} />
           <Route path="/super-admin/registrations" element={<SuperAdminRegistrations />} />

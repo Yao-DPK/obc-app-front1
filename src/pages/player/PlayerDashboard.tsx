@@ -1,4 +1,4 @@
-// apps/web/src/pages/dashboard/PlayerDashboard.tsx
+/* // apps/web/src/pages/dashboard/PlayerDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -122,4 +122,4 @@ export default function PlayerDashboard() {
       </Card>
     </motion.div>
   );
-}
+} */

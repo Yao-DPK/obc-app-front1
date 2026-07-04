@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Eye, Pencil, File, Download } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
 
 const MOCK_DOCUMENTS = [
   { id: 1, name: 'Pièce d\'identité', type: 'PDF', status: 'validé', url: '/doc1.pdf', playerId: 1 },
