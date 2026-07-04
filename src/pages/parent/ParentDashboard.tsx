@@ -3,53 +3,51 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useGuardianStore } from '@/stores/useGuardianStore';
-import { useUserStore } from '@/stores/useUserStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, FileText, CreditCard, AlertCircle, CheckCircle } from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
+import { Users, FileText, CreditCard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 export default function ParentDashboard() {
   const { user } = useAuth();
-  const { getPlayersByGuardian, fetchGuardianRelationships } = useGuardianStore();
-  const { getUserById, fetchUsers } = useUserStore();
-  const { documents, fetchDocuments } = useDocumentStore();
-  const { payments, fetchPayments } = usePaymentStore();
+  const { players, getMyPlayers, isLoading } = useGuardianStore();
+  const { documents } = useDocumentStore();
+  const { payments } = usePaymentStore();
 
   useEffect(() => {
-    if (user?.id) {
-      fetchGuardianRelationships();
-      fetchUsers();
-      // Récupérer les documents et paiements pour l'utilisateur courant (parent)
-      fetchDocuments(user.id);
-      fetchPayments(user.id);
-    }
+    getMyPlayers();
+    console.log(`user: ${JSON.stringify(user)}`);
   }, [user]);
 
-  const players = getPlayersByGuardian(user?.id || 0);
-  const playersDetails = players.map(p => getUserById(p.playerId)).filter(Boolean);
+  // Métriques
+  const childrenCount = players.length;
 
-  // Compter les documents manquants pour les enfants
-  const childrenMissingDocs = playersDetails.filter(player => {
-    const playerDocs = documents.filter(d => d.userId === player!.id);
-    const hasMandatory = playerDocs.some(d => d.isObligatory && d.validatedAt);
-    return !hasMandatory;
+  const missingDocs = players.filter((player) => {
+    const playerDocs = documents.filter(d => d.userId === player.id);
+    const hasMandatoryValid = playerDocs.some(d => d.isObligatory && d.validatedAt);
+    return !hasMandatoryValid;
   }).length;
 
-  // Vérifier les paiements en retard (ex: mensualité du mois)
-  const overduePayments = payments.filter(p => p.status === 'pending' && new Date(p.declaredAt) < new Date()).length;
+  const overduePayments = payments.filter(p => 
+    p.status === 'pending' && new Date(p.declaredAt) < new Date()
+  ).length;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+      </div>
+    );
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="space-y-6"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <PageHeader
         title="Tableau de bord"
         description="Suivez les activités de vos enfants"
       />
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -57,21 +55,23 @@ export default function ParentDashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{playersDetails.length}</div>
+            <div className="text-2xl font-bold">{childrenCount}</div>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Documents manquants</CardTitle>
             <FileText className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{childrenMissingDocs}</div>
-            {childrenMissingDocs > 0 && (
+            <div className="text-2xl font-bold">{missingDocs}</div>
+            {missingDocs > 0 && (
               <p className="text-xs text-orange-600">Documents obligatoires à fournir</p>
             )}
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Paiements en retard</CardTitle>
@@ -91,30 +91,39 @@ export default function ParentDashboard() {
           <CardTitle>Vos enfants</CardTitle>
         </CardHeader>
         <CardContent>
-          {playersDetails.length === 0 ? (
-            <p className="text-muted-foreground">Aucun enfant enregistré.</p>
+          {players.length === 0 ? (
+            <p className="text-muted-foreground text-center py-8">
+              Aucun enfant enregistré. Contactez l'administration.
+            </p>
           ) : (
             <div className="space-y-4">
-              {playersDetails.map((player) => {
-                const playerDocs = documents.filter(d => d.userId === player!.id);
-                const hasValidMedCert = playerDocs.some(d => d.type === 'Certificat Medical' && d.validatedAt);
-                const hasPaymentUpToDate = payments.some(p => p.playerIds.includes(player!.id) && p.status === 'verified');
+              {players.map((player) => {
+                const playerDocs = documents.filter(d => d.userId === player.id);
+                const hasValidMedCert = playerDocs.some(d => 
+                  d.type === 'Certificat Medical' && d.validatedAt
+                );
+                const hasPaymentUpToDate = payments.some(p => 
+                  p.playerIds?.includes(player.id) && p.status === 'verified'
+                );
+
                 return (
-                  <div key={player!.id} className="flex items-center justify-between border-b pb-3">
+                  <div key={player.id} className="flex items-center justify-between border-b pb-3 last:border-0">
                     <div>
-                      <p className="font-medium">{player!.firstName} {player!.lastName}</p>
-                      <p className="text-sm text-muted-foreground">{player!.school} - {player!.class}</p>
+                      <p className="font-medium">{player.firstName} {player.lastName}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {player.school || ''} {player.class ? `- ${player.class}` : ''}
+                      </p>
                     </div>
                     <div className="flex gap-3">
                       {hasValidMedCert ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5 text-green-500"  />
                       ) : (
-                        <AlertCircle className="h-5 w-5 text-red-500" />
+                        <AlertCircle className="h-5 w-5 text-red-500"  />
                       )}
                       {hasPaymentUpToDate ? (
                         <CheckCircle className="h-5 w-5 text-green-500"  />
                       ) : (
-                        <AlertCircle className="h-5 w-5 text-orange-500"  />
+                        <AlertCircle className="h-5 w-5 text-orange-500"/>
                       )}
                     </div>
                   </div>

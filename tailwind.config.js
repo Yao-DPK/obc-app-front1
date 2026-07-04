@@ -28,6 +28,7 @@ export default {
         heading: ["Arimo", "serif"],
         body: ["Inter", "sans-serif"],
       },
+      
     },
   },
   plugins: [require("tailwindcss-animate")],

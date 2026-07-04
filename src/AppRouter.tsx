@@ -13,10 +13,15 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AdminRegistrations from "./pages/admin/AdminRegistrations";
 import SuperAdminRegistrations from "./pages/super_admin/SuperAdminRegistrations";
-//import Test from "./pages/Test";
+import Test from "./pages/Test";
 import { UserLoader } from "./components/UserLoader";
 import { RegistrationValidationPage } from "./pages/super_admin/RegistrationValidationPage";
 import AdminLogin from "./pages/AdminLogin";
+import PupilsList from "./pages/parent/PupilsList";
+import ChildInfoPage from "./pages/parent/PupilsInfo";
+import ChildDocumentsPage from "./pages/parent/PupilsDocuments";
+import ChildPaymentsPage from "./pages/parent/PupilsPayments";
+import ParentProfilePage from "./pages/parent/ParentProfile";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -67,7 +72,7 @@ export function AppRouter() {
 
         {/* Superviseur uniquement */}
         <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
-          {/* <Route path="/test" element={<Test/>} /> */}
+          <Route path="/test" element={<Test/>} />
           <Route path="/super-admin/stats" element={<SuperAdminDashboard />} />
           <Route path="/super-admin/admins" element={<ManageAdmins />} />
           <Route path="/super-admin/registrations" element={<SuperAdminRegistrations />} />
@@ -82,6 +87,16 @@ export function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin/registrations" element={<AdminRegistrations />} />
         </Route>
+
+        {/* Parent Uniquement */}
+        <Route element={<ProtectedRoute allowedRoles={['parent']} />}>
+          <Route path="/parent/pupils" element={<PupilsList />} />
+          <Route path="/parent/pupils/:id/infos" element={<ChildInfoPage />} />
+          <Route path="/parent/pupils/:id/documents" element={<ChildDocumentsPage />} />
+          <Route path="/parent/pupils/:id/payments" element={<ChildPaymentsPage />} />
+          <Route path="/parent/profile" element={<ParentProfilePage />} />
+        </Route>
+
 
       </Route>
 

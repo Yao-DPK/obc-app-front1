@@ -1,7 +1,8 @@
 // src/config/navigation.ts
 import type { UserRole } from '@/types/user.type';
 import { 
-  LayoutDashboard, UserPlus,
+  Baby,
+  LayoutDashboard, User, UserPlus,
   type LucideIcon
 } from 'lucide-react';
 
@@ -30,9 +31,11 @@ const navItems: NavItem[] = [
   //{ to: '/super-admin/admins', label: 'Gérer les admins', icon: UserCog, roles: ['super_admin'], section: 'admin' },
   //{ to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin' },
 
-  // Lien "Administration" pour accès rapide (visible pour admin et super_admin)
-  //{ to: '/admin', label: 'Administration', icon: Shield, roles: ['admin'], section: 'admin' }
-  //{ to: '/super-admin', label: 'Super Admin', icon: Crown, roles: ['super_admin'], section: 'admin' },
+  // Section Parent
+  { to: 'parent/profile', label: 'Profil', icon: User, roles: ['parent'], section: 'gestion'},
+  { to: 'parent/pupils', label: 'Enfants', icon: Baby, roles: ['parent'], section: 'gestion'}
+  
+
 ].filter((item): item is NavItem => Boolean(item));
 
 export const groupedNavItems = (role: UserRole) => {

@@ -32,6 +32,7 @@ export interface User {
   address?: string | null;
   school?: string | null;
   class?: string | null;
+  photoUrl?: string | null;
   emergencyContactName?: string | null;
   emergencyContactPhone?: string | null;
   registrationStatus: RegistrationStatus;

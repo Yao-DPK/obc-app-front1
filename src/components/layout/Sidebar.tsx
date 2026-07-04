@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ChevronDown, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import type { UserRole } from '@/types/user.type';
 import { cn } from '@/lib/utils';
 import logo from '@/assets/OBC.png';
 import { groupedNavItems } from '@/lib/navigation';
+import { AdultAvatar } from '../CustomAdultAvatar';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
@@ -22,7 +22,7 @@ export function Sidebar() {
   const grouped = groupedNavItems(user.role as UserRole);
   const sectionsTitles: Record<string, string> = {
     principal: 'Navigation',
-    gestion: 'Gestion des inscriptions',
+    gestion: 'Gestion',
     admin: 'Administration',
     parametres: 'Paramètres',
   };
@@ -31,11 +31,7 @@ export function Sidebar() {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const getInitials = () => {
-    const first = user.firstName?.charAt(0) || '';
-    const last = user.lastName?.charAt(0) || '';
-    return (first + last).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U';
-  };
+
 
   const allNavItems = Object.values(grouped).flat();
 
@@ -141,10 +137,8 @@ export function Sidebar() {
       <div className="border-t border-gray-200 p-3 shrink-0 bg-white">
         {!isCollapsed ? (
           <div className="flex items-center gap-3 mb-2">
-            <Avatar className="h-9 w-9 bg-gradient-to-br from-primary to-primary/70 text-white shadow-sm">
-              <AvatarFallback>{getInitials()}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
+            <AdultAvatar photoUrl={user!.photoUrl!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
+          <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-800 truncate">
                 {user.firstName} {user.lastName}
               </p>
@@ -157,9 +151,7 @@ export function Sidebar() {
           </div>
         ) : (
           <div className="flex justify-center mb-2">
-            <Avatar className="h-8 w-8 bg-gradient-to-br from-primary to-primary/70 text-white shadow-sm">
-              <AvatarFallback>{getInitials()}</AvatarFallback>
-            </Avatar>
+            <AdultAvatar photoUrl={user!.photoUrl!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
           </div>
         )}
         <Button
@@ -174,6 +166,7 @@ export function Sidebar() {
           {!isCollapsed && 'Déconnexion'}
         </Button>
       </div>
+
     </aside>
   );
 }

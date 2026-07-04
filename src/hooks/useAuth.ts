@@ -1,15 +1,10 @@
 // src/hooks/useAuth.ts
 import { create } from 'zustand';
 import axios from 'src/lib/axios';
+import type { User } from '@/types';
 
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  phone?: string;
-}
+
+
 
 interface AuthStore {
   user: User | null;
@@ -25,7 +20,9 @@ export const useAuth = create<AuthStore>((set) => ({
   user: null,
   accessToken: null,
   isLoading: true,
-  setAuth: (user, accessToken) => set({ user, accessToken }),
+  setAuth: (user, accessToken) => {
+    set({ user, accessToken })
+  },
   setAccessToken: (accessToken) => set({ accessToken }),
   logout: () => set({ user: null, accessToken: null }),
   restoreSession: async () => {
@@ -34,7 +31,7 @@ export const useAuth = create<AuthStore>((set) => ({
       const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
       const { user, accessToken } = res.data; // si backend renvoie user
       if (accessToken) {
-        set({ user, accessToken, isLoading: false });
+       set({ user, accessToken, isLoading: false });
       } else {
         set({ isLoading: false });
       }

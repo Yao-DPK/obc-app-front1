@@ -71,6 +71,7 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
+        console.log(`refresh error`)
         processQueue(refreshError, null);
         useAuth.getState().logout();
         // ✅ Fix #3 — event dispatch (assure-toi que le listener est monté dans App.tsx dès le démarrage)

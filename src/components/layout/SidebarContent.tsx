@@ -4,7 +4,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import type { UserRole } from '@/types/user.type';
@@ -12,6 +11,7 @@ import { cn } from '@/lib/utils';
 import logo from '@/assets/OBC.png';
 import { groupedNavItems } from '@/lib/navigation';
 import { useState } from 'react';
+import { AdultAvatar } from '../CustomAdultAvatar';
 
 interface SidebarContentProps {
   mobile?: boolean;
@@ -37,11 +37,6 @@ export function SidebarContent({ mobile, onClose }: SidebarContentProps) {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const getInitials = () => {
-    const first = user.firstName?.charAt(0) || '';
-    const last = user.lastName?.charAt(0) || '';
-    return (first + last).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U';
-  };
 
   const handleLogout = async () => {
     await logout();
@@ -109,9 +104,7 @@ export function SidebarContent({ mobile, onClose }: SidebarContentProps) {
       {/* Profil + déconnexion */}
       <div className="border-t border-gray-200 p-4 bg-white">
         <div className="flex items-center gap-3 mb-3">
-          <Avatar className="h-9 w-9 bg-gradient-to-br from-primary to-primary/70 text-white shadow-sm">
-            <AvatarFallback>{getInitials()}</AvatarFallback>
-          </Avatar>
+          <AdultAvatar photoUrl={user!.photoUrl!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-gray-800 truncate">
               {user.firstName} {user.lastName}

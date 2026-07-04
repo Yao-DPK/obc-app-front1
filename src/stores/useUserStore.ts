@@ -1,66 +1,120 @@
-// apps/web/src/stores/useUserStore.ts
 import { create } from 'zustand';
 import type { User } from '@/types/user.type';
-import api from '@/lib/axios';
 import { userService } from '@/lib/services/user.service';
-
 
 interface UserStore {
   users: User[];
   isLoading: boolean;
+  error: string | null;
+
+  // ========== ACTIONS ==========
+
   fetchUsers: () => Promise<void>;
   fetchPlayers: () => Promise<void>;
-  fetchAdmin: () => Promise<void>;
-  getUserById: (id: number) => User | undefined;
-  updateUserStatus: (userId: number, status: string) => Promise<void>;
+  fetchAdmins: () => Promise<void>;
+  fetchParents: () => Promise<void>;
+  fetchUsersByIds: (ids: number[]) => Promise<void>;
+  fetchUserById: (id: number) => Promise<User | null>;
+
+  updateUser: (userId: number, data: Partial<User>) => Promise<void>;
+  updateStatus: (userId: number, status: string) => Promise<void>;
+
+  clear: () => void;
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
   users: [],
   isLoading: false,
+  error: null,
+
+  // ========== RÉCUPÉRATION ==========
+
   fetchUsers: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      // TODO: Remplacer par appel API
-      const response = await userService.fetchUsers();
-      set({ users: response.data, isLoading: false });
-      //await new Promise(resolve => setTimeout(resolve, 500)); // simulate delay
-      //set({ users: mockUsers, isLoading: false });
-    } catch (error) {
-      console.error(error);
-      set({ isLoading: false });
+      const users = await userService.fetchUsers();
+      set({ users, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
     }
   },
+
   fetchPlayers: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      // TODO: Remplacer par appel API
-      const response = await userService.fetchPlayers();
-      set({ users: response.data, isLoading: false });
-      //await new Promise(resolve => setTimeout(resolve, 500)); // simulate delay
-      //set({ users: mockUsers, isLoading: false });
-    } catch (error) {
-      console.error(error);
-      set({ isLoading: false });
+      const users = await userService.fetchPlayers();
+      set({ users, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
     }
   },
-  fetchAdmin: async () => {
-    set({ isLoading: true });
+
+  fetchAdmins: async () => {
+    set({ isLoading: true, error: null });
     try {
-      // TODO: Remplacer par appel API
-      
-      const response = await userService.fetchAdmins();
-      set({ users: response.data, isLoading: false });
-      //await new Promise(resolve => setTimeout(resolve, 500)); // simulate delay
-      //set({ users: mockUsers, isLoading: false });
-    } catch (error) {
-      console.error(error);
-      set({ isLoading: false });
+      const users = await userService.fetchAdmins();
+      set({ users, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
     }
   },
-  getUserById: (id) => get().users.find(u => u.id === id),
-  updateUserStatus: async (userId: number, status: string) => {
-    await api.patch(`/api/users/${userId}/status`, { status });
-    await get().fetchUsers();
-  }
+
+  fetchParents: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const users = await userService.fetchParents();
+      set({ users, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+    }
+  },
+
+  fetchUsersByIds: async (ids: number[]) => {
+    if (!ids.length) {
+      set({ users: [], isLoading: false });
+      return;
+    }
+    set({ isLoading: true, error: null });
+    try {
+      const users = await userService.fetchBatchUsers(ids);
+      set({ users, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+    }
+  },
+
+  fetchUserById: async (id: number) => {
+    try {
+      const user = await userService.fetchUserById(id);
+      return user;
+    } catch (error: any) {
+      set({ error: error.message });
+      return null;
+    }
+  },
+
+  // ========== MISE À JOUR ==========
+
+  updateUser: async (userId: number, data: Partial<User>) => {
+    try {
+      const updated = await userService.updateUser(userId, data);
+      set((state) => ({
+        users: state.users.map((u) => (u.id === userId ? updated : u)),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+      throw error;
+    }
+  },
+
+  updateStatus: async (userId: number, status: string) => {
+    await userService.updateStatus(userId, status);
+    await get().fetchUsers(); // Rafraîchir la liste
+  },
+
+  // ========== UTILITAIRES ==========
+
+  clear: () => {
+    set({ users: [], isLoading: false, error: null });
+  },
 }));

@@ -72,9 +72,12 @@ export function PaymentComponent() {
       return;
     }
 
+    const tax_free_amount = details.montant
+   
+
     window.KadevPay.checkout({
       public_key: import.meta.env.VITE_KADEV_PUBLIC_KEY, // Attention: VITE_ préfixe
-      amount: details.montant,
+      amount: tax_free_amount,
       email: details.email,
       name: details.name || '',
       phone: details.phone || '',
