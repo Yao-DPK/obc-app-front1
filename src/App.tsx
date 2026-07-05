@@ -1,8 +1,8 @@
-import { BrowserRouter } from 'react-router-dom';
-import { AppRouter } from './AppRouter';
+import { BrowserRouter, RouterProvider } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
 import CustomLoader from './components/CustomLoader';
+import { router } from './AppRouter';
 
 
 export default function App() {
@@ -17,9 +17,6 @@ export default function App() {
 }
 
   return (
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
-
+    <RouterProvider router={router} />
   );
 }

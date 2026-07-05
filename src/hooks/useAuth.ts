@@ -29,7 +29,10 @@ export const useAuth = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+
       const { user, accessToken } = res.data; // si backend renvoie user
+
+      //console.log(`user: ${JSON.stringify(user)}`);
       if (accessToken) {
        set({ user, accessToken, isLoading: false });
       } else {

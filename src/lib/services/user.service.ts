@@ -5,7 +5,7 @@ export const userService = {
   // ========== LECTURE ==========
   async fetchProfile(){
     const { data } = await api.get('/api/auth/profile');
-    console.log(`data: ${JSON.stringify(data)}`)
+    //console.log(`data: ${JSON.stringify(data)}`)
     return data;
   },
 

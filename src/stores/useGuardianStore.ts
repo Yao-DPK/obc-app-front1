@@ -6,6 +6,7 @@ interface GuardianStore {
   // ========== ÉTAT ==========
   players: User[]; // liste des enfants (objets User complets)
   guardians: User[]; // liste des parents (objets User complets)
+  selected_player: User | null;
   relationships: GuardianRelationship[];
   isLoading: boolean;
   error: string | null;
@@ -13,6 +14,7 @@ interface GuardianStore {
   // ========== ACTIONS ==========
   getMyPlayers: () => Promise<User[]>;
   //getMyGuardians: () => Promise<User[]>;
+  
   getPlayersByGuardian: (guardianId: number) => Promise<User[]>;
   getGuardiansByPlayer: (playerId: number) => Promise<User[]>;
   linkPlayer: (guardianId: number, playerId: number, permissions?: any) => Promise<void>;
@@ -25,6 +27,7 @@ export const useGuardianStore = create<GuardianStore>((set, get) => ({
   // ========== ÉTAT INITIAL ==========
   players: [],
   guardians: [],
+  selected_player: null,
   relationships: [],
   isLoading: false,
   error: null,

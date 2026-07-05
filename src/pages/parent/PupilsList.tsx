@@ -64,6 +64,14 @@ export default function PupilsList() {
     navigate(`${id}/documents`)
   }
 
+  function handleInfos(id: number): void {
+    navigate(`${id}/infos`)
+  }
+
+  function handlePayments(id: number): void {
+    navigate(`${id}/payments`)
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -119,15 +127,13 @@ export default function PupilsList() {
                       <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-blue-600 hover:bg-blue-50" title="Documents" onClick={() => handleDocuments(child.id)}>
                         <FileText className="h-5 w-5" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-green-600 hover:bg-green-50" title="Paiements">
+                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-green-600 hover:bg-green-50" title="Paiements" onClick={() => handlePayments(child.id)}>
                         <CreditCard className="h-5 w-5" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-purple-600 hover:bg-purple-50" title="Informations personnelles">
+                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-purple-600 hover:bg-purple-50" title="Informations personnelles" onClick={() => handleInfos(child.id)}>
                         <Info className="h-5 w-5" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-gray-700 hover:bg-gray-50">
-                        <ChevronRight className="h-5 w-5" />
-                      </Button>
+
                     </div>
 
                     {/* Version mobile : menu compact */}
@@ -139,18 +145,14 @@ export default function PupilsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem onClick={() => console.log('Documents', child.id)}>
+                          <DropdownMenuItem onClick={() => handleDocuments(child.id)}>
                             <FileText className="h-4 w-4 mr-2" /> Documents
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => console.log('Paiements', child.id)}>
+                          <DropdownMenuItem onClick={() => handlePayments(child.id)}>
                             <CreditCard className="h-4 w-4 mr-2" /> Paiements
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => console.log('Infos', child.id)}>
+                          <DropdownMenuItem onClick={() => handleInfos(child.id)}>
                             <Info className="h-4 w-4 mr-2" /> Infos personnelles
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => console.log('Voir plus', child.id)}>
-                            <ChevronRight className="h-4 w-4 mr-2" /> Voir le profil
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

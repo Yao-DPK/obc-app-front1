@@ -1,109 +1,158 @@
-import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import { useAuth } from "./hooks/useAuth";
-import { PublicLayout } from "./components/layout/PublicLayout";
-import Login from "./pages/Login";
-import { Layout } from "./components/layout/Layout";
-import Dashboard from "./pages/Dashboard";
-import SuperAdminDashboard from "./pages/super_admin/SuperAdminDashboard";
-import ManageAdmins from "./pages/super_admin/ManageAdmins";
-import Unauthorized from "./pages/Unauthorized";
-import InscriptionJoueur from "./pages/Inscription/InscriptionJoueur";
-import { useEffect } from "react";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import AdminRegistrations from "./pages/admin/AdminRegistrations";
-import SuperAdminRegistrations from "./pages/super_admin/SuperAdminRegistrations";
-//import Test from "./pages/Test";
-import { UserLoader } from "./components/UserLoader";
-import { RegistrationValidationPage } from "./pages/super_admin/RegistrationValidationPage";
-import AdminLogin from "./pages/AdminLogin";
-import PupilsList from "./pages/parent/PupilsList";
-import ChildInfoPage from "./pages/parent/PupilsInfo";
-import ChildDocumentsPage from "./pages/parent/PupilsDocuments";
-import ChildPaymentsPage from "./pages/parent/PupilsPayments";
-import ParentProfilePage from "./pages/parent/ParentProfile";
+// router.tsx
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
+import { PublicLayout } from './components/layout/PublicLayout';
+import { Layout } from './components/layout/Layout';
+import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
+import InscriptionJoueur from './pages/Inscription/InscriptionJoueur';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import Unauthorized from './pages/Unauthorized';
+import Dashboard from './pages/Dashboard';
+import SuperAdminDashboard from './pages/super_admin/SuperAdminDashboard';
+import ManageAdmins from './pages/super_admin/ManageAdmins';
+import SuperAdminRegistrations from './pages/super_admin/SuperAdminRegistrations';
+import AdminRegistrations from './pages/admin/AdminRegistrations';
+import PupilsList from './pages/parent/PupilsList';
+import ChildInfoPage from './pages/parent/PupilsInfo';
+import ChildDocumentsPage from './pages/parent/PupilsDocuments';
+import ChildPaymentsPage from './pages/parent/PupilsPayments';
+import ParentProfilePage from './pages/parent/ParentProfile';
 
-interface ProtectedRouteProps {
-  allowedRoles?: string[];
-}
+// ========== LOADERS ==========
+import { childInfoLoader } from './loaders/childInfo.loader';
+import { childDocumentsLoader } from './loaders/childDocuments.loader';
+import { childPaymentsLoader } from './loaders/childPayments.loader';
+import { profileLoader } from './loaders/profile.loader';
+import { useAuth } from './hooks/useAuth';
+import type { JSX } from 'react/jsx-runtime';
+import { RegistrationValidationPage } from './pages/super_admin/RegistrationValidationPage';
+import { UserLoader } from './components/UserLoader';
 
-function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
+// ========== PROTECTED ROUTE WRAPPER ==========
+const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element; allowedRoles?: string[] }) => {
   const { user, isLoading } = useAuth();
+
   if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Chargement...</div>;
   }
 
-  if (!user) return <Navigate to="/login" replace />;
-  if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to="/unauthorized" replace />;
-  return <Outlet />;
-}
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
+  return children;
+};
 
-export function AppRouter() {
-  const navigate = useNavigate();
+export const router = createBrowserRouter([
+  // ========== ROUTES PUBLIQUES ==========
+  {
+    path: '/',
+    element: <PublicLayout />,
+    children: [
+      { path: 'login', element: <Login /> },
+      { path: 'login/admin', element: <AdminLogin /> },
+      { path: 'inscription/joueur', element: <InscriptionJoueur /> },
+      { path: 'unauthorized', element: <Unauthorized /> },
+      { path: 'forgot-password', element: <ForgotPassword /> },
+      { path: 'reset-password', element: <ResetPassword /> },
+    ],
+  },
 
-  useEffect(() => {
-    const handler = () => navigate('/login');
-    window.addEventListener('auth:logout', handler);
-    return () => window.removeEventListener('auth:logout', handler);
-  }, []);
-  
+  // ========== ROUTES PRIVÉES ==========
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      // Tous les rôles
+      {
+        path: 'dashboard',
+        element: (
+          <ProtectedRoute allowedRoles={['player', 'parent', 'admin', 'super_admin']}>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
 
-  return (
-    <Routes>
-      {/* Routes publiques */}
-      <Route element={<PublicLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/admin" element={<AdminLogin />} />
-        <Route path="/inscription/joueur" element={<InscriptionJoueur />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        
-      </Route>
+      // Super Admin
+      {
+        path: 'super-admin',
+        element: (
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <Outlet />
+          </ProtectedRoute>
+        ),
+        children: [
+          { path: 'stats', element: <SuperAdminDashboard /> },
+          { path: 'admins', element: <ManageAdmins /> },
+          { path: 'registrations', element: <SuperAdminRegistrations /> },
+          {
+            path: 'registrations/validate/:userId',
+            element: (
+              <UserLoader userIdParam="userId">
+                {(user) => <RegistrationValidationPage user={user} />}
+              </UserLoader>
+            ),
+          },
+        ],
+      },
 
-      {/* Routes privées */}
-      <Route element={<Layout />}>
-        {/* Tous les rôles connectés */}
-        <Route element={<ProtectedRoute allowedRoles={['player', 'parent', 'admin', 'super_admin']} />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
+      // Admin
+      {
+        path: 'admin',
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Outlet />
+          </ProtectedRoute>
+        ),
+        children: [
+          { path: 'registrations', element: <AdminRegistrations /> },
+        ],
+      },
 
-        {/* Superviseur uniquement */}
-        <Route element={<ProtectedRoute allowedRoles={['super_admin']} />}>
-          {/* <Route path="/test" element={<Test/>} /> */}
-          <Route path="/super-admin/stats" element={<SuperAdminDashboard />} />
-          <Route path="/super-admin/admins" element={<ManageAdmins />} />
-          <Route path="/super-admin/registrations" element={<SuperAdminRegistrations />} />
-          <Route path="/super-admin/registrations/validate/:userId" element={
-            <UserLoader userIdParam="userId">
-            {(user) => <RegistrationValidationPage user={user} />}
-          </UserLoader>
-        } />
-        </Route>
-        
-        {/* Admin uniquement */}
-        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-          <Route path="/admin/registrations" element={<AdminRegistrations />} />
-        </Route>
+      // Parent (avec loaders)
+      {
+        path: 'parent',
+        element: (
+          <ProtectedRoute allowedRoles={['parent']}>
+            <Outlet />
+          </ProtectedRoute>
+        ),
+        children: [
+          { path: 'pupils', element: <PupilsList /> },
+          {
+            path: 'pupils/:id/infos',
+            element: <ChildInfoPage />,
+            //loader: childInfoLoader,
+            errorElement: <div>Erreur chargement enfant</div>,
+          },
+          {
+            path: 'pupils/:id/documents',
+            element: <ChildDocumentsPage />,
+            loader: childDocumentsLoader,
+          },
+          {
+            path: 'pupils/:id/payments',
+            element: <ChildPaymentsPage />,
+            loader: childPaymentsLoader,
+          },
+          {
+            path: 'profile',
+            element: <ParentProfilePage />,
+            loader: profileLoader,
+          },
+        ],
+      },
 
-        {/* Parent Uniquement */}
-        <Route element={<ProtectedRoute allowedRoles={['parent']} />}>
-          <Route path="/parent/pupils" element={<PupilsList />} />
-          <Route path="/parent/pupils/:id/infos" element={<ChildInfoPage />} />
-          <Route path="/parent/pupils/:id/documents" element={<ChildDocumentsPage />} />
-          <Route path="/parent/pupils/:id/payments" element={<ChildPaymentsPage />} />
-          <Route path="/parent/profile" element={<ParentProfilePage />} />
-        </Route>
-
-
-      </Route>
-
-      
-
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
-    </Routes>
-  );
-}
+      // Fallback (route par défaut)
+      {
+        path: '*',
+        element: <Navigate to="/dashboard" replace />,
+      },
+    ],
+  },
+]);
