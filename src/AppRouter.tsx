@@ -3,7 +3,6 @@ import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { Layout } from './components/layout/Layout';
 import Login from './pages/Login';
-import AdminLogin from './pages/AdminLogin';
 import InscriptionJoueur from './pages/Inscription/InscriptionJoueur';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -18,19 +17,22 @@ import ChildInfoPage from './pages/parent/PupilsInfo';
 import ChildDocumentsPage from './pages/parent/PupilsDocuments';
 import ChildPaymentsPage from './pages/parent/PupilsPayments';
 import ParentProfilePage from './pages/parent/ParentProfile';
-
-// ========== LOADERS ==========
-import { childInfoLoader } from './loaders/childInfo.loader';
-import { childDocumentsLoader } from './loaders/childDocuments.loader';
-import { childPaymentsLoader } from './loaders/childPayments.loader';
-import { profileLoader } from './loaders/profile.loader';
-import { useAuth } from './hooks/useAuth';
-import type { JSX } from 'react/jsx-runtime';
-import { RegistrationValidationPage } from './pages/super_admin/RegistrationValidationPage';
 import { UserLoader } from './components/UserLoader';
+import { useAuth } from './stores/useAuth';
+import {
+  childInfoLoader,
+  childDocumentsLoader,
+  childPaymentsLoader,
+  profileLoader,
+} from './loaders';
+import type { ReactNode } from 'react';
+import { RegistrationValidationPage } from './pages/super_admin/RegistrationValidationPage';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import Home from './pages/Home';
+import CustomLoader from './components/CustomLoader';
 
 // ========== PROTECTED ROUTE WRAPPER ==========
-const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element; allowedRoles?: string[] }) => {
+const ProtectedRoute = ({ children, allowedRoles }: { children: ReactNode; allowedRoles?: string[] }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -38,7 +40,7 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element; all
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
@@ -48,18 +50,33 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element; all
   return children;
 };
 
+// ========== PUBLIC ROUTE WRAPPER (avec Outlet) ==========
+const PublicRoute = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) return <CustomLoader />;
+  if (user) return <Navigate to="/dashboard" replace />;
+
+  return <Outlet />;
+};
+
 export const router = createBrowserRouter([
   // ========== ROUTES PUBLIQUES ==========
   {
-    path: '/',
-    element: <PublicLayout />,
+    element: <PublicRoute />,
     children: [
-      { path: 'login', element: <Login /> },
-      { path: 'login/admin', element: <AdminLogin /> },
-      { path: 'inscription/joueur', element: <InscriptionJoueur /> },
-      { path: 'unauthorized', element: <Unauthorized /> },
-      { path: 'forgot-password', element: <ForgotPassword /> },
-      { path: 'reset-password', element: <ResetPassword /> },
+      {
+        element: <PublicLayout />,
+        children: [
+          { index: true, element: <Navigate to="/dashboard" replace /> },
+          { path: 'home', element: <Home /> },
+          { path: 'login', element: <Login /> },
+          { path: 'inscription/joueur', element: <InscriptionJoueur /> },
+          { path: 'unauthorized', element: <Unauthorized /> },
+          { path: 'forgot-password', element: <ForgotPassword /> },
+          { path: 'reset-password', element: <ResetPassword /> },
+        ],
+      },
     ],
   },
 
@@ -68,7 +85,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
-      // Tous les rôles
+      // Dashboard (tous rôles)
       {
         path: 'dashboard',
         element: (
@@ -109,9 +126,7 @@ export const router = createBrowserRouter([
             <Outlet />
           </ProtectedRoute>
         ),
-        children: [
-          { path: 'registrations', element: <AdminRegistrations /> },
-        ],
+        children: [{ path: 'registrations', element: <AdminRegistrations /> }],
       },
 
       // Parent (avec loaders)
@@ -127,28 +142,31 @@ export const router = createBrowserRouter([
           {
             path: 'pupils/:id/infos',
             element: <ChildInfoPage />,
-            //loader: childInfoLoader,
-            errorElement: <div>Erreur chargement enfant</div>,
+            loader: childInfoLoader,
+            errorElement: <ErrorBoundary />,
           },
           {
             path: 'pupils/:id/documents',
             element: <ChildDocumentsPage />,
             loader: childDocumentsLoader,
+            errorElement: <ErrorBoundary />,
           },
           {
             path: 'pupils/:id/payments',
             element: <ChildPaymentsPage />,
             loader: childPaymentsLoader,
+            errorElement: <ErrorBoundary />,
           },
           {
             path: 'profile',
             element: <ParentProfilePage />,
             loader: profileLoader,
+            errorElement: <ErrorBoundary />,
           },
         ],
       },
 
-      // Fallback (route par défaut)
+      // Fallback
       {
         path: '*',
         element: <Navigate to="/dashboard" replace />,

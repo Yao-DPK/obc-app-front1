@@ -8,6 +8,12 @@ export const guardianService = {
     return data; // ou data selon la réponse du backend
   },
 
+  async getMyPlayersById(playerId: number): Promise<User> {
+    const { data } = await api.get(`/api/guardian/players`);
+    const selected_player = data.find((p: User) => p.id == playerId);
+    return selected_player;
+  },
+
   async getPlayers(guardianId: number): Promise<User[]> {
     const { data } = await api.get(`/api/guardian/players/${guardianId}`);
     return data; // ou data selon la réponse du backend

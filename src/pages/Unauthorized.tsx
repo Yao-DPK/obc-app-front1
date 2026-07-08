@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/stores/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/ui/button';
 

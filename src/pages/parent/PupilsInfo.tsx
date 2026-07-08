@@ -4,15 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { User as UserIcon, Calendar, Phone, Mail, MapPin } from 'lucide-react';
 import type { User } from "@/types";
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import { getAge } from '@/utils/utils';
-import { useGuardianStore } from '@/stores/useGuardianStore';
 
 
 export default function ChildInfoPage() {
-  const { id } = useParams<{ id: string }>();
-  const { players } = useGuardianStore();
-  const child = players.find((p) => p.id  == id as unknown as number)
+  const child = useLoaderData<User>();
   
 
 
@@ -26,9 +23,11 @@ export default function ChildInfoPage() {
 
   return (
     <div className="space-y-6 mb-20">
+      
       <PageHeader
         title={`${child.firstName} ${child.lastName}`}
         description="Informations personnelles"
+        showBack
       />
 
       <Card>

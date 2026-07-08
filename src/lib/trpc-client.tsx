@@ -2,7 +2,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { trpc } from './trpc';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../stores/useAuth';
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const { accessToken } = useAuth();

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuth } from 'src/hooks/useAuth';
+import { useAuth } from '@/stores/useAuth';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '',
@@ -71,14 +71,13 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
-        console.log(`refresh error`)
         processQueue(refreshError, null);
-        useAuth.getState().logout();
-        // ✅ Fix #3 — event dispatch (assure-toi que le listener est monté dans App.tsx dès le démarrage)
+        // 🔧 Petite protection si logout échoue
+        try {
+          useAuth.getState().logout();
+        } catch (_) {}
         window.dispatchEvent(new Event('auth:logout'));
         return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
       }
     }
 

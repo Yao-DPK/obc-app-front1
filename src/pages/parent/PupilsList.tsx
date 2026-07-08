@@ -16,7 +16,7 @@ import {
 import { ChildAvatar } from '@/components/CustomChildAvatar';
 import { useNavigate } from 'react-router-dom';
 import { useGuardianStore } from '@/stores/useGuardianStore';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/stores/useAuth';
 
 
 export default function PupilsList() {

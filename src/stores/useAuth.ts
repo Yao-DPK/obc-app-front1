@@ -1,18 +1,13 @@
-// src/hooks/useAuth.ts
 import { create } from 'zustand';
 import axios from 'src/lib/axios';
 import type { User } from '@/types';
-
-
-
 
 interface AuthStore {
   user: User | null;
   accessToken: string | null;
   isLoading: boolean;
   setAuth: (user: User, token: string) => void;
-  setAccessToken: (token: string) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   restoreSession: () => Promise<void>;
 }
 
@@ -20,26 +15,38 @@ export const useAuth = create<AuthStore>((set) => ({
   user: null,
   accessToken: null,
   isLoading: true,
+
   setAuth: (user, accessToken) => {
-    set({ user, accessToken })
+    set({ user, accessToken });
   },
-  setAccessToken: (accessToken) => set({ accessToken }),
-  logout: () => set({ user: null, accessToken: null }),
+
+  logout: async () => {
+    try {
+      await axios.post('/api/auth/logout', {}, { withCredentials: true });
+    } catch (error) {
+      // Ignorer les erreurs côté réseau
+    } finally {
+      set({ user: null, accessToken: null });
+    }
+  },
+
   restoreSession: async () => {
     set({ isLoading: true });
     try {
       const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+      const { user, accessToken } = res.data;
 
-      const { user, accessToken } = res.data; // si backend renvoie user
-
-      //console.log(`user: ${JSON.stringify(user)}`);
       if (accessToken) {
-       set({ user, accessToken, isLoading: false });
+        // ✅ Charger le profil complet (optionnel si user est déjà complet)
+        const profile = await axios.get('/api/auth/profile', {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        set({ user: profile.data, accessToken, isLoading: false });
       } else {
         set({ isLoading: false });
       }
     } catch (error) {
-      set({ isLoading: false });
+      set({ user: null, accessToken: null, isLoading: false });
     }
   },
 }));

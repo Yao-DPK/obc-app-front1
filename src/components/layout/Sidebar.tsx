@@ -1,13 +1,13 @@
 // src/components/layout/Sidebar.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ChevronDown, LogOut } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../stores/useAuth';
 import { Button } from '../ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import type { UserRole } from '@/types/user.type';
 import { cn } from '@/lib/utils';
-import logo from '@/assets/OBC.png';
+import logo from '../../assets/OBC.png';
 import { groupedNavItems } from '@/lib/navigation';
 import { AdultAvatar } from '../CustomAdultAvatar';
 
@@ -18,6 +18,10 @@ export function Sidebar() {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
   if (!user) return null;
+
+  useEffect(() => {
+    console.log(`Sidebar user: ${JSON.stringify(user)})`);
+  })
 
   const grouped = groupedNavItems(user.role as UserRole);
   const sectionsTitles: Record<string, string> = {
@@ -37,7 +41,7 @@ export function Sidebar() {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+    navigate('/home');
   };
 
   return (

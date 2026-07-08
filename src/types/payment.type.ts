@@ -68,11 +68,21 @@ export interface PaymentObligation {
   id: number;
   playerId: number | null;
   amount: number;
+  amount_paid: number;
   dueDate: string; // YYYY-MM-DD
   description: string;
   status: PaymentObligationStatus;
   createdAt: string;
 }
+/* {
+    amount: number;
+    description: string;
+    status: "pending" | "paid" | "overdue" | "cancelled" | "ongoing";
+    playerId?: number | null | undefined;
+    amount_paid?: number | null | undefined;
+    dueDate?: string | null | undefined;
+} */
+
 
 export interface CreatePaymentObligationDto {
   playerId?: number | null;

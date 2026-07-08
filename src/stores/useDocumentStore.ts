@@ -49,7 +49,6 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
     try {
       const response = await api.get(`/api/documents/pending`);
       let received_length = response.data;
-      console.log('received_length: ', received_length)
       set({ pendingDocuments: received_length})
     } catch (error) {
       console.error(error);

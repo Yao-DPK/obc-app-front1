@@ -3,7 +3,7 @@
 // pour être utilisé dans le Sheet mobile.
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, LogOut } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../stores/useAuth';
 import { Button } from '../ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import type { UserRole } from '@/types/user.type';
@@ -40,7 +40,7 @@ export function SidebarContent({ mobile, onClose }: SidebarContentProps) {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+    navigate('/home');
     if (onClose) onClose();
   };
 

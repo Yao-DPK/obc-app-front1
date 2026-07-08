@@ -7,6 +7,7 @@ import { Toaster } from 'sonner';
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Menu } from 'lucide-react';
+import logo from '/src/assets/OBC.png';
 import { SidebarContent } from './SidebarContent';
 
 export function Layout() {
@@ -16,7 +17,7 @@ export function Layout() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-primary/5">
       {/* Mobile header with logo and menu button */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <img src="/src/assets/OBC.png" alt="Logo" className="h-8 w-auto" />
+        <img src={logo} alt="Logo" className="h-8 w-auto" />
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon">

@@ -10,7 +10,7 @@ import { FilePreview } from '@/components/ui/FilePreview';
 import { useEffect, useState } from 'react';
 import { Input } from './ui/input';
 import { documentService } from '@/lib/services/document.service';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/stores/useAuth';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface PlayerDocumentsProps {

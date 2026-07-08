@@ -80,7 +80,7 @@ export function useInscriptionForm() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       toast.success('Inscription soumise !');
-      navigate('/login');
+      navigate('/home');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Erreur');
     } finally {

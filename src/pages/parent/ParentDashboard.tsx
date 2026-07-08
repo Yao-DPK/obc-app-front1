@@ -1,7 +1,7 @@
 // apps/web/src/pages/dashboard/ParentDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/stores/useAuth';
 import { useGuardianStore } from '@/stores/useGuardianStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
@@ -17,7 +17,7 @@ export default function ParentDashboard() {
 
   useEffect(() => {
     getMyPlayers();
-    console.log(`user: ${JSON.stringify(user)}`);
+    //console.log(`user: ${JSON.stringify(user)}`);
   }, [user]);
 
   // Métriques

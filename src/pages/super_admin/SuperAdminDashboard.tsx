@@ -10,13 +10,11 @@ import { PageHeader } from '@/components/ui/PageHeader';
 
 export default function SuperAdminDashboard() {
   const { users, fetchUsers } = useUserStore();
-  const { pendingDocuments, fetchPendingDocuments } = useDocumentStore();
-  const { payments, fetchPayments } = usePaymentStore();
+  const { pendingDocuments } = useDocumentStore();
+  const { payments } = usePaymentStore();
 
   useEffect(() => {
     fetchUsers();
-    fetchPendingDocuments();
-    fetchPayments();
   }, []);
 
   const totalUsers = users.length;

@@ -23,7 +23,6 @@ export interface User {
   id: number;
   email: string;
   role: UserRole;
-  passwordHash: string;
   firstName?: string | null;
   lastName?: string | null;
   birthDate?: string | null;   // ISO date string

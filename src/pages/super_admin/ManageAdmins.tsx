@@ -16,7 +16,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, UserCog, Trash2 } from 'lucide-react';
 import type { User } from '@/types/user.type';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/stores/useAuth';
 
 // Schéma de validation pour le formulaire d'ajout
 const adminSchema = z.object({
