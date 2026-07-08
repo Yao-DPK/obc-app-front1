@@ -1,39 +1,70 @@
 // apps/web/src/components/inscription/Step3.tsx
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload } from 'lucide-react';
-import type { DocumentType } from '@/types';
+import { Upload, File, CheckCircle2, AlertCircle } from 'lucide-react';
+import type { Document, DocumentType } from '@/types';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { DocumentItem } from '@/components/DocumentItem';
 
 interface Step3Props {
   updateRequiredFile: (fileType: DocumentType, file: File | null) => void;
 }
 
 export function Step3({ updateRequiredFile }: Step3Props) {
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
+
+  const handleFileUpload = (fileType: DocumentType, file: File | null) => {
+    updateRequiredFile(fileType, file);
+    if (file) {
+      setUploadedFiles((prev) => ({ ...prev, [fileType]: file.name }));
+    } else {
+      setUploadedFiles((prev) => {
+        const copy = { ...prev };
+        delete copy[fileType];
+        return copy;
+      });
+    }
+  };
+
+  const requiredDocs: Document[] = [
+    { id: 1, type: 'Extrait de Naissance' },
+    { id: 2, type: "Photo d'identite"},
+  ];
+
   return (
-    <div className="space-y-6">
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
-        <Upload className="mx-auto h-12 w-12 text-gray-400 mb-2" />
-        <p className="text-sm text-gray-500">Téléversez les documents obligatoires ci‑dessous</p>
+    <div className="space-y-8">
+      {/* En-tête */}
+      <div className="bg-gradient-to-r from-blue-50 to-white border border-blue-200 rounded-lg p-6 text-center">
+        <Upload className="mx-auto h-12 w-12 text-primary mb-3" />
+        <h3 className="text-lg font-semibold text-primary">Documents obligatoires</h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          Téléversez les documents ci-dessous pour finaliser votre inscription.
+        </p>
       </div>
 
+      {/* Liste des documents */}
       <div className="space-y-4">
+        {requiredDocs.map((doc) => (
+        <DocumentItem
+          key={doc.type}
+          document={doc} // ou récupérer depuis la liste existante
+          mode="upload"
+          onUpload={(file) => updateRequiredFile(doc.type as DocumentType, file)}
+          showObligatory
+          emptyLabel={doc.type}
+        />
+      ))}
+      </div>
+
+      {/* Informations supplémentaires */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
+        <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
         <div>
-          <Label>Extrait de naissance (obligatoire) – PDF ou image</Label>
-          <Input
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-            className="mt-1 h-10"
-            onChange={(e) => updateRequiredFile('Extrait de Naissance', e.target.files?.[0] || null)}
-          />
-        </div>
-        <div>
-          <Label>Photo d'identité (obligatoire) – PDF ou image</Label>
-          <Input
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-            className="mt-1 h-10"
-            onChange={(e) => updateRequiredFile("Photo d'identite", e.target.files?.[0] || null)}
-          />
+          <p className="text-sm font-medium text-amber-700">Documents acceptés</p>
+          <p className="text-xs text-amber-600">
+            Formats : PDF, JPG, JPEG, PNG. Taille maximale : 5 Mo par fichier.
+          </p>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import z from "zod";
 
-export type DocumentType = 'Certificat Medical' | 'Photo d\'identite' | 'Recu de Paiement' | 'Extrait de Naissance' | 'autre';
+export type DocumentType = 'Certificat Medical' | 'Photo d\'identite' | 'Recu de Paiement' | 'Extrait de Naissance' | 'Autorisation Parentale' | 'Pièce d\'identité' | 'autre';
 
 /* Pour la validation des string en document type. */
 export const DocumentTypeSchema = z.enum([
@@ -24,14 +24,15 @@ export type DocumentStatus = typeof DOCUMENT_STATUSES[keyof typeof DOCUMENT_STAT
 
 export interface Document {
   id: number;
-  userId: number;
+  userId?: number;
   type: DocumentType;
-  fileId: string;
-  publicUrl: string;
-  isObligatory: boolean;
-  documentStatus?: string;
-  validatedAt?: string | null;   // ISO datetime
-  uploadedAt: string;
+  fileId?: string;
+  publicUrl?: string;
+  documentStatus?: DocumentStatus;
+  isObligatory?: boolean;
+  validatedAt?: string | null;
+  validatedBy?: number | null;
+  uploadedAt?: string;
 }
 
 export interface inscriptionFile{

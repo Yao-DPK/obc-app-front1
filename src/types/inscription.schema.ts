@@ -2,9 +2,9 @@
 import { z } from 'zod';
 
 export const joueurInfoSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  confirmPassword: z.string().min(6),
+  email: z.string().email().optional(),
+  password: z.string().min(6).optional(),
+  confirmPassword: z.string().min(6).optional(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -12,10 +12,9 @@ export const joueurInfoSchema = z.object({
   phone: z.string().optional(),
   address: z.string().optional(),
   school: z.string().optional(),
-  class: z.string().optional(),
   emergencyContactName: z.string().optional(),
   emergencyContactPhone: z.string().optional(),
-  isSelfManaged: z.boolean().default(false),
+  isSelfManaged: z.boolean().default(false).optional(),
   guardians: z
     .array(
       z.object({
