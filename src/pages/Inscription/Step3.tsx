@@ -1,10 +1,7 @@
 // apps/web/src/components/inscription/Step3.tsx
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Upload, File, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload,  AlertCircle } from 'lucide-react';
 import type { Document, DocumentType } from '@/types';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 import { DocumentItem } from '@/components/DocumentItem';
 
 interface Step3Props {
@@ -14,8 +11,10 @@ interface Step3Props {
 export function Step3({ updateRequiredFile }: Step3Props) {
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
 
+
   const handleFileUpload = (fileType: DocumentType, file: File | null) => {
     updateRequiredFile(fileType, file);
+    console.log(`uploadedFiles: ${JSON.stringify(uploadedFiles)}`)
     if (file) {
       setUploadedFiles((prev) => ({ ...prev, [fileType]: file.name }));
     } else {
@@ -50,7 +49,7 @@ export function Step3({ updateRequiredFile }: Step3Props) {
           key={doc.type}
           document={doc} // ou récupérer depuis la liste existante
           mode="upload"
-          onUpload={(file) => updateRequiredFile(doc.type as DocumentType, file)}
+          onUpload={(file) => handleFileUpload(doc.type as DocumentType, file)}
           showObligatory
           emptyLabel={doc.type}
         />

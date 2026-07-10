@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FieldError } from '@/components/ui/field';
-import { FileSignature, Users, PenLine, CheckCircle2 } from 'lucide-react';
+import { FileSignature, Users, PenLine } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface Step2Props {

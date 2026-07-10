@@ -1,4 +1,4 @@
-import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { useAuth } from './stores/useAuth';
 import { useEffect } from 'react';
 import CustomLoader from './components/CustomLoader';

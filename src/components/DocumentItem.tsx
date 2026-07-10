@@ -17,7 +17,7 @@ import {
   X,
   Loader2,
 } from 'lucide-react';
-import { type DocumentFile, type DocumentStatus, type Document } from '@/types';
+import { type DocumentStatus, type Document } from '@/types';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRef, useState } from 'react';
 import { Input } from './ui/input';
@@ -101,14 +101,12 @@ export function DocumentItem({
   uploadProgress = 0,
   showActions = true,
   showStatus = true,
-  showUploader = false,
   showUploadDate = false,
   showObligatory = false,
   mode = 'mixed',
   className,
   size = 'md',
   variant = 'card',
-  emptyLabel = 'Aucun fichier sélectionné',
 }: DocumentItemProps) {
    const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);

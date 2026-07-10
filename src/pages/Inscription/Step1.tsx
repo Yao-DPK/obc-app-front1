@@ -4,8 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FieldError } from '@/components/ui/field';
-import { User, Mail, Lock, Calendar, Phone, MapPin, School, Users, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { User, Mail, Calendar, Phone, MapPin, School, Users, AlertCircle } from 'lucide-react';
 import type { FieldArrayWithId } from 'react-hook-form';
 
 interface Step1Props {
@@ -22,7 +21,6 @@ interface Step1Props {
 
 export function Step1({
   isSelfManaged,
-  setIsSelfManaged,
   fields,
   append,
   remove,
