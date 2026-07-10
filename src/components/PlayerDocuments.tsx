@@ -203,7 +203,7 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess, onVal
                 )}
                 {isUploaded && uploadedDoc && (
                   <FilePreview
-                    url={uploadedDoc.publicUrl}
+                    url={uploadedDoc.publicUrl!}
                     fileName={`${doc.label} - ${uploadedDoc.fileId}`}
                   />
                 )}
@@ -212,20 +212,6 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess, onVal
           );
         })}
       </div>
-
-      {/* {!allUploaded && (
-        <Badge variant="secondary" className="w-full">
-          En attente de téléversement des documents
-        </Badge>
-      )}
-      {allUploaded && !allValidated && (
-        <Badge variant="secondary" className="w-full">
-          En attente de validation des documents
-        </Badge>
-      )}
-      {allValidated && (
-        <Badge className="w-full bg-green-600 hover:bg-green-700">Documents validés</Badge>
-      )} */}
     </div>
   );
 }

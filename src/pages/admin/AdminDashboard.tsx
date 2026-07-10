@@ -1,7 +1,7 @@
 // apps/web/src/pages/dashboard/SuperAdminDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Shield, UserPlus, FileText, CreditCard } from 'lucide-react';
+import { Users, UserPlus, FileText, CreditCard } from 'lucide-react';
 import { StatCard } from '@/components/ui/StatCard';
 import { useUserStore } from '@/stores/useUserStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';

@@ -34,7 +34,7 @@ export const useAuth = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
-      const { user, accessToken } = res.data;
+      const { accessToken } = res.data.accessToken;
 
       if (accessToken) {
         // ✅ Charger le profil complet (optionnel si user est déjà complet)

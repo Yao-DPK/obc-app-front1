@@ -35,7 +35,7 @@ const OPTIONS = [
 
 export default function Home() {
   const [selectedOption, setSelectedOption] = useState<Option>('inscription');
-  const activeOption = OPTIONS.find(o => o.id === selectedOption)!;
+  //const activeOption = OPTIONS.find(o => o.id === selectedOption)!;
 
   return (
     <div className="min-h-screen flex overflow-hidden">

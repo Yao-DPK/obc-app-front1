@@ -1,7 +1,7 @@
 // apps/web/src/pages/dashboard/ParentDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { User, FileText, CreditCard, Info, ChevronRight } from 'lucide-react';
+import { User, FileText, CreditCard, Info } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChildAvatar } from '@/components/CustomChildAvatar';
