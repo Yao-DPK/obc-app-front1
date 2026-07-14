@@ -32,6 +32,7 @@ import CustomLoader from './components/CustomLoader';
 import ConfirmGuardian from './pages/ConfirmGuardian/ConfirmGuardian';
 import PaymentEventsManagement from './pages/super_admin/PaymentEventsManagement';
 import DocumentTypesManagement from './pages/super_admin/DocumentTypesManagement';
+import ProfilePage from './pages/Profile';
 
 // ========== PROTECTED ROUTE WRAPPER ==========
 const ProtectedRoute = ({ children, allowedRoles }: { children: ReactNode; allowedRoles?: string[] }) => {
@@ -96,6 +97,16 @@ export const router = createBrowserRouter([
             <Dashboard />
           </ProtectedRoute>
         ),
+        
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute allowedRoles={['player', 'parent', 'admin', 'super_admin']}>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+        
       },
 
       // Super Admin
@@ -158,12 +169,6 @@ export const router = createBrowserRouter([
             path: 'pupils/:id/payments',
             element: <ChildPaymentsPage />,
             loader: childPaymentsLoader,
-            errorElement: <ErrorBoundary />,
-          },
-          {
-            path: 'profile',
-            element: <ParentProfilePage />,
-            loader: profileLoader,
             errorElement: <ErrorBoundary />,
           },
         ],
