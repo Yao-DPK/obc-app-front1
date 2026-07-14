@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 
 // ========== CONFIGURATION DES RÔLES ==========
 // Ordre hiérarchique : Superviseur > Admin > Parent > Joueur
-const ROLE_CONFIG = {
+export const ROLE_CONFIG = {
   super_admin: {
     label: 'Superviseur',
     icon: Crown,

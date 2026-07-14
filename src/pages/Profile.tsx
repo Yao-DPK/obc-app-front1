@@ -14,7 +14,7 @@ import {
   Loader2 
 } from 'lucide-react';
 import { AdultAvatar } from '@/components/CustomAdultAvatar';
-import { RoleBadge } from './RoleBadge';
+import { ROLE_CONFIG, RoleBadge } from './RoleBadge';
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -108,7 +108,7 @@ export default function ProfilePage() {
           <CardContent className="space-y-4">
             <div>
               <p className="text-sm text-muted-foreground">Rôle</p>
-              <p className="font-medium capitalize">{user.role}</p>
+              <p className="font-medium capitalize">{ROLE_CONFIG[user.role as keyof typeof ROLE_CONFIG].label}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
