@@ -2,91 +2,144 @@
 import api from '@/lib/axios';
 import type {
   PaymentObligation,
-  CreatePaymentObligationDto,
-  UpdatePaymentObligationDto,
-  IntentResponse,
-  IntentStatusResponse,
+  CreateObligationDto,
+  PaymentIntent,
+  CreateIntentDto,
   PaymentEvent,
-  CreatePaymentEventDto,
+  PaymentSummary,
+  VerifyPaymentDto,
   UpdatePaymentEventDto,
-  CreateIntentPayload,
+  CreatePaymentEventDto,
 } from '@/types';
 
 export const paymentService = {
-  // ========== Payment Obligations ==========
-  async createObligation(data: CreatePaymentObligationDto): Promise<PaymentObligation> {
-    const response = await api.post('/payment-obligations', data);
-    return response.data;
-  },
+  // ============================================================
+  // ÉVÉNEMENTS
+  // ============================================================
 
-  async getAllObligations(): Promise<PaymentObligation[]> {
-    const response = await api.get('/api/payment-obligations');
-    return response.data;
-  },
-
-  async getObligationsByPlayer(playerId: number): Promise<PaymentObligation[]> {
-    const response = await api.get(`/api/payment-obligations/player/${playerId}`);
-    return response.data;
-  },
-
-  async getObligationById(id: number): Promise<PaymentObligation> {
-    const response = await api.get(`/payment-obligations/${id}`);
-    return response.data;
-  },
-
-  async updateObligation(id: number, data: UpdatePaymentObligationDto): Promise<PaymentObligation> {
-    const response = await api.put(`/payment-obligations/${id}`, data);
-    return response.data;
-  },
-
-  async deleteObligation(id: number): Promise<void> {
-    await api.delete(`/payment-obligations/${id}`);
-  },
-
-  async updateObligationStatus(id: number, status: string): Promise<PaymentObligation> {
-    const response = await api.patch(`/api/payment-obligations/${id}/status`, { status });
-    return response.data;
-  },
-
-  // ========== Payment Intents (Kadev Pay) ==========
-  async createIntent(data: CreateIntentPayload): Promise<IntentResponse> {
-    const response = await api.post('/payment-intents', data);
-    return response.data;
-  },
-
-  async getIntentStatus(intentId: number): Promise<IntentStatusResponse> {
-    const response = await api.get(`/payment-intents/${intentId}/status`);
-    return response.data;
-  },
-
-  // ========== Payment Events (Admin) ==========
-  async createEvent(data: CreatePaymentEventDto): Promise<PaymentEvent> {
-    const response = await api.post('/admin/payment-events', data);
-    return response.data;
-  },
-
-  async getAllEvents(includeInactive = false): Promise<PaymentEvent[]> {
-    const response = await api.get(`/admin/payment-events?includeInactive=${includeInactive}`);
-    return response.data;
+  async getActiveEvents(): Promise<PaymentEvent[]> {
+    const { data } = await api.get('/api/payments/events');
+    return data;
   },
 
   async getEventById(id: number): Promise<PaymentEvent> {
-    const response = await api.get(`/admin/payment-events/${id}`);
-    return response.data;
+    const { data } = await api.get(`/api/payments/events/${id}`);
+    return data;
+  },
+
+  // ============================================================
+  // OBLIGATIONS
+  // ============================================================
+
+  async createObligation(dto: CreateObligationDto): Promise<PaymentObligation> {
+    const { data } = await api.post('/api/payments/obligations', dto);
+    return data;
+  },
+
+  async getMyObligations(): Promise<PaymentObligation[]> {
+    const { data } = await api.get('/api/payments/obligations');
+    return data;
+  },
+
+  async getObligationById(id: number): Promise<PaymentObligation> {
+    const { data } = await api.get(`/api/payments/obligations/${id}`);
+    return data;
+  },
+
+  async cancelObligation(id: number): Promise<PaymentObligation> {
+    const { data } = await api.patch(`/api/payments/obligations/${id}/cancel`);
+    return data;
+  },
+
+  async getObligations(params?: { userId?: number; playerIds?: number[] }): Promise<PaymentObligation[]> {
+    const url = new URL('/api/payments/obligations', import.meta.env.VITE_API_URL);
+    if (params?.userId) {
+      url.searchParams.append('userId', params.userId.toString());
+    } else if (params?.playerIds && params.playerIds.length) {
+      url.searchParams.append('playerIds', params.playerIds.join(','));
+    }
+    const { data } = await api.get(url.toString());
+    return data;
+  },
+
+  // ============================================================
+  // INTENTIONS DE PAIEMENT
+  // ============================================================
+
+  async createIntent(dto: CreateIntentDto): Promise<PaymentIntent> {
+    const { data } = await api.post('/api/payments/intents', dto);
+    return data;
+  },
+
+  async getMyIntents(): Promise<PaymentIntent[]> {
+    const { data } = await api.get('/api/payments/intents');
+    return data;
+  },
+
+  async getIntentById(id: number): Promise<PaymentIntent> {
+    const { data } = await api.get(`/api/payments/intents/${id}`);
+    return data;
+  },
+
+  async getIntentByReference(ref: string): Promise<PaymentIntent> {
+    const { data } = await api.get(`/api/payments/intents/reference/${ref}`);
+    return data;
+  },
+
+  // ============================================================
+  // VÉRIFICATION (admin)
+  // ============================================================
+
+  async verifyPayment(dto: VerifyPaymentDto): Promise<{ message: string; intent: PaymentIntent }> {
+    const { data } = await api.patch('/api/payments/verify', dto);
+    return data;
+  },
+
+  // ============================================================
+  // RÉSUMÉ
+  // ============================================================
+
+  async getMySummary(): Promise<PaymentSummary> {
+    const { data } = await api.get('/api/payments/summary');
+    return data;
+  },
+
+  async getUserSummary(userId: number): Promise<PaymentSummary> {
+    const { data } = await api.get(`/api/payments/admin/summary/${userId}`);
+    return data;
+  },
+
+  // ============================================================
+  // ADMIN : VUE GLOBALE
+  // ============================================================
+
+  async getAllObligations(): Promise<PaymentObligation[]> {
+    const { data } = await api.get('/api/payments/admin/obligations');
+    return data;
+  },
+
+  async getAllIntents(): Promise<PaymentIntent[]> {
+    const { data } = await api.get('/api/payments/admin/intents');
+    return data;
+  },
+
+  async getAllEvents(includeInactive = false): Promise<PaymentEvent[]> {
+  const { data } = await api.get(`/api/payments/admin/events?includeInactive=${includeInactive}`);
+  return data;
+},
+
+  async createEvent(data: CreatePaymentEventDto): Promise<PaymentEvent> {
+    const { data: event } = await api.post('/api/payments/admin/events', data);
+    return event;
   },
 
   async updateEvent(id: number, data: UpdatePaymentEventDto): Promise<PaymentEvent> {
-    const response = await api.patch(`/admin/payment-events/${id}`, data);
-    return response.data;
+    const { data: event } = await api.patch(`/api/payments/admin/events/${id}`, data);
+    return event;
   },
 
   async deleteEvent(id: number): Promise<void> {
-    await api.delete(`/admin/payment-events/${id}`);
+    await api.delete(`/api/payments/admin/events/${id}`);
   },
 
-  // ========== Public payment events ==========
-  async getActiveEvents(): Promise<PaymentEvent[]> {
-    const response = await api.get('/payment-events');
-    return response.data;
-  },
 };

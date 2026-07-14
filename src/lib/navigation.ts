@@ -2,8 +2,8 @@
 import type { UserRole } from '@/types/user.type';
 import { 
   Baby,
-  LayoutDashboard, User, UserPlus,
-  type LucideIcon
+  LayoutDashboard, User, UserPlus, File,
+  type LucideIcon, CreditCard
 } from 'lucide-react';
 
 export interface NavItem {
@@ -24,11 +24,12 @@ const navItems: NavItem[] = [
   // Section Gestion (pour admin et super admin)
   { to: '/admin/registrations', label: 'Valider inscriptions', icon: UserPlus, roles: ['admin'], section: 'gestion' },
   { to: '/super-admin/registrations', label: 'Gestion inscriptions', icon: UserPlus, roles: ['super_admin'], section: 'gestion' },
-  /* { to: '/admin/documents', label: 'Valider documents', icon: FileText, roles: ['admin', 'super_admin'], section: 'gestion' },
-  { to: '/admin/payments', label: 'Valider paiements', icon: CreditCard, roles: ['admin', 'super_admin'], section: 'gestion' }, */
+
+
   
   // Section Administration (réservée super admin)
-  //{ to: '/super-admin/admins', label: 'Gérer les admins', icon: UserCog, roles: ['super_admin'], section: 'admin' },
+  { to: '/super-admin/payment_events', label: 'Définition Paiements', icon: CreditCard, roles: ['super_admin'], section: 'admin' },
+  { to: '/super-admin/document-types', label: 'Définition Documents', icon: File, roles: ['super_admin'], section: 'admin' }, 
   //{ to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin' },
 
   // Section Parent

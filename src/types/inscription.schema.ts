@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 export const joueurInfoSchema = z.object({
   email: z.string().email().optional(),
-  password: z.string().min(6).optional(),
-  confirmPassword: z.string().min(6).optional(),
+  /* password: z.string().min(6).optional(),
+  confirmPassword: z.string().min(6).optional(), */
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -26,10 +26,10 @@ export const joueurInfoSchema = z.object({
       })
     )
     .optional(),
-}).refine((data) => data.password === data.confirmPassword, {
+})/* .refine((data) => data.password === data.confirmPassword, {
   message: 'Les mots de passe ne correspondent pas',
   path: ['confirmPassword'],
-});
+}) */;
 
 export const attestationSchema = z.object({
   signatoryType: z.enum(['self', 'guardian']),

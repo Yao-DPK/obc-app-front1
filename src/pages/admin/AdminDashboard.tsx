@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Users, UserPlus, FileText, CreditCard } from 'lucide-react';
 import { StatCard } from '@/components/ui/StatCard';
 import { useUserStore } from '@/stores/useUserStore';
-import { useDocumentStore } from '@/stores/useDocumentStore';
+import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { PageHeader } from '@/components/ui/PageHeader';
 

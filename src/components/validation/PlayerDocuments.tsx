@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 import { FileCheck, FileX, Clock, AlertTriangle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { useDocumentStore } from '@/stores/useDocumentStore';
+import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { useEffect, useState } from 'react';
-import { Input } from './ui/input';
+import { Input } from '../ui/input';
 import { documentService } from '@/lib/services/document.service';
 import { useAuth } from '@/stores/useAuth';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface PlayerDocumentsProps {
   userId: number;

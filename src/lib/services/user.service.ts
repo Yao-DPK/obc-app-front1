@@ -16,22 +16,27 @@ export const userService = {
   },
 
   async fetchPlayers(): Promise<User[]> {
-    const { data } = await api.get('/api/users/players');
+    const { data } = await api.get('/api/users/player');
     return data;
   },
 
   async fetchAdmins(): Promise<User[]> {
-    const { data } = await api.get('/api/users/admins');
+    const { data } = await api.get('/api/users/admin');
     return data;
   },
 
   async fetchParents(): Promise<User[]> {
-    const { data } = await api.get('/api/users/parents');
+    const { data } = await api.get('/api/users/parent');
     return data;
   },
 
   async fetchUserById(id: number): Promise<User> {
     const { data } = await api.get(`/api/users/${id}`);
+    return data;
+  },
+
+  async fetchUserByRoleAndId(id: number, role: string): Promise<User> {
+    const { data } = await api.get(`/api/users/${role}/${id}`);
     return data;
   },
 

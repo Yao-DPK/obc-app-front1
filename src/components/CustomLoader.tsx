@@ -68,7 +68,7 @@ const CustomLoader = () => {
               <span className="text-6xl font-extrabold tracking-tight text-green-700">C</span>
             </div>
             <p className="mt-1 text-sm font-medium text-gray-500 tracking-[0.2em] uppercase">
-              Olympic Basket Club
+              Olympic Basket Center
             </p>
 
             {/* Points de chargement */}

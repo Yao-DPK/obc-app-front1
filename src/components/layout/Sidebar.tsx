@@ -19,9 +19,6 @@ export function Sidebar() {
 
   if (!user) return null;
 
-  useEffect(() => {
-    console.log(`Sidebar user: ${JSON.stringify(user)})`);
-  })
 
   const grouped = groupedNavItems(user.role as UserRole);
   const sectionsTitles: Record<string, string> = {

@@ -19,28 +19,18 @@ export interface Payment {
   verifiedAt?: string | null;
 }
 
-export interface PaymentEvent {
-  id: number;
-  name: string;
-  description: string;
-  amount: string;       // montant hors frais
-  allowInstallments: boolean;
-  startDate?: string;
-  endDate?: string;
-  isActive: boolean;
-}
-
-
 export interface CreatePaymentEventDto {
   name: string;
-  description: string;
+  description?: string;
   amount: number;
-  startDate: string;
-  endDate: string;
-  isActive?: boolean;
+  allowInstallments?: boolean;
+  startDate?: string;
+  endDate?: string;
 }
 
-export type UpdatePaymentEventDto = Partial<CreatePaymentEventDto>;
+export interface UpdatePaymentEventDto extends Partial<CreatePaymentEventDto> {
+  isActive?: boolean;
+}
 
 export interface CreateIntentPayload {
   eventId: number;
@@ -64,25 +54,6 @@ export interface IntentStatusResponse {
   status: string;
 }
 
-export interface PaymentObligation {
-  id: number;
-  playerId: number | null;
-  amount: number;
-  amount_paid: number;
-  dueDate: string; // YYYY-MM-DD
-  description: string;
-  status: PaymentObligationStatus;
-  createdAt: string;
-}
-/* {
-    amount: number;
-    description: string;
-    status: "pending" | "paid" | "overdue" | "cancelled" | "ongoing";
-    playerId?: number | null | undefined;
-    amount_paid?: number | null | undefined;
-    dueDate?: string | null | undefined;
-} */
-
 
 export interface CreatePaymentObligationDto {
   playerId?: number | null;
@@ -103,4 +74,79 @@ export interface CreateIntentDto {
 
 
 
+export interface PaymentObligation {
+  id: number;
+  userId: number;
+  eventId: number;
+  playerIds: number[];
+  totalAmount: number;
+  paidAmount: number;
+  remainingAmount: number;
+  dueDate: string | null;
+  description: string;
+  status: 'pending' | 'partial' | 'paid' | 'overdue' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentIntent {
+  id: number;
+  obligationId: number;
+  userId: number;
+  amount: number;
+  method: 'wave' | 'orange_money' | 'cash' | 'card';
+  transactionReference: string | null;
+  transactionMetadata: { phone?: string; reference?: string } | null;
+  status: 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled';
+  declaredAt: string;
+  verifiedBy: number | null;
+  verifiedAt: string | null;
+  createdAt: string;
+}
+
+export interface PaymentEvent {
+  id: number;
+  name: string;
+  description: string | null;
+  amount: number;
+  allowInstallments: boolean;
+  startDate: string | null;
+  endDate: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentSummary {
+  totalObligations: number;
+  totalAmount: number;
+  totalPaid: number;
+  totalRemaining: number;
+  statusCounts: {
+    pending: number;
+    partial: number;
+    paid: number;
+    overdue: number;
+  };
+}
+
+export interface CreateObligationDto {
+  eventId: number;
+  playerIds: number[];
+  totalAmount: number;
+  dueDate?: string;
+}
+
+export interface CreateIntentDto {
+  obligationId: number;
+  amount: number;
+  method: 'wave' | 'orange_money' | 'cash' | 'card';
+  transactionReference?: string;
+  transactionMetadata?: { phone?: string; reference?: string };
+}
+
+export interface VerifyPaymentDto {
+  intentId: number;
+  status: 'verified' | 'rejected';
+}
 

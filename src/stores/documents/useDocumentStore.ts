@@ -2,34 +2,27 @@
 import { create } from 'zustand';
 import type { Document, DocumentStatus } from '@/types/document.type'
 import api from '@/lib/axios';
+import { documentService } from '@/lib/services/document.service';
 
 interface DocumentStore {
   documents: Document[];
   pendingDocuments: number;
   isLoading: boolean;
-  fetchDocuments: (userId?: number) => Promise<void>;
+  error: string | null;
+  fetchDocuments: (params?: { userId?: number; playerIds?: number[] }) => Promise<void>;
   fetchPendingDocuments: (userId?: number) => Promise<void>;
   fetchUserDocuments: (userId: number) => Promise<void>;
   validateDocument: (documentId: number, validated: boolean, adminId?: number) => Promise<void>;
   updateDocumentStatus: (documentId: number, status: DocumentStatus, adminId?: number) => Promise<void>;
+  clear: () => void;
 }
 
 export const useDocumentStore = create<DocumentStore>((set) => ({
   documents: [],
   isLoading: false,
   pendingDocuments: 0,
-  fetchDocuments: async () => {
-    set({ isLoading: true });
-    try {
-      // TODO: Remplacer par appel API
-      const response = await api.get(`/api/documents/`);
-      let received_docs = response.data;
-      set({ documents: received_docs, isLoading: false });
-    } catch (error) {
-      console.error(error);
-      set({ isLoading: false });
-    }
-  },
+  error: null,
+
 
   fetchUserDocuments: async (userId: number) => {
     set({ isLoading: true });
@@ -65,5 +58,18 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
   const status = validated ? 'Validé' : 'Rejeté';
   await api.put(`/api/documents/${documentId}/validate`, { status, adminId });
   // puis rafraîchir la liste des documents
-}
+},
+  fetchDocuments: async (params) => {
+      set({ isLoading: true, error: null });
+      try {
+        const documents = await documentService.getDocuments(params);
+        set({ documents, isLoading: false });
+      } catch (error: any) {
+        set({ error: error.message, isLoading: false });
+      }
+    },
+
+    clear: () => {
+      set({ documents: [], isLoading: false, error: null });
+    },
 }));

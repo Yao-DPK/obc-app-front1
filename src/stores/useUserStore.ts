@@ -4,12 +4,14 @@ import { userService } from '@/lib/services/user.service';
 
 interface UserStore {
   users: User[];
+  user: User | null;
   isLoading: boolean;
   error: string | null;
 
   // ========== ACTIONS ==========
 
   fetchUsers: () => Promise<void>;
+  fetchUserByIdAndRole: (userId: number, role: string) => Promise<void>
   fetchPlayers: () => Promise<void>;
   fetchAdmins: () => Promise<void>;
   fetchParents: () => Promise<void>;
@@ -24,6 +26,7 @@ interface UserStore {
 
 export const useUserStore = create<UserStore>((set, get) => ({
   users: [],
+  user: null,
   isLoading: false,
   error: null,
 
@@ -34,6 +37,16 @@ export const useUserStore = create<UserStore>((set, get) => ({
     try {
       const users = await userService.fetchUsers();
       set({ users, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+    }
+  },
+
+  fetchUserByIdAndRole: async (userId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const user = await userService.fetchUserByRoleAndId(userId, 'player');
+      set({ user, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }

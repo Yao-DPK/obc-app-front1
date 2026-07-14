@@ -17,7 +17,6 @@ import ChildInfoPage from './pages/parent/PupilsInfo';
 import ChildDocumentsPage from './pages/parent/PupilsDocuments';
 import ChildPaymentsPage from './pages/parent/PupilsPayments';
 import ParentProfilePage from './pages/parent/ParentProfile';
-import { UserLoader } from './components/UserLoader';
 import { useAuth } from './stores/useAuth';
 import {
   childInfoLoader,
@@ -30,6 +29,9 @@ import { RegistrationValidationPage } from './pages/super_admin/RegistrationVali
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Home from './pages/Home';
 import CustomLoader from './components/CustomLoader';
+import ConfirmGuardian from './pages/ConfirmGuardian/ConfirmGuardian';
+import PaymentEventsManagement from './pages/super_admin/PaymentEventsManagement';
+import DocumentTypesManagement from './pages/super_admin/DocumentTypesManagement';
 
 // ========== PROTECTED ROUTE WRAPPER ==========
 const ProtectedRoute = ({ children, allowedRoles }: { children: ReactNode; allowedRoles?: string[] }) => {
@@ -75,6 +77,7 @@ export const router = createBrowserRouter([
           { path: 'unauthorized', element: <Unauthorized /> },
           { path: 'forgot-password', element: <ForgotPassword /> },
           { path: 'reset-password', element: <ResetPassword /> },
+          { path: '/confirm-guardian', element: <ConfirmGuardian />,},
         ],
       },
     ],
@@ -107,12 +110,12 @@ export const router = createBrowserRouter([
           { path: 'stats', element: <SuperAdminDashboard /> },
           { path: 'admins', element: <ManageAdmins /> },
           { path: 'registrations', element: <SuperAdminRegistrations /> },
+          { path: 'payment_events', element: <PaymentEventsManagement /> },
+          { path: 'document-types', element: <DocumentTypesManagement />},
           {
             path: 'registrations/validate/:userId',
             element: (
-              <UserLoader userIdParam="userId">
-                {(user) => <RegistrationValidationPage user={user} />}
-              </UserLoader>
+                <RegistrationValidationPage />
             ),
           },
         ],

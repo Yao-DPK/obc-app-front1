@@ -2,7 +2,7 @@
 
 import z from "zod";
 
-export type DocumentType = 'Certificat Medical' | 'Photo d\'identite' | 'Recu de Paiement' | 'Extrait de Naissance' | 'Autorisation Parentale' | 'Pièce d\'identité' | 'autre';
+//export type DocumentType = 'Certificat Medical' | 'Photo d\'identite' | 'Recu de Paiement' | 'Extrait de Naissance' | 'Autorisation Parentale' | 'Pièce d\'identité' | 'autre';
 
 /* Pour la validation des string en document type. */
 export const DocumentTypeSchema = z.enum([
@@ -35,14 +35,39 @@ export interface Document {
   uploadedAt?: string;
 }
 
+
+
 export interface inscriptionFile{
-  fileType: DocumentType;
+  fileType: string;
   file: File;
   isObligatory: boolean
 }
 
 export interface DocumentFile{
-  fileType: DocumentType;
+  fileType: string;
   file: File;
   isObligatory?: boolean
 }
+
+export interface DocumentType {
+  id: number;
+  name: string;
+  description: string | null;
+  isObligatory: boolean;
+  applicableCategories: string[];
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateDocumentTypeDto {
+  name: string;
+  description?: string;
+  isObligatory?: boolean;
+  applicableCategories?: string[];
+  displayOrder?: number;
+  isActive?: boolean;
+}
+
+export interface UpdateDocumentTypeDto extends Partial<CreateDocumentTypeDto> {}

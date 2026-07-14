@@ -188,8 +188,10 @@ export default function InscriptionJoueur() {
                         >
                           <Send className="h-4 w-4" />
                           {isSubmitting ? 'Envoi en cours...' : 'Soumettre l’inscription'}
+                          {/* ToDO: Génération et sauvegarde du fichier de l'attestation après soumission de l'inscripttion */}
                         </Button>
                       )}
+
                     </div>
                   </div>
                 </form>
