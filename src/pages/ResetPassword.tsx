@@ -8,7 +8,7 @@ import api from '../lib/axios';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { KeyRound, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
 // 1. Schéma de validation plus strict
 const resetPasswordSchema = z
@@ -117,6 +117,7 @@ export default function ResetPassword() {
         timestamp: Date.now(),
       });
 
+      console.log('response.data: ', response);
       toast.success('Mot de passe modifié avec succès !');
 
       // 9. Redirection après délai pour meilleure UX

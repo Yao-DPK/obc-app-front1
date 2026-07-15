@@ -36,6 +36,7 @@ interface PaymentStore {
   fetchSummary: () => Promise<void>;
   fetchUserSummary: (userId: number) => Promise<void>;
   createObligation: (dto: CreateObligationDto) => Promise<PaymentObligation>;
+  updateObligationStatus: (id: number, status: string) => Promise<void>;
   createIntent: (dto: CreateIntentDto) => Promise<PaymentIntent>;
   cancelObligation: (id: number) => Promise<void>;
   verifyPayment: (dto: VerifyPaymentDto) => Promise<void>;
@@ -162,6 +163,20 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
       throw error;
     }
   },
+
+  updateObligationStatus: async (id: number, status: string) => {
+  set({ isLoadingObligations: true, error: null });
+  try {
+    const updated = await paymentService.updateObligationStatus(id, status);
+    set((state) => ({
+      obligations: state.obligations.map((o) => (o.id === id ? updated : o)),
+      isLoadingObligations: false,
+    }));
+  } catch (error: any) {
+    set({ error: error.message, isLoadingObligations: false });
+    throw error;
+  }
+},
 
   cancelObligation: async (id: number) => {
     set({ isLoadingObligations: true, error: null });

@@ -1,7 +1,7 @@
 // src/pages/admin/PaymentEventsManagement.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, DollarSign, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, CheckCircle, XCircle } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import api from '../../lib/axios';
 
@@ -54,7 +54,7 @@ type ConfirmationStatus =
 export default function ConfirmGuardian() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
-  const action = searchParams.get('action'); // 'confirm' | 'reject'
+  //const action = searchParams.get('action'); // 'confirm' | 'reject'
   const navigate = useNavigate();
 
   const [status, setStatus] = useState<ConfirmationStatus>('loading');

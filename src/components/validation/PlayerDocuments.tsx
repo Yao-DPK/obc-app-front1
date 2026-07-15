@@ -40,10 +40,10 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess, onVal
   const { user } = useAuth();
 
   const uploadedDocs = documents.filter((doc) =>
-    REQUIRED_DOCS.some((rd) => rd.type === doc.type)
+    REQUIRED_DOCS.some((rd) => rd.type === doc.type.name)
   );
   const missingDocs = REQUIRED_DOCS.filter(
-    (rd) => !uploadedDocs.some((ud) => ud.type === rd.type)
+    (rd) => !uploadedDocs.some((ud) => ud.type.name === rd.type)
   );
   const allUploaded = missingDocs.length === 0;
   const allValidated = allUploaded && uploadedDocs.every((doc) => doc.documentStatus === DOCUMENT_STATUSES.VALID);
@@ -114,7 +114,7 @@ export function PlayerDocuments({ userId, documents, isLoading, onSuccess, onVal
     <div className="space-y-6">
       <div className="grid gap-4">
         {REQUIRED_DOCS.map((doc) => {
-          const uploadedDoc = uploadedDocs.find((d) => d.type === doc.type);
+          const uploadedDoc = uploadedDocs.find((d) => d.type.name === doc.type);
           const isUploaded = !!uploadedDoc;
           const isPending = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.PENDING;
           const isExpired = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.EXPIRED;

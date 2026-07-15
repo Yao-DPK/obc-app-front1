@@ -21,7 +21,7 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
 
   useEffect(() => {
     if (playerId) {
-      fetchObligations(playerId);
+      fetchObligations();
     }
   }, [playerId, fetchObligations]);
 
@@ -34,7 +34,7 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
     try {
       await updateObligationStatus(obligationId, newStatus as any);
       toast.success(`Statut mis à jour : ${newStatus}`);
-      await fetchObligations(playerId);
+      await fetchObligations();
     } catch (error) {
       toast.error('Erreur lors de la mise à jour du statut');
     } finally {
@@ -106,7 +106,7 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
           </CardHeader>
           <CardContent>
             <div className="flex justify-between text-sm">
-              <span>Montant : {obligation.amount.toLocaleString()} FCFA</span>
+              <span>Montant : {obligation.totalAmount.toLocaleString()} FCFA</span>
               <span>Date limite : {obligation.dueDate ? new Date(obligation.dueDate).toLocaleDateString() : 'Non définie'}</span>
             </div>
           </CardContent>

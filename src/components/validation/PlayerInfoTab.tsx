@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { PlayerInfoForm } from './PlayerInfoForm';
 import type { User } from '@/types/user.type';
-import { cn } from '@/lib/utils';
 
 interface PlayerInfoTabProps {
   user: User;

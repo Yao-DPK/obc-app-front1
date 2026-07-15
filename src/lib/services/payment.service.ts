@@ -62,6 +62,11 @@ export const paymentService = {
     return data;
   },
 
+  async updateObligationStatus(id: number, status: string): Promise<PaymentObligation> {
+    const { data } = await api.patch(`/api/payments/obligations/${id}/status`, { status });
+    return data;
+  },
+
   // ============================================================
   // INTENTIONS DE PAIEMENT
   // ============================================================

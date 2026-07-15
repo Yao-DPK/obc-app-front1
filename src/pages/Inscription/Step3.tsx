@@ -16,19 +16,26 @@ export function Step3({ updateRequiredFile }: Step3Props) {
     updateRequiredFile(fileType, file);
     console.log(`uploadedFiles: ${JSON.stringify(uploadedFiles)}`)
     if (file) {
-      setUploadedFiles((prev) => ({ ...prev, [fileType]: file.name }));
+      setUploadedFiles((prev) => ({ ...prev, [fileType.name]: file.name }));
     } else {
       setUploadedFiles((prev) => {
         const copy = { ...prev };
-        delete copy[fileType];
+        delete copy[fileType.name];
         return copy;
       });
     }
   };
 
+
+  const documentTypes: DocumentType[] = [
+    {id: 1, name: 'Extrait de naissance', description: "", isObligatory: true, applicableCategories:['Tous'], displayOrder: 0, isActive: true, createdAt: new Date().toDateString(), updatedAt: new Date().toDateString()},
+    {id: 2, name: 'Photo d\'identite', description: "", isObligatory: true, applicableCategories:['Tous'], displayOrder: 0, isActive: true, createdAt: new Date().toDateString(), updatedAt: new Date().toDateString()}
+
+  ] 
+
   const requiredDocs: Document[] = [
-    { id: 1, type: 'Extrait de Naissance' },
-    { id: 2, type: "Photo d'identite"},
+    { id: 1, type: documentTypes[0] },
+    { id: 2, type: documentTypes[1]},
   ];
 
   return (
@@ -46,12 +53,12 @@ export function Step3({ updateRequiredFile }: Step3Props) {
       <div className="space-y-4">
         {requiredDocs.map((doc) => (
         <DocumentItem
-          key={doc.type}
+          key={doc.type.name}
           document={doc} // ou récupérer depuis la liste existante
           mode="upload"
           onUpload={(file) => handleFileUpload(doc.type as DocumentType, file)}
           showObligatory
-          emptyLabel={doc.type}
+          emptyLabel={doc.type.name}
         />
       ))}
       </div>

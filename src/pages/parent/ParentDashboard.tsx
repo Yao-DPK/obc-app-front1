@@ -24,7 +24,6 @@ import { useAuth } from '@/stores/useAuth';
 import { useGuardianStore } from '@/stores/useGuardianStore';
 import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
-import { cn } from '@/lib/utils';
 import { getAge } from '@/utils/utils';
 
 // ========== SOUS-COMPOSANTS ==========

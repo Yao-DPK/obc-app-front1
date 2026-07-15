@@ -11,7 +11,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 export default function AdminDashboard() {
   const { users, fetchUsers } = useUserStore();
   const { pendingDocuments } = useDocumentStore();
-  const { payments } = usePaymentStore();
+  const {obligations} = usePaymentStore();
 
   useEffect(() => {
     fetchUsers();
@@ -21,7 +21,7 @@ export default function AdminDashboard() {
   const pendingRegistrations = users.filter(
     u => u.registrationStatus === 'pre_inscrit' || u.registrationStatus === 'attestation_signee'
   ).length;
-  const pendingPayments = payments.filter(p => p.status === 'pending').length;
+  const pendingPayments = obligations.filter(p => p.status === 'pending').length;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">

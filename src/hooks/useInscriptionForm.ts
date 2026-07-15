@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import api from '@/lib/axios';
-import type { inscriptionFile } from '@/types';
+import type { DocumentType, inscriptionFile } from '@/types';
 import {
   joueurInfoSchema,
   attestationSchema,
@@ -44,17 +44,17 @@ export function useInscriptionForm() {
 
   const onPreviousStep = () => setStep((prev) => prev - 1);
 
-  const updateRequiredFile = (fileType: inscriptionFile['fileType'], file: File | null) => {
+  const updateRequiredFile = (fileType: DocumentType, file: File | null) => {
     if (file) {
       setRequiredFiles((prev) => {
-        const existing = prev.find((f) => f.fileType === fileType);
+        const existing = prev.find((f) => f.fileType.name === fileType.name);
         if (existing) {
-          return prev.map((f) => (f.fileType === fileType ? { ...f, file } : f));
+          return prev.map((f) => (f.fileType.name === fileType.name ? { ...f, file } : f));
         }
         return [...prev, { fileType, file, isObligatory: true }];
       });
     } else {
-      setRequiredFiles((prev) => prev.filter((f) => f.fileType !== fileType));
+      setRequiredFiles((prev) => prev.filter((f) => f.fileType.name !== fileType.name));
     }
   };
 
@@ -72,7 +72,7 @@ export function useInscriptionForm() {
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
-    requiredFiles.forEach((f) => formData.append(f.fileType, f.file));
+    requiredFiles.forEach((f) => formData.append(f.fileType.name, f.file));
 
     setIsSubmitting(true);
     try {

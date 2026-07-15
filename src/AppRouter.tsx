@@ -16,13 +16,11 @@ import PupilsList from './pages/parent/PupilsList';
 import ChildInfoPage from './pages/parent/PupilsInfo';
 import ChildDocumentsPage from './pages/parent/PupilsDocuments';
 import ChildPaymentsPage from './pages/parent/PupilsPayments';
-import ParentProfilePage from './pages/parent/ParentProfile';
 import { useAuth } from './stores/useAuth';
 import {
   childInfoLoader,
   childDocumentsLoader,
   childPaymentsLoader,
-  profileLoader,
 } from './loaders';
 import type { ReactNode } from 'react';
 import { RegistrationValidationPage } from './pages/super_admin/RegistrationValidationPage';

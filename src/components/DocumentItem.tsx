@@ -113,7 +113,7 @@ export function DocumentItem({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isUploaded = !!document?.publicUrl;
-  const Icon = document?.type ? DOCUMENT_ICONS[document.type] || DOCUMENT_ICONS['Autre'] : <File className="h-5 w-5" />;
+  const Icon = document?.type ? DOCUMENT_ICONS[document.type.name] || DOCUMENT_ICONS['Autre'] : <File className="h-5 w-5" />;
   const statusConfig = document?.documentStatus
     ? STATUS_CONFIG[document.documentStatus]
     : STATUS_CONFIG['En attente de Validation'];
@@ -178,7 +178,7 @@ export function DocumentItem({
                 </div>
                 <div>
                     <p className={cn('font-medium', s.text)}>
-                    {document?.type || 'Document'}
+                    {document?.type.name || 'Document'}
                     </p>
                     {showObligatory && document?.isObligatory && (
                     <Badge variant="outline" className="text-xs text-red-500 border-red-200 bg-red-50">
@@ -273,7 +273,7 @@ export function DocumentItem({
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={cn('font-medium', s.text)}>{document.type}</span>
+                <span className={cn('font-medium', s.text)}>{document.type.name}</span>
 
                 {showObligatory && document.isObligatory && (
                   <Badge variant="outline" className="text-xs text-red-500 border-red-200 bg-red-50">
@@ -398,7 +398,7 @@ export function DocumentItem({
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="text-muted-foreground">{Icon}</div>
-        <span className={cn('font-medium truncate', s.text)}>{document.type}</span>
+        <span className={cn('font-medium truncate', s.text)}>{document.type.name}</span>
 
         {showObligatory && document.isObligatory && (
           <span className="text-xs text-red-500">*</span>

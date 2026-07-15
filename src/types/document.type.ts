@@ -38,7 +38,7 @@ export interface Document {
 
 
 export interface inscriptionFile{
-  fileType: string;
+  fileType: DocumentType;
   file: File;
   isObligatory: boolean
 }

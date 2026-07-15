@@ -9,8 +9,6 @@ import {
   User,
   CheckCircle,
   AlertCircle,
-  Activity,
-  Clock,
   ChevronRight,
   Users,
   School,
@@ -31,13 +29,13 @@ import { useAuth } from '@/stores/useAuth';
 
 // ========== COMPOSANTS INTERNES ==========
 
-const StatSkeleton = () => (
+/* const StatSkeleton = () => (
   <div className="space-y-2">
     <Skeleton className="h-4 w-24" />
     <Skeleton className="h-8 w-16" />
   </div>
 );
-
+ */
 const InfoRow = ({ label, value, icon: Icon, className }: any) => (
   <div className={cn('flex items-center gap-2 text-sm', className)}>
     {Icon && <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
@@ -85,7 +83,6 @@ export default function PlayerDashboard() {
     (o) => o.status === 'overdue'
   ).length;
 
-  const totalObligations = obligations.length;
   const totalAmount = obligations.reduce((sum, o) => sum + Number(o.totalAmount), 0);
   const totalPaid = obligations.reduce((sum, o) => sum + Number(o.paidAmount || 0), 0);
   const remainingAmount = totalAmount - totalPaid;

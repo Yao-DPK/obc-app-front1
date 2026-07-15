@@ -24,14 +24,10 @@ import { cn } from '@/lib/utils';
 
 export default function SuperAdminDashboard() {
   // ========== STORES ==========
-  const { users, fetchUsers, isLoading: usersLoading } = useUserStore();
-  const { pendingDocuments, fetchPendingDocuments, isLoading: docsLoading} = useDocumentStore();
+  const { users, isLoading: usersLoading } = useUserStore();
+  const { pendingDocuments, isLoading: docsLoading} = useDocumentStore();
   const {
     summary,
-    fetchSummary,
-    fetchObligations,
-    fetchIntents,
-    fetchAllObligations, fetchAllIntents, allObligations, allIntents,
     isLoadingObligations,
     isLoadingIntents,
   } = usePaymentStore();
