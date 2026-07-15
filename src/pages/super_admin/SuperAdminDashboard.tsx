@@ -6,10 +6,8 @@ import {
   Shield,
   UserPlus,
   FileText,
-  CreditCard,
   TrendingUp,
   AlertCircle,
-  CheckCircle,
   Clock,
   DollarSign,
   Activity,
@@ -20,7 +18,6 @@ import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 
 export default function SuperAdminDashboard() {
   // ========== STORES ==========
