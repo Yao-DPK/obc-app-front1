@@ -5,6 +5,13 @@ export interface UploadDocumentPayload{
     files: Document[]
 }
 
+export interface GetDocumentTypesOptions {
+  id?: string;
+  name?: string;
+  names?: string[];
+  includeInactive?: boolean; // Optionnel, par défaut false
+}
+
 export const documentService = {
     async uploadDocuments(payload: FormData){
         const { data } = await api.post("/api/documents/upload", payload, {
@@ -34,12 +41,20 @@ export const documentService = {
 
    // ========== TYPES DE DOCUMENTS ==========
 
-  async getDocumentTypes(includeInactive = false): Promise<DocumentType[]> {
-    const { data } = await api.get('/api/documents/types', {
-      params: { includeInactive },
-    });
-    return data;
-  },
+  async getDocumentTypes(options: GetDocumentTypesOptions = {}): Promise<DocumentType[]> {
+  // Destructuration avec une valeur par défaut pour includeInactive
+  const { id, name, names, includeInactive = false } = options;
+
+  const { data } = await api.get('/api/documents/types', {
+    params: { 
+      id, 
+      name, 
+      names, 
+      includeInactive 
+    },
+  });
+  return data;
+},
 
   async getDocumentTypeById(id: number): Promise<DocumentType> {
     const { data } = await api.get(`/api/documents/types/${id}`);

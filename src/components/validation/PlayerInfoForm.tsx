@@ -44,11 +44,11 @@ export function PlayerInfoForm({ user, onValidChange, onSuccess }: PlayerInfoFor
     defaultValues: {
       firstName: user.firstName || '',
       lastName: user.lastName || '',
-      birthDate: user.birthDate ? new Date(user.birthDate) : undefined,
+      birthDate: user.playerDetails.birthDate ? new Date(user.playerDetails.birthDate) : undefined,
       phone: user.phone || '',
       address: user.address || '',
-      school: user.school || '',
-      class: user.class || '',
+      school: user.playerDetails.school || '',
+      class: user.playerDetails.class || '',
     },
     mode: 'onChange', // pour valider en temps réel
   });

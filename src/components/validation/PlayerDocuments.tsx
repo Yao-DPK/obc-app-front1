@@ -1,5 +1,5 @@
 // components/player/PlayerDocuments.tsx
-import { DOCUMENT_STATUSES, type Document, type DocumentStatus } from '@/types';
+import { DOCUMENT_STATUSES, type Document, type DocumentStatus, type DocumentType } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileCheck, FileX, Clock, AlertTriangle } from 'lucide-react';
@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 interface PlayerDocumentsProps {
   userId: number;
   documents: Document[];
+  docTypes: DocumentType[];
   isLoading: boolean;
   onSuccess?: () => void;
   onValidChange?: (isValid: boolean) => void; // Nouvelle prop
@@ -32,7 +33,7 @@ const REQUIRED_DOCS: RequiredDoc[] = [
   { type: "Photo d'identite", label: "Photo d'identité" },
 ];
 
-export function PlayerDocuments({ userId, documents, isLoading, onSuccess, onValidChange }: PlayerDocumentsProps) {
+export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSuccess, onValidChange }: PlayerDocumentsProps) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [uploadingDocType, setUploadingDocType] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});

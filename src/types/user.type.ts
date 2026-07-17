@@ -20,6 +20,7 @@ export interface AttestationData {
 }
 
 export interface User {
+  playerDetails: any;
   id: number;
   email: string;
   role: UserRole;

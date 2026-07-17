@@ -2,11 +2,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PlayerDocuments } from './PlayerDocuments';
-import type { Document } from '@/types';
+import type { Document, DocumentType } from '@/types';
 
 interface PlayerDocumentsTabProps {
   userId: number;
   documents: Document[];
+  docTypes: DocumentType[];
   isLoading: boolean;
   onSuccess: () => void;
   onValidChange: (isValid: boolean) => void;
@@ -15,6 +16,7 @@ interface PlayerDocumentsTabProps {
 export function PlayerDocumentsTab({
   userId,
   documents,
+  docTypes,
   isLoading,
   onSuccess,
   onValidChange,
@@ -40,6 +42,7 @@ export function PlayerDocumentsTab({
         <PlayerDocuments
           userId={userId}
           documents={documents}
+          docTypes={docTypes}
           isLoading={isLoading}
           onSuccess={onSuccess}
           onValidChange={onValidChange}

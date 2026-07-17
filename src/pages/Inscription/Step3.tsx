@@ -27,16 +27,11 @@ export function Step3({ updateRequiredFile }: Step3Props) {
   };
 
 
-  const documentTypes: DocumentType[] = [
+  const requireDocTypes: DocumentType[] = [
     {id: 1, name: 'Extrait de naissance', description: "", isObligatory: true, applicableCategories:['Tous'], displayOrder: 0, isActive: true, createdAt: new Date().toDateString(), updatedAt: new Date().toDateString()},
     {id: 2, name: 'Photo d\'identite', description: "", isObligatory: true, applicableCategories:['Tous'], displayOrder: 0, isActive: true, createdAt: new Date().toDateString(), updatedAt: new Date().toDateString()}
 
-  ] 
-
-  const requiredDocs: Document[] = [
-    { id: 1, type: documentTypes[0] },
-    { id: 2, type: documentTypes[1]},
-  ];
+  ] /*  */
 
   return (
     <div className="space-y-8">
@@ -51,14 +46,11 @@ export function Step3({ updateRequiredFile }: Step3Props) {
 
       {/* Liste des documents */}
       <div className="space-y-4">
-        {requiredDocs.map((doc) => (
+        {requireDocTypes.map((doc) => (
         <DocumentItem
-          key={doc.type.name}
-          document={doc} // ou récupérer depuis la liste existante
-          mode="upload"
-          onUpload={(file) => handleFileUpload(doc.type as DocumentType, file)}
+          docType={doc}
+          onUpload={(file, doc) => handleFileUpload(doc as DocumentType, file)}
           showObligatory
-          emptyLabel={doc.type.name}
         />
       ))}
       </div>

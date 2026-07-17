@@ -15,13 +15,15 @@ import { PlayerInfoTab } from '@/components/validation/PlayerInfoTab';
 import { PaymentTab } from '@/components/validation/PaymentTab';
 import { Badge } from '@/components/ui/badge';
 import { PlayerDocumentsTab } from '@/components/validation/PlayerDocumentTab';
+import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
 
 export function RegistrationValidationPage() {
   const { userId } = useParams();
   const { user, fetchUserByIdAndRole, isLoading: userLoading } = useUserStore();
   const { documents, isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
+  const { docTypes, fetchDocTypes } = useDocumentTypeStore();
   const { fetchObligations } = usePaymentStore();
-
+  const requiredDocs: string[] = ["Extrait de Naissance", "Photo d'Identité"];
   const [isInfoValid, setIsInfoValid] = useState(false);
   const [isDocsValid, setIsDocsValid] = useState(false);
   const [isPaymentValid, setIsPaymentValid] = useState(false);
@@ -32,6 +34,8 @@ export function RegistrationValidationPage() {
       fetchUserByIdAndRole(Number(userId), 'player');
       fetchUserDocuments(Number(userId));
       fetchObligations();
+      fetchDocTypes({names: requiredDocs});
+      console.log(`Doc Types: ${JSON.stringify(docTypes)}`);
     }
   }, [userId, fetchUserByIdAndRole, fetchUserDocuments, fetchObligations]);
 
@@ -61,7 +65,7 @@ export function RegistrationValidationPage() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 -ml-2 sm:hidden"
+            className="h-8 w-8 -ml-2"
             onClick={() => window.history.back()}
           >
             <ChevronLeft className="h-5 w-5" />
@@ -172,6 +176,7 @@ export function RegistrationValidationPage() {
           <PlayerDocumentsTab
             userId={user.id}
             documents={documents}
+            docTypes={docTypes}
             isLoading={docsLoading}
             onSuccess={() => fetchUserDocuments(user.id)}
             onValidChange={setIsDocsValid}

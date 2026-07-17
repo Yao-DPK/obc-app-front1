@@ -17,7 +17,7 @@ export interface NavItem {
 const navItems: NavItem[] = [
   // Section principale – commun à tous
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
-  { to: '/profile', label: 'Profile', icon: User, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
+  { to: '/profile', label: 'Profil', icon: User, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
   /* { to: '/documents', label: 'Documents', icon: FileText, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
   { to: '/payments', label: 'Paiements', icon: CreditCard, roles: ['player', 'parent', 'admin', 'super_admin'], section: 'principal' },
   { to: '/children', label: 'Mes enfants', icon: Users, roles: ['parent'], section: 'principal' } */,
