@@ -1,8 +1,8 @@
-import type { DocumentFile } from "@/types";
+import type { Document } from "@/types";
 import api from "../axios";
 
 export interface UploadDocumentPayload{
-    files: DocumentFile[]
+    files: Document[]
 }
 
 export const inscriptionService = {

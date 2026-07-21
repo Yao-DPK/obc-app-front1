@@ -19,7 +19,7 @@ export default function DocumentTypesManagement() {
   const [editingDocType, setEditingDocType] = useState<DocumentType | null>(null);
 
   useEffect(() => {
-    fetchDocTypes(true);
+    fetchDocTypes({includeInactive: true});
   }, []);
 
   const handleEdit = (docType: DocumentType) => {
@@ -52,7 +52,7 @@ export default function DocumentTypesManagement() {
   };
 
   const handleModalSuccess = () => {
-    fetchDocTypes(true);
+    fetchDocTypes({includeInactive: true});
     handleModalClose();
   };
 

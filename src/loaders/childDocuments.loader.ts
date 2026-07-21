@@ -1,7 +1,7 @@
 // ========== loaders/childDocuments.loader.ts ==========
 import type { LoaderFunction } from 'react-router-dom';
 import api from '@/lib/axios';
-import type { DocumentFile } from '@/types';
+import type { Document } from '@/types';
 
 export const childDocumentsLoader: LoaderFunction = async ({ params }) => {
   const id = params.id;
@@ -11,7 +11,7 @@ export const childDocumentsLoader: LoaderFunction = async ({ params }) => {
   }
 
   try {
-    const { data } = await api.get<DocumentFile[]>(`/api/children/${id}/documents`);
+    const { data } = await api.get<Document[]>(`/api/children/${id}/documents`);
     return data;
   } catch (error) {
     throw new Response('Documents non trouvés', { status: 404 });

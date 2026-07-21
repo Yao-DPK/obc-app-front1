@@ -1,7 +1,6 @@
 // apps/web/src/components/inscription/Step3.tsx
 import { Upload,  AlertCircle } from 'lucide-react';
 import type { DocumentType } from '@/types';
-import { useState } from 'react';
 import { DocumentItem } from '@/components/DocumentItem';
 
 interface Step3Props {
@@ -10,19 +9,9 @@ interface Step3Props {
 }
 
 export function Step3({ requiredDocTypes, updateRequiredFile }: Step3Props) {
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
 
   const handleFileSelect = (fileType: DocumentType, file: File | null) => {
     updateRequiredFile(fileType, file);
-    if (file) {
-      setUploadedFiles((prev) => ({ ...prev, [fileType.name]: file.name }));
-    } else {
-      setUploadedFiles((prev) => {
-        const copy = { ...prev };
-        delete copy[fileType.name];
-        return copy;
-      });
-    }
   };
 
 
