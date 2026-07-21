@@ -2,7 +2,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PlayerDocuments } from './PlayerDocuments';
-import type { DocumentType } from '@/types';
 
 interface PlayerDocumentsTabProps {
   userId: number;
