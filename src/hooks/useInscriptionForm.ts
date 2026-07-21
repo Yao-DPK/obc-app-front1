@@ -14,6 +14,8 @@ import {
   type AttestationData,
 } from '@/types/inscription.schema';
 
+
+
 export function useInscriptionForm() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -72,13 +74,17 @@ export function useInscriptionForm() {
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
-    requiredFiles.forEach((f) => formData.append(f.fileType.name, f.file));
-
+    console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
+    requiredFiles.forEach((f) => {
+      console.log(`Ajout ${f.fileType.name}`);
+      formData.append(f.fileType.name, f.file)
+    });
     setIsSubmitting(true);
     try {
       await api.post('/api/inscription/pre-register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      
       toast.success('Inscription soumise !');
       navigate('/home');
     } catch (err: any) {

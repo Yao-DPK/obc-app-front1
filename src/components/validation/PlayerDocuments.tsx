@@ -1,5 +1,5 @@
 // components/player/PlayerDocuments.tsx
-import { DOCUMENT_STATUSES, type Document, type DocumentStatus, type DocumentType } from '@/types';
+import { DOCUMENT_STATUSES, type DocumentStatus } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileCheck, FileX, Clock, AlertTriangle } from 'lucide-react';
@@ -12,40 +12,35 @@ import { Input } from '../ui/input';
 import { documentService } from '@/lib/services/document.service';
 import { useAuth } from '@/stores/useAuth';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
 
 interface PlayerDocumentsProps {
   userId: number;
-  documents: Document[];
-  docTypes: DocumentType[];
   isLoading: boolean;
   onSuccess?: () => void;
   onValidChange?: (isValid: boolean) => void; // Nouvelle prop
 
 }
 
-type RequiredDoc = {
-  type: string;
-  label: string;
-};
 
-const REQUIRED_DOCS: RequiredDoc[] = [
-  { type: 'Extrait de Naissance', label: 'Extrait de naissance' },
-  { type: "Photo d'identite", label: "Photo d'identité" },
-];
-
-export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSuccess, onValidChange }: PlayerDocumentsProps) {
+export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }: PlayerDocumentsProps) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [uploadingDocType, setUploadingDocType] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
-  const { updateDocumentStatus, fetchUserDocuments } = useDocumentStore();
+  const { documents, updateDocumentStatus, fetchUserDocuments } = useDocumentStore();
+  const { docTypes } = useDocumentTypeStore();
   const { user } = useAuth();
 
+
   const uploadedDocs = documents.filter((doc) =>
-    REQUIRED_DOCS.some((rd) => rd.type === doc.type.name)
+    docTypes.some((dt) => dt.name === doc.type.name)
   );
-  const missingDocs = REQUIRED_DOCS.filter(
-    (rd) => !uploadedDocs.some((ud) => ud.type.name === rd.type)
+
+  const missingDocs = docTypes.filter(
+    (rd) => !uploadedDocs.some((ud) => ud.type.name === rd.name)
   );
+
+  console.log(`uploaded Docs: ${JSON.stringify(docTypes)}`);
   const allUploaded = missingDocs.length === 0;
   const allValidated = allUploaded && uploadedDocs.every((doc) => doc.documentStatus === DOCUMENT_STATUSES.VALID);
   const isSectionValid = allValidated;
@@ -88,7 +83,7 @@ export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSucc
     setUploadingDocType(docType);
     const formData = new FormData();
     formData.append('data', JSON.stringify({ userId, docType }));
-    formData.append('file', file);
+    formData.append(docType, file);
     try {
       await documentService.uploadDocuments(formData);
       toast.success('Document envoyé avec succès');
@@ -114,14 +109,15 @@ export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSucc
   return (
     <div className="space-y-6">
       <div className="grid gap-4">
-        {REQUIRED_DOCS.map((doc) => {
-          const uploadedDoc = uploadedDocs.find((d) => d.type.name === doc.type);
+        {docTypes.map((doc) => {
+          const uploadedDoc = uploadedDocs.find((d) => d.type.name === doc.name);
+          
           const isUploaded = !!uploadedDoc;
           const isPending = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.PENDING;
           const isExpired = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.EXPIRED;
           const isRejected = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.REJECTED;
           const isValid = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.VALID;
-          const selectedFile = selectedFiles[doc.type];
+          const selectedFile = selectedFiles[doc.name];
 
           const getCardBorderClass = () => {
             if (!isUploaded) return '';
@@ -132,7 +128,7 @@ export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSucc
           };
 
           return (
-            <Card key={doc.type} className={getCardBorderClass()}>
+            <Card key={doc.name} className={getCardBorderClass()}>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -151,7 +147,7 @@ export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSucc
                     ) : (
                       <FileX className="text-red-400" />
                     )}
-                    {doc.label}
+                    {doc.name}
                   </CardTitle>
                   {isUploaded && (
                     <div className="flex items-center gap-2">
@@ -191,21 +187,21 @@ export function PlayerDocuments({ userId, documents, docTypes, isLoading, onSucc
                     <Input
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => handleFileSelect(doc.type, e.target.files?.[0] || null)}
+                      onChange={(e) => handleFileSelect(doc.name, e.target.files?.[0] || null)}
                     />
                     <Button
                       variant="outline"
-                      onClick={() => selectedFile && handleUpload(doc.type, selectedFile)}
-                      disabled={!selectedFile || uploadingDocType === doc.type}
+                      onClick={() => selectedFile && handleUpload(doc.name, selectedFile)}
+                      disabled={!selectedFile || uploadingDocType === doc.name}
                     >
-                      {uploadingDocType === doc.type ? 'Envoi en cours...' : 'Envoyer'}
+                      {uploadingDocType === doc.name ? 'Envoi en cours...' : 'Envoyer'}
                     </Button>
                   </div>
                 )}
                 {isUploaded && uploadedDoc && (
                   <FilePreview
                     url={uploadedDoc.publicUrl!}
-                    fileName={`${doc.label} - ${uploadedDoc.fileId}`}
+                    fileName={`${doc.name} - ${uploadedDoc.fileId}`}
                   />
                 )}
               </CardContent>

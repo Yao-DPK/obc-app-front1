@@ -1,20 +1,19 @@
 // apps/web/src/components/inscription/Step3.tsx
 import { Upload,  AlertCircle } from 'lucide-react';
-import type { Document, DocumentType } from '@/types';
+import type { DocumentType } from '@/types';
 import { useState } from 'react';
 import { DocumentItem } from '@/components/DocumentItem';
 
 interface Step3Props {
+  requiredDocTypes: DocumentType[],
   updateRequiredFile: (fileType: DocumentType, file: File | null) => void;
 }
 
-export function Step3({ updateRequiredFile }: Step3Props) {
+export function Step3({ requiredDocTypes, updateRequiredFile }: Step3Props) {
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
 
-
-  const handleFileUpload = (fileType: DocumentType, file: File | null) => {
+  const handleFileSelect = (fileType: DocumentType, file: File | null) => {
     updateRequiredFile(fileType, file);
-    console.log(`uploadedFiles: ${JSON.stringify(uploadedFiles)}`)
     if (file) {
       setUploadedFiles((prev) => ({ ...prev, [fileType.name]: file.name }));
     } else {
@@ -26,12 +25,6 @@ export function Step3({ updateRequiredFile }: Step3Props) {
     }
   };
 
-
-  const requireDocTypes: DocumentType[] = [
-    {id: 1, name: 'Extrait de naissance', description: "", isObligatory: true, applicableCategories:['Tous'], displayOrder: 0, isActive: true, createdAt: new Date().toDateString(), updatedAt: new Date().toDateString()},
-    {id: 2, name: 'Photo d\'identite', description: "", isObligatory: true, applicableCategories:['Tous'], displayOrder: 0, isActive: true, createdAt: new Date().toDateString(), updatedAt: new Date().toDateString()}
-
-  ] /*  */
 
   return (
     <div className="space-y-8">
@@ -46,10 +39,10 @@ export function Step3({ updateRequiredFile }: Step3Props) {
 
       {/* Liste des documents */}
       <div className="space-y-4">
-        {requireDocTypes.map((doc) => (
+        {requiredDocTypes.map((doc) => (
         <DocumentItem
           docType={doc}
-          onUpload={(file, doc) => handleFileUpload(doc as DocumentType, file)}
+          onFileChange={(file, doc) => handleFileSelect(doc as DocumentType, file)}
           showObligatory
         />
       ))}

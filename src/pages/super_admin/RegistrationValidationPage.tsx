@@ -20,10 +20,10 @@ import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
 export function RegistrationValidationPage() {
   const { userId } = useParams();
   const { user, fetchUserByIdAndRole, isLoading: userLoading } = useUserStore();
-  const { documents, isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
-  const { docTypes, fetchDocTypes } = useDocumentTypeStore();
+  const { isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
+  const { fetchDocTypes } = useDocumentTypeStore();
   const { fetchObligations } = usePaymentStore();
-  const requiredDocs: string[] = ["Extrait de Naissance", "Photo d'Identité"];
+  const requiredDocs: string[] = ["Extrait de Naissance", "Photo d'Identite"];
   const [isInfoValid, setIsInfoValid] = useState(false);
   const [isDocsValid, setIsDocsValid] = useState(false);
   const [isPaymentValid, setIsPaymentValid] = useState(false);
@@ -32,10 +32,9 @@ export function RegistrationValidationPage() {
   useEffect(() => {
     if (userId) {
       fetchUserByIdAndRole(Number(userId), 'player');
-      fetchUserDocuments(Number(userId));
+      fetchUserDocuments(Number(userId)); 
       fetchObligations();
       fetchDocTypes({names: requiredDocs});
-      console.log(`Documents: ${JSON.stringify(documents)}`);
     }
   }, [userId, fetchUserByIdAndRole, fetchUserDocuments, fetchObligations]);
 
@@ -175,8 +174,6 @@ export function RegistrationValidationPage() {
         <TabsContent value="documents" className="mt-4 sm:mt-6">
           <PlayerDocumentsTab
             userId={user.id}
-            documents={documents}
-            docTypes={docTypes}
             isLoading={docsLoading}
             onSuccess={() => fetchUserDocuments(user.id)}
             onValidChange={setIsDocsValid}

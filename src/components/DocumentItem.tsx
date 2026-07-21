@@ -67,6 +67,7 @@ const STATUS_CONFIG: Record<
 interface DocumentItemProps {
   document?: Document | null;
   docType: DocumentType;
+
   onView?: (doc: Document) => void;
   onEdit?: (doc: Document) => void;
   onDelete?: (doc: Document) => void;
@@ -76,6 +77,7 @@ interface DocumentItemProps {
 
   // ─── UPLOAD ───
   onUpload?: (file: File, documentType: DocumentType) => Promise<void> | void;
+  onFileChange?: (file: File, documentType: DocumentType) => Promise<void> | void;
   accept?: string;
   maxSize?: number; // en Mo
   uploading?: boolean;
@@ -98,6 +100,7 @@ export function DocumentItem({
   document = null,
   docType,
   onView,
+  onFileChange,
   onEdit,
   onDelete,
   onDownload,
@@ -144,7 +147,7 @@ export function DocumentItem({
   const s = sizeClasses[size];
 
   // ========== GESTIONNAIRES ==========
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -154,6 +157,7 @@ export function DocumentItem({
     }
     setError(null);
     setSelectedFile(file);
+    await onFileChange?.(file, docType);
   };
 
   const handleUpload = async () => {
