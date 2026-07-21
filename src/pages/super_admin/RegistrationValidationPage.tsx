@@ -35,7 +35,7 @@ export function RegistrationValidationPage() {
       fetchUserDocuments(Number(userId));
       fetchObligations();
       fetchDocTypes({names: requiredDocs});
-      console.log(`Doc Types: ${JSON.stringify(docTypes)}`);
+      console.log(`Documents: ${JSON.stringify(documents)}`);
     }
   }, [userId, fetchUserByIdAndRole, fetchUserDocuments, fetchObligations]);
 

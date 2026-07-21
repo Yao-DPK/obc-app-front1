@@ -39,6 +39,59 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex overflow-hidden">
+
+      {/* ====== COLONNE DROITE – Options (desktop) ====== */}
+      <div className="hidden md:flex w-[420px] lg:w-[480px] bg-primary flex-col justify-center p-10 text-white shadow-2xl">
+        <div className="max-w-sm mx-auto space-y-10">
+          {/* Logo / Titre */}
+          <div>
+            <div className="inline-flex bg-white/20 p-3 rounded-full shadow-md mb-4">
+              <Clock className="h-10 w-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white">Olympic Basket-ball Center</h1>
+            <p className="text-white/70 text-sm mt-1">Plateforme de gestion</p>
+          </div>
+
+          {/* Liste des options */}
+          <div className="space-y-3">
+            {OPTIONS.map((option) => {
+              const Icon = option.icon;
+              const isActive = selectedOption === option.id;
+
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => setSelectedOption(option.id)}
+                  className={cn(
+                    'w-full text-left flex items-start gap-4 p-4 rounded-xl transition-all duration-300',
+                    isActive
+                      ? 'bg-white/25 shadow-lg ring-2 ring-white/30'
+                      : 'hover:bg-white/10'
+                  )}
+                >
+                  <div className={cn(
+                    'p-2 rounded-full flex-shrink-0 transition-colors',
+                    isActive ? 'bg-white/20' : 'bg-white/5'
+                  )}>
+                    <Icon className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">{option.title}</p>
+                    <p className="text-sm text-white/70">{option.description}</p>
+                    {isActive && (
+                      <p className="text-xs text-white/50 mt-1 flex items-center gap-1">
+                        <span>Cliquez sur le formulaire à gauche</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </p>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       {/* ====== COLONNE GAUCHE – Formulaire ====== */}
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-12 bg-gradient-to-br from-background via-background to-primary/5">
         <div className="w-full max-w-md">
@@ -141,57 +194,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ====== COLONNE DROITE – Options (desktop) ====== */}
-      <div className="hidden md:flex w-[420px] lg:w-[480px] bg-primary flex-col justify-center p-10 text-white shadow-2xl">
-        <div className="max-w-sm mx-auto space-y-10">
-          {/* Logo / Titre */}
-          <div>
-            <div className="inline-flex bg-white/20 p-3 rounded-full shadow-md mb-4">
-              <Clock className="h-10 w-10 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-white">Olympic Basket-ball Center</h1>
-            <p className="text-white/70 text-sm mt-1">Plateforme de gestion</p>
-          </div>
-
-          {/* Liste des options */}
-          <div className="space-y-3">
-            {OPTIONS.map((option) => {
-              const Icon = option.icon;
-              const isActive = selectedOption === option.id;
-
-              return (
-                <button
-                  key={option.id}
-                  onClick={() => setSelectedOption(option.id)}
-                  className={cn(
-                    'w-full text-left flex items-start gap-4 p-4 rounded-xl transition-all duration-300',
-                    isActive
-                      ? 'bg-white/25 shadow-lg ring-2 ring-white/30'
-                      : 'hover:bg-white/10'
-                  )}
-                >
-                  <div className={cn(
-                    'p-2 rounded-full flex-shrink-0 transition-colors',
-                    isActive ? 'bg-white/20' : 'bg-white/5'
-                  )}>
-                    <Icon className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">{option.title}</p>
-                    <p className="text-sm text-white/70">{option.description}</p>
-                    {isActive && (
-                      <p className="text-xs text-white/50 mt-1 flex items-center gap-1">
-                        <span>Cliquez sur le formulaire à gauche</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </p>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 }

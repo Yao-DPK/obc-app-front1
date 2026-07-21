@@ -6,16 +6,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { FieldError } from '@/components/ui/field';
 import { FileSignature, Users, PenLine } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { type DocumentType } from '@/types';
+import { DocumentItem } from '@/components/DocumentItem';
 
 interface Step2Props {
   register: any;
+  requiredDoc: DocumentType;
+  onUpload: any;
   watch: any;
   setValue: any;
   getValues: any;
   errors: any;
 }
 
-export function Step2({ register, watch, setValue, getValues, errors }: Step2Props) {
+export function Step2({ register, requiredDoc, onUpload, watch, setValue, getValues, errors }: Step2Props) {
   const signatoryFullName = watch('signatoryFullName') || '___________';
 
   return (
@@ -75,7 +79,6 @@ export function Step2({ register, watch, setValue, getValues, errors }: Step2Pro
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="guardian">👨‍👩‍👦 Un parent / garant</SelectItem>
-           {/*  <SelectItem value="self">👤 Moi‑même (le joueur)</SelectItem> */}
           </SelectContent>
         </Select>
       </div>

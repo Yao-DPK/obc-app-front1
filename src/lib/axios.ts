@@ -4,6 +4,28 @@ import { useAuth } from '@/stores/useAuth';
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '',
   withCredentials: true,
+  paramsSerializer: {
+    serialize: (params) => {
+      // 1. Filtrer les valeurs undefined
+      const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(([_, value]) => value !== undefined)
+      );
+
+      // 2. Construire la chaîne
+      return Object.entries(filteredParams)
+        .map(([key, value]) => {
+          if (Array.isArray(value)) {
+            // Tableau : key=valeur1&key=valeur2
+            return value
+              .filter(v => v !== undefined && v !== null)
+              .map(v => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`)
+              .join('&');
+          }
+          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        })
+        .join('&');
+    },
+  },
 });
 
 let isRefreshing = false;

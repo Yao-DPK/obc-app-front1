@@ -29,7 +29,7 @@ export function useInscriptionForm() {
       guardians: [
         { email: '', firstName: '', lastName: '', phone: '', relationship: 'Mère' },
       ],
-      signatoryType: 'self',
+      signatoryType: 'guardian',
       acceptedTerms: true,
       signatureFile: undefined,
     },

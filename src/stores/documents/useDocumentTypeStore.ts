@@ -25,7 +25,7 @@ export const useDocumentTypeStore = create<DocumentTypeStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const docTypes = await documentService.getDocumentTypes({id, name, names, includeInactive});
-      set({ docTypes, isLoading: false });
+      set({ docTypes: docTypes, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }

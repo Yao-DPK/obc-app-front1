@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useInscriptionForm } from '@/hooks/useInscriptionForm';
-
+import { type DocumentType} from "@/types";
 import { CheckCircle2, ArrowRight, ArrowLeft, Send, User, FileText, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';
+import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
+import { useEffect } from 'react';
+import CustomLoader from '@/components/CustomLoader';
 
 const steps = [
   { id: 1, label: 'Informations', icon: User },
@@ -32,6 +35,7 @@ export default function InscriptionJoueur() {
     updateRequiredFile,
     onSubmitFinal,
   } = useInscriptionForm();
+  const { docTypes, fetchDocTypes } = useDocumentTypeStore();
 
   const { register, watch, setValue, getValues, formState } = form;
   const { errors } = formState;
@@ -41,6 +45,17 @@ export default function InscriptionJoueur() {
     2: '📄 Attestation et règlement',
     3: '📎 Documents requis',
   };
+
+  
+  useEffect(() => {
+    fetchDocTypes({names: ["Extrait de Naissance", "Photo d'Identité", "Signature Attestation"]});
+    console.log(`DocTypes: ${JSON.stringify(docTypes)}`);
+  }, [])
+
+  const step2Doc: DocumentType | undefined = docTypes.find((doc) => doc.name = "Signature Attestation");
+  if (!step2Doc){
+    return <CustomLoader/>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 py-12 px-4">
@@ -147,6 +162,8 @@ export default function InscriptionJoueur() {
                     <Step2
                       register={register}
                       watch={watch}
+                      requiredDoc={step2Doc}
+                      onUpload={updateRequiredFile}
                       setValue={setValue}
                       getValues={getValues}
                       errors={errors}

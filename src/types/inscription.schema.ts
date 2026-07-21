@@ -32,7 +32,7 @@ export const joueurInfoSchema = z.object({
 }) */;
 
 export const attestationSchema = z.object({
-  signatoryType: z.enum(['self', 'guardian']),
+  signatoryType: z.enum(['guardian']),
   selectedGuardianIndex: z.number().optional(),
   signatoryFullName: z.string().min(2),
   acceptedTerms: z.boolean().refine((val) => val === true, {

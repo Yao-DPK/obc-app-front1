@@ -25,13 +25,13 @@ export function PublicLayout() {
             <div className="bg-primary/10 p-1.5 md:p-2 rounded-lg md:rounded-xl flex-shrink-0">
               <img src={logo} alt="Logo OBC" className="h-7 md:h-10 w-auto" />
             </div>
-            <span className="text-base md:text-xl font-bold text-primary tracking-tight whitespace-nowrap">
+{/*             <span className="text-base md:text-xl font-bold text-primary tracking-tight whitespace-nowrap">
               OBC
               <span className="hidden sm:inline">
                 <span className="text-gray-400 font-normal ml-1">|</span>
                 <span className="text-gray-600 font-medium text-xs md:text-sm ml-1.5">Gestion</span>
               </span>
-            </span>
+            </span> */}
           </Link>
 
           {/* Navigation - Desktop */}
