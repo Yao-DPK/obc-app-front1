@@ -70,7 +70,9 @@ export function useInscriptionForm() {
         documents: requiredFiles.map((f) => ({ fileType: f.fileType, isObligatory: f.isObligatory })),
       },
     };
+    console.log(`1`);
     const formData = new FormData();
+    console.log(`2`);
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
@@ -79,12 +81,15 @@ export function useInscriptionForm() {
       console.log(`Ajout ${f.fileType.name}`);
       formData.append(f.fileType.name, f.file)
     });
+    console.log(`3`);
     setIsSubmitting(true);
     try {
+      console.log(`4`);
       await api.post('/api/inscription/pre-register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       
+      console.log(`5`);
       toast.success('Inscription soumise !');
       navigate('/home');
     } catch (err: any) {
