@@ -66,9 +66,9 @@ export function useInscriptionForm() {
     const payload = {
       step1: step1Data,
       step2: step2Data,
-      step3: {
+/*       step3: {
         documents: requiredFiles.map((f) => ({ fileType: f.fileType, isObligatory: f.isObligatory })),
-      },
+      }, */
     };
     console.log(`1`);
     const formData = new FormData();
@@ -85,9 +85,9 @@ export function useInscriptionForm() {
     setIsSubmitting(true);
     try {
       console.log(`4`);
-      const res = await api.post('/api/inscription/pre-register', formData, {
+      const res = await api.post('/api/inscription/pre-register', formData/* , {
         headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      } */);
       console.log(`res result: ${JSON.stringify(res)}`);
       console.log(`5`);
       toast.success('Inscription soumise !');
