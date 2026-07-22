@@ -33,7 +33,7 @@ export function useInscriptionForm() {
       ],
       signatoryType: 'guardian',
       acceptedTerms: true,
-      //signatureFile: undefined,
+      signatureFile: undefined,
     },
   });
 
@@ -74,9 +74,9 @@ export function useInscriptionForm() {
     const formData = new FormData();
     console.log(`2`);
     formData.append('data', JSON.stringify(payload));
-    /* const signatureFile = getValues('signatureFile');
+    const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
-    console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
+   /*  console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
     requiredFiles.forEach((f) => {
       console.log(`Ajout ${f.fileType.name}`);
       formData.append(f.fileType.name, f.file)

@@ -38,9 +38,9 @@ export const attestationSchema = z.object({
   acceptedTerms: z.boolean().refine((val) => val === true, {
     message: 'Vous devez accepter les conditions',
   }),
-  /* signatureFile: z.instanceof(File).refine((file) => file.size > 0, {
+  signatureFile: z.instanceof(File).refine((file) => file.size > 0, {
     message: 'Le fichier de signature est requis',
-  }), */
+  }),
 });
 
 export type JoueurFormData = z.infer<typeof joueurInfoSchema>;
