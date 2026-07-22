@@ -164,7 +164,8 @@ export function Step2({ register, watch, setValue, getValues, errors }: Step2Pro
             className="cursor-pointer"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              setValue('signatureFile', file as any);
+              console.log(`file: ${file?.name}`);
+              //setValue('signatureFile', file as any);
             }}
           />
           <p className="text-xs text-muted-foreground mt-2">Format accepté : PDF, JPG, PNG (max 5 Mo)</p>
