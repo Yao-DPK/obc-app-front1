@@ -85,10 +85,10 @@ export function useInscriptionForm() {
     setIsSubmitting(true);
     try {
       console.log(`4`);
-      await api.post('/api/inscription/pre-register', formData, {
+      const res = await api.post('/api/inscription/pre-register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      
+      console.log(`res result: ${JSON.stringify(res)}`);
       console.log(`5`);
       toast.success('Inscription soumise !');
       navigate('/home');

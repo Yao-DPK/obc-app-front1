@@ -43,11 +43,6 @@ const processQueue = (error: any, token: string | null = null) => {
 api.interceptors.request.use((config) => {
   const state = useAuth.getState();
   const accessToken = state?.accessToken;
-  if (!config.url?.includes('/inscription')) {
-    const state = useAuth.getState();
-    const accessToken = state?.accessToken;
-    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-  }
   config.withCredentials = true;
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
