@@ -33,7 +33,7 @@ export function useInscriptionForm() {
       ],
       signatoryType: 'guardian',
       acceptedTerms: true,
-      signatureFile: undefined,
+      //signatureFile: undefined,
     },
   });
 
