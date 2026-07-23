@@ -163,7 +163,9 @@ export default function InscriptionJoueur() {
                   )}
                   {step === 3 && <Step3 
                   requiredDocTypes={docTypes}
-                  updateRequiredFile={updateRequiredFile} />}
+                  updateRequiredFile={updateRequiredFile}
+                  setValue={setValue}
+                  />}
 
                   {/* Navigation */}
                   <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6 border-t border-gray-100">

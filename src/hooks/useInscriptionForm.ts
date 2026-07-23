@@ -12,6 +12,8 @@ import {
   type FullFormData,
   type JoueurFormData,
   type AttestationData,
+  type UploadData,
+  uploadSchema,
 } from '@/types/inscription.schema';
 
 
@@ -24,7 +26,7 @@ export function useInscriptionForm() {
   const [requiredFiles, setRequiredFiles] = useState<inscriptionFile[]>([]);
 
   const form = useForm<FullFormData>({
-    resolver: (step === 1 ? zodResolver(joueurInfoSchema) : zodResolver(attestationSchema)) as any,
+    resolver: (step === 1 ? zodResolver(joueurInfoSchema) : step === 2 ? zodResolver(attestationSchema) : zodResolver(uploadSchema) ) as any,
     defaultValues: {
       gender: 'M',
       isSelfManaged: false,
@@ -63,6 +65,7 @@ export function useInscriptionForm() {
   const onSubmitFinal = async () => {
     const step1Data = getValues() as JoueurFormData;
     const step2Data = getValues() as AttestationData;
+    const step3Data = getValues() as UploadData;
     const payload = {
       step1: step1Data,
       step2: step2Data,
@@ -75,11 +78,11 @@ export function useInscriptionForm() {
     console.log(`2`);
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
-    console.log(`reqired: ${JSON.stringify(requiredFiles)}`);
     if (signatureFile) formData.append('signature', signatureFile);
-    formData.append('Extrait de Naissance', requiredFiles[0].file);
-    formData.append("Photo d'Identite", requiredFiles[1].file);
-
+    const birthFile = getValues('signatureFile');
+    if (birthFile) formData.append('Extrait de Naissance', birthFile);
+    const pictureFile = getValues('signatureFile');
+    if (pictureFile) formData.append("Photo d'Identite", pictureFile);
     console.log(`3`);
     setIsSubmitting(true);
     try {

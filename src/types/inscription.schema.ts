@@ -43,6 +43,16 @@ export const attestationSchema = z.object({
   }),
 });
 
+export const uploadSchema = z.object({
+  birthFile: z.instanceof(File).refine((file) => file.size > 0, {
+    message: 'Le fichier de l\'extrait de naissance est requis',
+  }),
+  pictureFile: z.instanceof(File).refine((file) => file.size > 0, {
+    message: 'Le fichier de la photo est requis',
+  }),
+});
+
 export type JoueurFormData = z.infer<typeof joueurInfoSchema>;
 export type AttestationData = z.infer<typeof attestationSchema>;
-export type FullFormData = JoueurFormData & AttestationData;
+export type UploadData = z.infer<typeof uploadSchema>;
+export type FullFormData = JoueurFormData & AttestationData & UploadData;
