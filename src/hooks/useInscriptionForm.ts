@@ -67,7 +67,7 @@ export function useInscriptionForm() {
       step1: step1Data,
       step2: step2Data,
       step3: {
-        documents: requiredFiles.map((f) => ({ fileType: f.fileType, isObligatory: f.isObligatory })),
+        documents: requiredFiles.map((f) => ({ fileType: f.fileType, file: f.file, isObligatory: f.isObligatory })),
       }, 
     };
     console.log(`1`);
@@ -75,9 +75,10 @@ export function useInscriptionForm() {
     console.log(`2`);
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
+    console.log(`reqired: ${JSON.stringify(requiredFiles)}`);
     if (signatureFile) formData.append('signature', signatureFile);
-    formData.append('Extrait de Naissance', requiredFiles[1].file);
-    formData.append("Photo d'Identite", requiredFiles[2].file);
+    formData.append('Extrait de Naissance', requiredFiles[0].file);
+    formData.append("Photo d'Identite", requiredFiles[1].file);
 
     console.log(`3`);
     setIsSubmitting(true);
