@@ -18,7 +18,7 @@ export function Step3({ requiredDocTypes, updateRequiredFile, setValue }: Step3P
       setValue('birthFile', file as any)
     }
 
-    if (fileType.name == "Photo d'Identite"){
+    if (fileType.name == "Photo"){
       setValue('pictureFile', file as any)
     }
     

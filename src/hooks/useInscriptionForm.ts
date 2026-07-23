@@ -79,8 +79,8 @@ export function useInscriptionForm() {
     if (signatureFile) formData.append('signature', signatureFile);
     const birthFile = getValues('birthFile');
     if (birthFile) formData.append('Extrait de Naissance', birthFile);
-    /* const pictureFile = getValues('pictureFile');
-    if (pictureFile) formData.append("Photo d'Identite", pictureFile); */
+    const pictureFile = getValues('pictureFile');
+    if (pictureFile) formData.append("Photo", pictureFile);
     console.log(`3`);
     setIsSubmitting(true);
     try {

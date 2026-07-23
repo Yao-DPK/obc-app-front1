@@ -7,7 +7,7 @@ import z from "zod";
 /* Pour la validation des string en document type. */
 export const DocumentTypeSchema = z.enum([
   'Certificat Medical',
-  "Photo d'Identite",
+  "Photo",
   'Recu de Paiement',
   'Extrait de Naissance',
   'autre'

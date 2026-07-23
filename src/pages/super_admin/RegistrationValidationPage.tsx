@@ -23,7 +23,7 @@ export function RegistrationValidationPage() {
   const { isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
   const { fetchDocTypes } = useDocumentTypeStore();
   const { fetchObligations } = usePaymentStore();
-  const requiredDocs: string[] = ["Extrait de Naissance", "Photo d'Identite"];
+  const requiredDocs: string[] = ["Extrait de Naissance", "Photo"];
   const [isInfoValid, setIsInfoValid] = useState(false);
   const [isDocsValid, setIsDocsValid] = useState(false);
   const [isPaymentValid, setIsPaymentValid] = useState(false);
