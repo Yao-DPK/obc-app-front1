@@ -77,10 +77,10 @@ export function useInscriptionForm() {
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
-    const birthFile = getValues('signatureFile');
+    /* const birthFile = getValues('signatureFile');
     if (birthFile) formData.append('Extrait de Naissance', birthFile);
     const pictureFile = getValues('signatureFile');
-    if (pictureFile) formData.append("Photo d'Identite", pictureFile);
+    if (pictureFile) formData.append("Photo d'Identite", pictureFile); */
     console.log(`3`);
     setIsSubmitting(true);
     try {
