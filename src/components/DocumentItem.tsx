@@ -27,12 +27,12 @@ import { Progress } from './ui/progress';
 
 // ========== MAPPING ICÔNES PAR TYPE ==========
 const DOCUMENT_ICONS: Record<string, React.ReactNode> = {
-  'Certificat Médical': <File className="h-5 w-5" />,
+  'Certificat Medical': <File className="h-5 w-5" />,
   'Extrait de Naissance': <FileText className="h-5 w-5" />,
   "Photo": <User className="h-5 w-5" />,
   'Autorisation Parentale': <FileText className="h-5 w-5" />,
   'Attestation Scolaire': <FileText className="h-5 w-5" />,
-  "Pièce d'identité": <User className="h-5 w-5" />,
+  "Piece Identite": <User className="h-5 w-5" />,
   Autre: <File className="h-5 w-5" />,
 };
 

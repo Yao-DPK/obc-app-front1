@@ -164,7 +164,6 @@ export default function InscriptionJoueur() {
                   {step === 3 && <Step3 
                   requiredDocTypes={docTypes}
                   updateRequiredFile={updateRequiredFile}
-                  setValue={setValue}
                   />}
 
                   {/* Navigation */}

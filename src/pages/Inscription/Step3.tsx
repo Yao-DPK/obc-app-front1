@@ -6,21 +6,12 @@ import { DocumentItem } from '@/components/DocumentItem';
 interface Step3Props {
   requiredDocTypes: DocumentType[],
   updateRequiredFile: (fileType: DocumentType, file: File | null) => void;
-  setValue: any;
-
 }
 
-export function Step3({ requiredDocTypes, updateRequiredFile, setValue }: Step3Props) {
+export function Step3({ requiredDocTypes, updateRequiredFile }: Step3Props) {
 
   const handleFileSelect = (fileType: DocumentType, file: File | null) => {
     updateRequiredFile(fileType, file);
-    if (fileType.name == "Extrait de Naissance"){
-      setValue('birthFile', file as any)
-    }
-
-    if (fileType.name == "Photo"){
-      setValue('pictureFile', file as any)
-    }
     
   };
 
