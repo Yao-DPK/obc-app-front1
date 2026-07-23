@@ -69,9 +69,7 @@ export function useInscriptionForm() {
     const payload = {
       step1: step1Data,
       step2: step2Data,
-      step3: {
-        documents: requiredFiles.map((f) => ({ fileType: f.fileType, file: f.file, isObligatory: f.isObligatory })),
-      }, 
+      step3: step3Data
     };
     console.log(`1`);
     const formData = new FormData();
