@@ -73,18 +73,18 @@ export function useInscriptionForm() {
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
-    console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
+    /* console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
     requiredFiles.forEach((f) => {
       console.log(`Ajout ${f.fileType.name}`);
       formData.append(f.fileType.name, f.file)
-    });
+    }); */
     console.log(`3`);
     setIsSubmitting(true);
     try {
       console.log(`4`);
-      const res = await api.post('/api/inscription/pre-register', formData/* , {
+      const res = await api.post('/api/inscription/pre-register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-      } */);
+      });
       console.log(`res result: ${JSON.stringify(res)}`);
       console.log(`5`);
       toast.success('Inscription soumise !');
