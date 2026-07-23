@@ -74,12 +74,11 @@ export function useInscriptionForm() {
     const formData = new FormData();
     console.log(`2`);
     formData.append('data', JSON.stringify(payload));
-    requiredFiles.forEach((f) => {
-      console.log(`Ajout ${f.fileType.name}`);
-      formData.append(f.fileType.name, f.file)
-    });
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
+    formData.append('Extrait de Naissance', requiredFiles[1].file);
+    formData.append("Photo d'Identite", requiredFiles[2].file);
+
     console.log(`3`);
     setIsSubmitting(true);
     try {
