@@ -66,9 +66,6 @@ export function useInscriptionForm() {
     const payload = {
       step1: step1Data,
       step2: step2Data,
-/*       step3: {
-        documents: requiredFiles.map((f) => ({ fileType: f.fileType, isObligatory: f.isObligatory })),
-      }, */
     };
     console.log(`1`);
     const formData = new FormData();
@@ -76,12 +73,12 @@ export function useInscriptionForm() {
     formData.append('data', JSON.stringify(payload));
     const signatureFile = getValues('signatureFile');
     if (signatureFile) formData.append('signature', signatureFile);
-   /*  console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
+    console.log(`Step 3 files: ${JSON.stringify(requiredFiles)}`);
     requiredFiles.forEach((f) => {
       console.log(`Ajout ${f.fileType.name}`);
       formData.append(f.fileType.name, f.file)
     });
-    console.log(`3`); */
+    console.log(`3`);
     setIsSubmitting(true);
     try {
       console.log(`4`);
