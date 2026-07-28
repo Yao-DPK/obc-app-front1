@@ -46,7 +46,7 @@ export default function InscriptionJoueur() {
 
   
   useEffect(() => {
-    fetchDocTypes({names: ["Extrait de Naissance", "Photo"]});
+    fetchDocTypes({names: ["Extrait de Naissance", "Photo d'Identite"]});
     console.log(`DocTypes: ${JSON.stringify(docTypes)}`);
   }, [])
 
