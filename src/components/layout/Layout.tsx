@@ -47,7 +47,7 @@ export function Layout() {
       </div>
 
       {/* Footer placé après le contenu principal */}
-      <Footer />
+      {/* <Footer /> */}
       <Toaster position="top-right" richColors closeButton />
     </div>
   );

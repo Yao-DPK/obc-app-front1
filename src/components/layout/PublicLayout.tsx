@@ -11,7 +11,7 @@ export function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="flex flex-col bg-white">
       {/* Lien d'accessibilité */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white p-2 rounded z-50">
         Aller au contenu principal
@@ -67,7 +67,7 @@ export function PublicLayout() {
 
         {/* Menu mobile déroulant */}
         <div className={cn(
-          'md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-2 transition-all duration-200 overflow-hidden',
+          'md:hidden bg-white border-t border-gray-100 px-4 py-3 transition-all duration-200 overflow-hidden',
           mobileMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0 p-0 border-0'
         )}>
           <Link 
@@ -88,13 +88,13 @@ export function PublicLayout() {
       </header>
 
       {/* Contenu principal */}
-      <main id="main-content" className="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-gray-50 via-white to-primary/5">
-        <div className="w-full max-w-6xl">
+      <main id="main-content" className="flex-1 flex min-h-screen min-w-screen items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-white via-white to-secondary">
+        <div className="w-full">
           <Outlet />
         </div>
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
       <Toaster position="top-right" richColors closeButton />
     </div>
   );

@@ -38,16 +38,16 @@ export default function Home() {
   //const activeOption = OPTIONS.find(o => o.id === selectedOption)!;
 
   return (
-    <div className="min-h-screen flex overflow-hidden">
+    <div className="min-h-screen flex">
 
       {/* ====== COLONNE DROITE – Options (desktop) ====== */}
-      <div className="hidden md:flex w-[420px] lg:w-[480px] bg-primary flex-col justify-center p-10 text-white shadow-2xl">
-        <div className="max-w-sm mx-auto space-y-10">
+      <div className="hidden md:flex w-[50%] lg:w-[50%] bg-primary flex-col justify-center p-10 text-white shadow-2xl">
+        <div className="max-w-lg mx-auto space-y-10">
           {/* Logo / Titre */}
           <div>
-            <div className="inline-flex bg-white/20 p-3 rounded-full shadow-md mb-4">
+            {/* <div className="inline-flex bg-white/20 p-3 rounded-full shadow-md mb-4">
               <Clock className="h-10 w-10 text-white" />
-            </div>
+            </div> */}
             <h1 className="text-3xl font-bold text-white">Olympic Basket-ball Center</h1>
             <p className="text-white/70 text-sm mt-1">Plateforme de gestion</p>
           </div>
