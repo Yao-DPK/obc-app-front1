@@ -38,6 +38,7 @@ interface GuardianData {
   guardianEmail: string;
   guardianName: string;
   playerName: string;
+  playerId?: number;
   hasAccount: boolean;
 }
 
@@ -89,15 +90,19 @@ export default function ConfirmGuardian() {
         setGuardianData(response.data);
         
         // Déterminer l'étape en fonction du statut du garant
-        if (response.data.hasAccount) {
+        if (response.data.hasExpired) {
+          setStatus('expired');
+        }  else if (response.data.hasAccount) {
           setStatus('login');
         } else {
           setStatus('create_account');
         }
+
+        
       } catch (error: any) {
         const statusCode = error.response?.status;
         const message = error.response?.data?.message || 'Token invalide';
-        
+        console.log(`response: ${message},  ${statusCode}`)
         if (statusCode === 410 || message.includes('expiré')) {
           setStatus('expired');
         } else {
@@ -127,7 +132,7 @@ export default function ConfirmGuardian() {
         toast.success('✅ Compte créé et rôle de garant confirmé !');
         
         setTimeout(() => {
-          navigate(response.data.redirectTo || '/dashboard');
+          navigate(response.data.redirectTo || '/home');
         }, 3000);
       }
     } catch (error: any) {
@@ -151,9 +156,9 @@ export default function ConfirmGuardian() {
       if (response.data.success) {
         setStatus('success');
         toast.success('✅ Rôle de garant confirmé !');
-        
+        navigate('/home');
         setTimeout(() => {
-          navigate(response.data.redirectTo || '/dashboard');
+          navigate('/home');
         }, 3000);
       }
     } catch (error: any) {
@@ -177,7 +182,7 @@ export default function ConfirmGuardian() {
       if (response.data.success) {
         setStatus('rejected');
         toast.info('Vous avez refusé la responsabilité de garant');
-        
+        navigate('/home');
         setTimeout(() => {
           navigate('/');
         }, 3000);
@@ -196,10 +201,11 @@ export default function ConfirmGuardian() {
     try {
       await api.post('/api/auth/resend-guardian-confirmation', {
         email: guardianData.guardianEmail,
+        playerId: guardianData.playerId,
       });
       
       toast.success('Un nouveau lien a été envoyé à votre adresse email');
-      
+      navigate('/home');
       setTimeout(() => {
         navigate('/');
       }, 2000);

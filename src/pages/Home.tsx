@@ -169,7 +169,7 @@ export default function Home() {
               {selectedOption === 'forgot' && (
                 <>
                   <div>
-                    <h2 className="text-xl font-bold">Mot de passe oublié</h2>
+                    <h2 className="text-xl font-bold">Première connexion ou Mot de passe oublié</h2>
                     <p className="text-muted-foreground text-sm">Réinitialisez votre mot de passe.</p>
                   </div>
                   <Link

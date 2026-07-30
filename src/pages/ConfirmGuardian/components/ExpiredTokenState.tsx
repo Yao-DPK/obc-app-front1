@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Clock, RefreshCw, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface ExpiredTokenStateProps {
   onResend: () => void;
@@ -10,9 +11,11 @@ interface ExpiredTokenStateProps {
 
 export function ExpiredTokenState({ onResend, email }: ExpiredTokenStateProps) {
   const navigate = useNavigate();
-
+  useEffect(() => {
+    console.log(`guardian email: ${email}`);
+  }, [])
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 via-background to-yellow-50 p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-2xl border-yellow-500/20 rounded-2xl backdrop-blur-sm bg-white/95">
         <CardHeader>
           <div className="flex justify-center">
