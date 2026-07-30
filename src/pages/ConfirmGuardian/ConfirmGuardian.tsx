@@ -156,7 +156,6 @@ export default function ConfirmGuardian() {
       if (response.data.success) {
         setStatus('success');
         toast.success('✅ Rôle de garant confirmé !');
-        navigate('/home');
         setTimeout(() => {
           navigate('/home');
         }, 3000);
@@ -184,7 +183,7 @@ export default function ConfirmGuardian() {
         toast.info('Vous avez refusé la responsabilité de garant');
         navigate('/home');
         setTimeout(() => {
-          navigate('/');
+          navigate('/home');
         }, 3000);
       }
     } catch (error: any) {
@@ -205,9 +204,8 @@ export default function ConfirmGuardian() {
       });
       
       toast.success('Un nouveau lien a été envoyé à votre adresse email');
-      navigate('/home');
       setTimeout(() => {
-        navigate('/');
+        navigate('/home');
       }, 2000);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Erreur lors du renvoi du lien');
