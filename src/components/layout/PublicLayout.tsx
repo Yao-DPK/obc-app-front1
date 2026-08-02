@@ -1,7 +1,7 @@
 // src/components/layout/PublicLayout.tsx
 import { Outlet, Link } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { Footer } from './Footer';
+//import { Footer } from './Footer';
 import logo from '../../assets/OBC.png';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';

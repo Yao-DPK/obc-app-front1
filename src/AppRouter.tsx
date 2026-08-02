@@ -73,7 +73,6 @@ export const router = createBrowserRouter([
           { path: 'home', element: <Home /> },
           { path: 'login', element: <Login /> },
           { path: 'inscription/joueur', element: <InscriptionJoueur /> },
-          //{ path: 'test', element: <Test /> },
           { path: 'unauthorized', element: <Unauthorized /> },
           { path: 'forgot-password', element: <ForgotPassword /> },
           { path: 'reset-password', element: <ResetPassword /> },
