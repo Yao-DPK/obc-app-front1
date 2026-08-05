@@ -32,11 +32,6 @@ export interface UpdatePaymentEventDto extends Partial<CreatePaymentEventDto> {
   isActive?: boolean;
 }
 
-export interface CreateIntentPayload {
-  eventId: number;
-  paymentMethod: 'momo' | 'card';
-  playerIds?: number[];
-}
 
 export interface IntentResponse {
   intentId: number;
@@ -65,43 +60,39 @@ export interface CreatePaymentObligationDto {
 
 export interface UpdatePaymentObligationDto extends Partial<CreatePaymentObligationDto> {}
 
-// Payment Intent (Kadev Pay)
-export interface CreateIntentDto {
-  amount: number;
-  description: string;
-  playerId?: number;
-}
-
 
 
 export interface PaymentObligation {
-  id: number;
-  userId: number;
-  eventId: number;
-  playerIds: number[];
-  totalAmount: number;
-  paidAmount: number;
-  remainingAmount: number;
-  dueDate: string | null;
-  description: string;
-  status: 'pending' | 'partial' | 'paid' | 'overdue' | 'cancelled';
-  createdAt: string;
-  updatedAt: string;
+  id?: number;
+  userId?: number;
+  eventId?: number;
+  playerId?: number;
+  totalAmount?: number;
+  paidAmount?: number;
+  remainingAmount?: number;
+  dueDate?: string | null;
+  description?: string;
+  status?: 'pending' | 'partial' | 'paid' | 'overdue' | 'cancelled';
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PaymentIntent {
-  id: number;
+  id?: number;
   obligationId: number;
   userId: number;
   amount: number;
-  method: 'wave' | 'orange_money' | 'cash' | 'card';
+  method: 'momo' | 'card';
   transactionReference: string | null;
-  transactionMetadata: { phone?: string; reference?: string } | null;
+  transactionMetadata?: { 
+    phone?: string;
+    cart_id?: string;
+    custom_field?: string} | null;
   status: 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled';
-  declaredAt: string;
-  verifiedBy: number | null;
-  verifiedAt: string | null;
-  createdAt: string;
+  declaredAt?: string;
+  verifiedBy?: number | null;
+  verifiedAt?: string | null;
+  createdAt?: string;
 }
 
 export interface PaymentEvent {
@@ -137,13 +128,6 @@ export interface CreateObligationDto {
   dueDate?: string;
 }
 
-export interface CreateIntentDto {
-  obligationId: number;
-  amount: number;
-  method: 'wave' | 'orange_money' | 'cash' | 'card';
-  transactionReference?: string;
-  transactionMetadata?: { phone?: string; reference?: string };
-}
 
 export interface VerifyPaymentDto {
   intentId: number;

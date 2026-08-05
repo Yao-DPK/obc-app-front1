@@ -6,6 +6,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { toast } from 'sonner';
+import { PaymentObligationCard } from '../ui/paymentObligationCard';
+import type { PaymentObligation } from '@/types';
 
 interface PaymentSectionProps {
   playerId: number;
@@ -14,10 +16,10 @@ interface PaymentSectionProps {
 }
 
 export function PaymentSection({ onValidChange }: PaymentSectionProps) {
-  const { obligations, isLoadingObligations, fetchObligations, updateObligationStatus } = usePaymentStore();
+  const { obligations, isLoadingObligations, fetchObligations, updateObligation } = usePaymentStore();
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const invalid_obligations = obligations.filter(o => o.status !== 'paid');
-  const isSectionValid = invalid_obligations.length === 0; // valid si aucune non payée
+  const isSectionValid = invalid_obligations.length === 0; // valid si aucune non payée 
 
   useEffect(() => {
     onValidChange?.(isSectionValid);
@@ -26,8 +28,21 @@ export function PaymentSection({ onValidChange }: PaymentSectionProps) {
   const handleStatusChange = async (obligationId: number, newStatus: string) => {
     setUpdatingId(obligationId);
     try {
-      await updateObligationStatus(obligationId, newStatus as any);
+      await updateObligation(obligationId, {status: newStatus as "pending" | "partial" | "paid" | "overdue" | "cancelled"});
+
       toast.success(`Statut mis à jour : ${newStatus}`);
+      await fetchObligations();
+    } catch (error) {
+      toast.error('Erreur lors de la mise à jour du statut');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const handlePay = async (obligation: PaymentObligation) => {
+    try {
+      toast.success(`Paiment réussi`);
+      
       await fetchObligations();
     } catch (error) {
       toast.error('Erreur lors de la mise à jour du statut');
@@ -82,7 +97,7 @@ export function PaymentSection({ onValidChange }: PaymentSectionProps) {
                 </Badge>
                 <Select
                   value={obligation.status}
-                  onValueChange={(val) => handleStatusChange(obligation.id, val)}
+                  onValueChange={(val) => handleStatusChange(obligation.id!, val)}
                   disabled={updatingId === obligation.id}
                 >
                   <SelectTrigger className="w-[140px]">
@@ -100,12 +115,14 @@ export function PaymentSection({ onValidChange }: PaymentSectionProps) {
           </CardHeader>
           <CardContent>
             <div className="flex justify-between text-sm">
-              <span>Montant : {obligation.totalAmount.toLocaleString()} FCFA</span>
+              <span>Montant : {obligation.totalAmount!.toLocaleString()} FCFA</span>
               <span>Date limite : {obligation.dueDate ? new Date(obligation.dueDate).toLocaleDateString() : 'Non définie'}</span>
             </div>
           </CardContent>
         </Card>
       ))}
+
+      
     </div>
   );
 }

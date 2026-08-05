@@ -6,7 +6,6 @@ import type {
   PaymentIntent,
   PaymentSummary,
   VerifyPaymentDto,
-  CreateIntentDto,
   CreateObligationDto,
   PaymentEvent,
   CreatePaymentEventDto,
@@ -36,8 +35,8 @@ interface PaymentStore {
   fetchSummary: () => Promise<void>;
   fetchUserSummary: (userId: number) => Promise<void>;
   createObligation: (dto: CreateObligationDto) => Promise<PaymentObligation>;
-  updateObligationStatus: (id: number, status: string) => Promise<void>;
-  createIntent: (dto: CreateIntentDto) => Promise<PaymentIntent>;
+  updateObligation: (id: number, data: PaymentObligation) => Promise<PaymentObligation>;
+  createIntent: (dto: PaymentIntent) => Promise<PaymentIntent>;
   cancelObligation: (id: number) => Promise<void>;
   verifyPayment: (dto: VerifyPaymentDto) => Promise<void>;
   fetchAllEvents: (includeInactive?: boolean) => Promise<void>;
@@ -148,7 +147,7 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     }
   },
 
-  createIntent: async (dto: CreateIntentDto) => {
+  createIntent: async (dto: PaymentIntent) => {
     set({ isLoadingIntents: true, error: null });
     try {
       const intent = await paymentService.createIntent(dto);
@@ -164,14 +163,15 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     }
   },
 
-  updateObligationStatus: async (id: number, status: string) => {
+  updateObligation: async (id: number, data: PaymentObligation) => {
   set({ isLoadingObligations: true, error: null });
   try {
-    const updated = await paymentService.updateObligationStatus(id, status);
+    const updated = await paymentService.updateObligation(id, data);
     set((state) => ({
       obligations: state.obligations.map((o) => (o.id === id ? updated : o)),
       isLoadingObligations: false,
     }));
+    return updated;
   } catch (error: any) {
     set({ error: error.message, isLoadingObligations: false });
     throw error;

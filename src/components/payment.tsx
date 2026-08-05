@@ -5,6 +5,10 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { PaymentMethodSelector } from "./ui/paymentMethodSelector";
+import { useKadev, type PaymentDetails } from "@/hooks/useKadev";
+import type { PaymentObligation } from "@/types";
+import { usePaymentStore } from "@/stores/usePaymentStore";
+import { PaymentObligationCard } from "./ui/paymentObligationCard";
 
 // Déclarer KadevPay globalement pour TypeScript
 declare global {
@@ -13,85 +17,76 @@ declare global {
   }
 }
 
-interface PaymentMetadata {
-  cart_id: string;
-  custom_field?: string;
-}
-
-interface PaymentDetails {
-  montant: number;
-  email: string;
-  name?: string;
-  phone?: string;
-  method: string;
-  callback_url?: string;
-  metadata: PaymentMetadata;
+export interface KadevResponse{
+    reference:string,
+    trans: string,
+    status:string,
+    message:string,
+    transaction:string,
+    trxref:string,
+    redirecturl:string
 }
 
 export function PaymentComponent() {
-  const [paymentDetails, setPaymentDetails] = useState({
-    montant: 0,
-    email: '',
-    name: '',
-    phone: '',
-    method: '',
-    metadata: { cart_id: '', custom_field: '' }
-  });
+  const {
+    paymentDetails,
+    setPaymentDetails, 
+    isLoading,
+    setIsLoading,
+    scriptLoaded, 
+    setScriptLoaded, 
+    handlePayment,
+  } = useKadev();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  // Chargement du script avec vérification
+  const { obligations, fetchObligations, updateObligation } = usePaymentStore();
+  
   useEffect(() => {
-    if (document.querySelector('script[src="https://pay.kadev.ci/js/v1/kadev-pay.js"]')) {
-      setScriptLoaded(true);
-      return;
-    }
 
-    const script = document.createElement('script');
-    script.src = 'https://pay.kadev.ci/js/v1/kadev-pay.js';
-    script.async = true;
-    script.onload = () => {
-      console.log('KadevPay script loaded');
-      setScriptLoaded(true);
-    };
-    script.onerror = () => {
-      toast.error('Erreur de chargement du module de paiement');
-    };
-    document.body.appendChild(script);
-
-    return () => {
-      // Ne pas supprimer le script si on risque de le retirer alors qu'un autre composant l'utilise
-      // document.body.removeChild(script); // À éviter si plusieurs instances
-    };
+      fetchObligations({playerId: 89});
+      console.log(`Payments: ${JSON.stringify(obligations)}`)
+    
   }, []);
 
-  /*
-  Objet à stocker
-  export const paymentIntents = pgTable('payment_intents', {
-  id: serial('id').primaryKey(),
-  obligationId: integer('obligation_id')
-    .references(() => paymentObligations.id)
-    .notNull(), // lien vers l'obligation correspondante
-  userId: integer('user_id')
-    .references(() => users.id)
-    .notNull(),
-  amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
-  method: varchar('method', { length: 20 }).notNull(), // momo, card
-  transactionReference: varchar('transaction_reference', { length: 100 }),
-  transactionMetadata: jsonb('transaction_metadata').$type<KayDevMetadata>(),
-  status: varchar('status', { length: 20 })
-    .default('pending')
-    .notNull(), // pending, paid, failed, expired
-  declaredAt: timestamp('declared_at').defaultNow().notNull(),
-  verifiedBy: integer('verified_by').references(() => users.id),
-  verifiedAt: timestamp('verified_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-}, (table) => ({
-  obligationIdx: index('pay_intent_oblig_idx').on(table.obligationId),
-  userIdx: index('pay_intent_user_idx').on(table.userId),
-  statusIds: index('pay_intent_status_idx').on(table.status)
-})); */
+  const handlePay = async (obligation: PaymentObligation) => {
+      try {
+        // Validation simple
+        //console.log('1');
+      if (!obligation.totalAmount || obligation.totalAmount <= 0) {
+        toast.error('Montant invalide');
+        return;
+      }
+      //console.log('2');
+      if (!scriptLoaded) {
+        toast.error('Le système de paiement n\'est pas encore prêt. Patientez...');
+        return;
+      }
+      //console.log('3');
+      const paymentDetails: PaymentDetails = {
+          montant: obligation.totalAmount,
+          email: "yao.konan2709@gmail.com",
+          method: "momo",
+      }
+        //console.log('4');
+      const response: any = await handlePayment(paymentDetails);
+
+      if(response.status == 'success'){
+        const obligationInfo: PaymentObligation = {
+          eventId: obligation.eventId,
+          playerId: obligation.userId,
+          totalAmount: obligation.totalAmount,
+          paidAmount: obligation.paidAmount,
+          status: 'paid',
+        }
+        const response = await updateObligation(obligation.id!, obligationInfo);
+
+        
+      }
+        await fetchObligations();
+      } catch (error) {
+        console.log(`error: ${error}`);
+        toast.error('Erreur lors de la mise à jour du statut');
+      }
+    };
 
 /* Object Apres paiemnt Réussi: 
 message: "Approved"
@@ -104,53 +99,6 @@ transaction: "6424656812"
 trxref: "KDV-1785858810"
 
 */
-  const handlePayment = async (details: PaymentDetails) => {
-    if (!window.KadevPay) {
-      toast.error('Module de paiement non chargé. Rafraîchissez la page.');
-      return;
-    }
-
-    /* 
-    Flow: 
-    - [] L'app récupere les payments à effectuer par l'utilisateur.
-    - [] L'utilisateur choisit le paiement à effectuer et clique sur le composant Payer
-    - [] L'appli récupere:
-      - ObligationId depuis le composant ou il a cliqué sur payer
-      - userId sera egale à l'attribut playerId de l'objet obligation
-      - Amounttosend sera pour l'instant égale au montant complet de l'obligation
-      - Method sera pour l'instant égal à Mobile Money
-    - [] L'utilisateur clique sur payer et fait les opérations
-    - [] apres réalisation des etapes de payments, on recoit les infos du paiement depuis Kadev: Refrerence de la transaction, Autres infos de la transaction et status de la transaction 
-    - [] Enfin on envoie tout au back et on stock tout en base.
-
-
-    */
-    const tax_free_amount = details.montant
-   
-
-    window.KadevPay.checkout({
-      public_key: import.meta.env.VITE_KADEV_PUBLIC_KEY, // Attention: VITE_ préfixe
-      amount: tax_free_amount,
-      email: details.email,
-      name: details.name || '',
-      phone: details.phone || '',
-      method: details.method,        // Utilisation de la méthode choisie
-      callback_url: details.callback_url || '',
-      metadata: {
-        cart_id: details.metadata.cart_id,
-        custom_field: details.metadata.custom_field || ''
-      },
-      onSuccess: function(response: any) {
-        console.log("Paiement validé ! Référence : ", response.reference);
-        toast.success('Paiement réussi !');
-        // Redirection ou autre action
-      },
-      onClose: function() {
-        console.log("Le client a abandonné le paiement.");
-        toast.info('Paiement annulé');
-      }
-    });
-  };
 
   const handleSubmitPayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,7 +154,7 @@ trxref: "KDV-1785858810"
     setPaymentDetails(prev => ({ ...prev, method: value }));
   };
 
-  return (
+  /* return (
     <Card>
       <CardHeader>
         <CardTitle>Paiement</CardTitle>
@@ -277,5 +225,18 @@ trxref: "KDV-1785858810"
         </form>
       </CardContent>
     </Card>
+  ); */
+
+  return(
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {obligations.map((ob) => (
+          <PaymentObligationCard
+            key={ob.id}
+            obligation={ob}
+            showPayButton
+            onPay={handlePay}
+          />
+        ))}
+    </div>
   );
 }

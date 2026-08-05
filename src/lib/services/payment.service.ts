@@ -4,7 +4,6 @@ import type {
   PaymentObligation,
   CreateObligationDto,
   PaymentIntent,
-  CreateIntentDto,
   PaymentEvent,
   PaymentSummary,
   VerifyPaymentDto,
@@ -67,8 +66,10 @@ export const paymentService = {
     return data;
   },
 
-  async updateObligationStatus(id: number, status: string): Promise<PaymentObligation> {
-    const { data } = await api.patch(`/api/payments/obligations/${id}/status`, { status });
+  async updateObligation(id: number, obligation: PaymentObligation): Promise<PaymentObligation> {
+    console.log(`obligation info: ${JSON.stringify(obligation)}`);
+    const {data}  = await api.patch(`/api/payments/obligations/${id}`, { obligation });
+    console.log(`received Data: ${JSON.stringify(data)}`);
     return data;
   },
 
@@ -76,7 +77,7 @@ export const paymentService = {
   // INTENTIONS DE PAIEMENT
   // ============================================================
 
-  async createIntent(dto: CreateIntentDto): Promise<PaymentIntent> {
+  async createIntent(dto: PaymentIntent): Promise<PaymentIntent> {
     const { data } = await api.post('/api/payments/intents', dto);
     return data;
   },
