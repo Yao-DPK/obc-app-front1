@@ -13,17 +13,11 @@ interface PaymentSectionProps {
   disabled?: boolean;
 }
 
-export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps) {
+export function PaymentSection({ onValidChange }: PaymentSectionProps) {
   const { obligations, isLoadingObligations, fetchObligations, updateObligationStatus } = usePaymentStore();
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const invalid_obligations = obligations.filter(o => o.status !== 'paid');
   const isSectionValid = invalid_obligations.length === 0; // valid si aucune non payée
-
-  useEffect(() => {
-    if (playerId) {
-      fetchObligations();
-    }
-  }, [playerId, fetchObligations]);
 
   useEffect(() => {
     onValidChange?.(isSectionValid);

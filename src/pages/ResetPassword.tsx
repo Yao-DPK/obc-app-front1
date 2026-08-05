@@ -114,7 +114,6 @@ export default function ResetPassword() {
         token,
         newPassword: data.password,
         // Ajout d'un timestamp pour éviter les attaques par rejeu
-        timestamp: Date.now(),
       });
 
       console.log('response.data: ', response);

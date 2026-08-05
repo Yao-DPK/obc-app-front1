@@ -31,6 +31,7 @@ import ConfirmGuardian from './pages/ConfirmGuardian/ConfirmGuardian';
 import PaymentEventsManagement from './pages/super_admin/PaymentEventsManagement';
 import DocumentTypesManagement from './pages/super_admin/DocumentTypesManagement';
 import ProfilePage from './pages/Profile';
+import { Test } from './pages/Test';
 
 // ========== PROTECTED ROUTE WRAPPER ==========
 const ProtectedRoute = ({ children, allowedRoles }: { children: ReactNode; allowedRoles?: string[] }) => {
@@ -75,6 +76,7 @@ export const router = createBrowserRouter([
           { path: 'inscription/joueur', element: <InscriptionJoueur /> },
           { path: 'unauthorized', element: <Unauthorized /> },
           { path: 'forgot-password', element: <ForgotPassword /> },
+          { path: 'test', element: <Test /> },
           { path: 'reset-password', element: <ResetPassword /> },
           { path: '/confirm-guardian', element: <ConfirmGuardian />,},
         ],

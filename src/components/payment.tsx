@@ -66,12 +66,65 @@ export function PaymentComponent() {
     };
   }, []);
 
+  /*
+  Objet à stocker
+  export const paymentIntents = pgTable('payment_intents', {
+  id: serial('id').primaryKey(),
+  obligationId: integer('obligation_id')
+    .references(() => paymentObligations.id)
+    .notNull(), // lien vers l'obligation correspondante
+  userId: integer('user_id')
+    .references(() => users.id)
+    .notNull(),
+  amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
+  method: varchar('method', { length: 20 }).notNull(), // momo, card
+  transactionReference: varchar('transaction_reference', { length: 100 }),
+  transactionMetadata: jsonb('transaction_metadata').$type<KayDevMetadata>(),
+  status: varchar('status', { length: 20 })
+    .default('pending')
+    .notNull(), // pending, paid, failed, expired
+  declaredAt: timestamp('declared_at').defaultNow().notNull(),
+  verifiedBy: integer('verified_by').references(() => users.id),
+  verifiedAt: timestamp('verified_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  obligationIdx: index('pay_intent_oblig_idx').on(table.obligationId),
+  userIdx: index('pay_intent_user_idx').on(table.userId),
+  statusIds: index('pay_intent_status_idx').on(table.status)
+})); */
+
+/* Object Apres paiemnt Réussi: 
+message: "Approved"
+redirecturl: "?trxref=KDV-1785858810&reference=KDV-1785858810"
+reference: "KDV-1785858810"
+status: "success"
+trans: 
+"6424656812"
+transaction: "6424656812"
+trxref: "KDV-1785858810"
+
+*/
   const handlePayment = async (details: PaymentDetails) => {
     if (!window.KadevPay) {
       toast.error('Module de paiement non chargé. Rafraîchissez la page.');
       return;
     }
 
+    /* 
+    Flow: 
+    - [] L'app récupere les payments à effectuer par l'utilisateur.
+    - [] L'utilisateur choisit le paiement à effectuer et clique sur le composant Payer
+    - [] L'appli récupere:
+      - ObligationId depuis le composant ou il a cliqué sur payer
+      - userId sera egale à l'attribut playerId de l'objet obligation
+      - Amounttosend sera pour l'instant égale au montant complet de l'obligation
+      - Method sera pour l'instant égal à Mobile Money
+    - [] L'utilisateur clique sur payer et fait les opérations
+    - [] apres réalisation des etapes de payments, on recoit les infos du paiement depuis Kadev: Refrerence de la transaction, Autres infos de la transaction et status de la transaction 
+    - [] Enfin on envoie tout au back et on stock tout en base.
+
+
+    */
     const tax_free_amount = details.montant
    
 

@@ -12,6 +12,10 @@ import type {
   CreatePaymentEventDto,
 } from '@/types';
 
+export interface GetObligationsOptions {
+  playerId?: number;
+}
+
 export const paymentService = {
   // ============================================================
   // ÉVÉNEMENTS
@@ -45,20 +49,21 @@ export const paymentService = {
     const { data } = await api.get(`/api/payments/obligations/${id}`);
     return data;
   },
+  
 
   async cancelObligation(id: number): Promise<PaymentObligation> {
     const { data } = await api.patch(`/api/payments/obligations/${id}/cancel`);
     return data;
   },
 
-  async getObligations(params?: { userId?: number; playerIds?: number[] }): Promise<PaymentObligation[]> {
-    const url = new URL('/api/payments/obligations', import.meta.env.VITE_API_URL);
-    if (params?.userId) {
-      url.searchParams.append('userId', params.userId.toString());
-    } else if (params?.playerIds && params.playerIds.length) {
-      url.searchParams.append('playerIds', params.playerIds.join(','));
-    }
-    const { data } = await api.get(url.toString());
+  async getObligations(options: GetObligationsOptions = {}): Promise<PaymentObligation[]> {
+    const {playerId} = options
+    
+    const { data } = await api.get('/api/payments/obligations', {
+    params: { 
+      playerId, 
+    },
+  });
     return data;
   },
 

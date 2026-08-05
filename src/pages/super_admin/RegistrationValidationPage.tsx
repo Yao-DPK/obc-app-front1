@@ -22,7 +22,7 @@ export function RegistrationValidationPage() {
   const { user, fetchUserByIdAndRole, isLoading: userLoading } = useUserStore();
   const { isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
   const { fetchDocTypes } = useDocumentTypeStore();
-  const { fetchObligations } = usePaymentStore();
+  const { obligations, fetchObligations } = usePaymentStore();
   const requiredDocs: string[] = ["Extrait de Naissance", "Photo"];
   const [isInfoValid, setIsInfoValid] = useState(false);
   const [isDocsValid, setIsDocsValid] = useState(false);
@@ -33,8 +33,10 @@ export function RegistrationValidationPage() {
     if (userId) {
       fetchUserByIdAndRole(Number(userId), 'player');
       fetchUserDocuments(Number(userId)); 
-      fetchObligations();
+      fetchObligations({playerId: Number(userId)});
       fetchDocTypes({names: requiredDocs});
+
+      console.log(`Payments: ${JSON.stringify(obligations)}`)
     }
   }, [userId, fetchUserByIdAndRole, fetchUserDocuments, fetchObligations]);
 
