@@ -1,10 +1,5 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Label } from '../components/ui/label';
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { useEffect } from "react";
 import { toast } from "sonner";
-import { PaymentMethodSelector } from "./ui/paymentMethodSelector";
 import { useKadev, type PaymentDetails } from "@/hooks/useKadev";
 import type { PaymentObligation } from "@/types";
 import { usePaymentStore } from "@/stores/usePaymentStore";
@@ -29,12 +24,12 @@ export interface KadevResponse{
 
 export function PaymentComponent() {
   const {
-    paymentDetails,
-    setPaymentDetails, 
-    isLoading,
-    setIsLoading,
+    //paymentDetails,
+    //setPaymentDetails, 
+    //isLoading,
+    //setIsLoading,
     scriptLoaded, 
-    setScriptLoaded, 
+    //setScriptLoaded, 
     handlePayment,
   } = useKadev();
 
@@ -42,7 +37,7 @@ export function PaymentComponent() {
   
   useEffect(() => {
 
-      fetchObligations({playerId: 89});
+      fetchObligations({playerIds: [89]});
       console.log(`Payments: ${JSON.stringify(obligations)}`)
     
   }, []);
@@ -77,7 +72,7 @@ export function PaymentComponent() {
           paidAmount: obligation.paidAmount,
           status: 'paid',
         }
-        const response = await updateObligation(obligation.id!, obligationInfo);
+        await updateObligation(obligation.id!, obligationInfo);
 
         
       }
@@ -100,7 +95,7 @@ trxref: "KDV-1785858810"
 
 */
 
-  const handleSubmitPayment = async (e: React.FormEvent) => {
+  /* const handleSubmitPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation simple
@@ -152,7 +147,7 @@ trxref: "KDV-1785858810"
   // Gestion du select
   const handleMethodChange = (value: string) => {
     setPaymentDetails(prev => ({ ...prev, method: value }));
-  };
+  }; */
 
   /* return (
     <Card>

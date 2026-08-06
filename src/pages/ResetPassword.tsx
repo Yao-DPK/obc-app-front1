@@ -67,7 +67,7 @@ export default function ResetPassword() {
           isLoading: false,
           message: 'Token de réinitialisation manquant',
         });
-        return;
+        return; 
       }
 
       try {
@@ -76,8 +76,9 @@ export default function ResetPassword() {
           params: { token },
         });
 
+        console.log(`response: ${JSON.stringify(response.data)}`);
         setTokenStatus({
-          isValid: true,
+          isValid: response.data.valid,
           email: response.data.email,
           isLoading: false,
           message: response.data.message,

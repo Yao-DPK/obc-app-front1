@@ -55,11 +55,11 @@ export function PaymentObligationCard({
           <div className="flex items-center gap-1.5">
             <DollarSign className="h-4 w-4 text-muted-foreground" />
             <span>
-              <span className="font-medium">{obligation.totalAmount.toLocaleString()} FCFA</span>
-              {obligation.paidAmount > 0 && (
+              <span className="font-medium">{obligation.totalAmount!.toLocaleString()} FCFA</span>
+              {obligation.paidAmount! > 0 && (
                 <span className="text-muted-foreground">
                   {' '}
-                  (payé : {obligation.paidAmount.toLocaleString()} FCFA)
+                  (payé : {obligation.paidAmount!.toLocaleString()} FCFA)
                 </span>
               )}
             </span>

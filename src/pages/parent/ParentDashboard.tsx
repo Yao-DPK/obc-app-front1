@@ -314,7 +314,7 @@ export default function ParentDashboard() {
                   (d) => d.type.name === 'Certificat Medical' && d.documentStatus === 'Validé'
                 );
                 const hasPaymentUpToDate = obligations.some(
-                  (p) => p.playerIds?.includes(player.id) && p.status === 'paid'
+                  (p) => p.playerId == player.id && p.status === 'paid'
                 );
 
                 // Compter les documents manquants pour cet enfant
@@ -382,7 +382,7 @@ export default function ParentDashboard() {
       </Card>
 
       {/* ====== LIENS RAPIDES ====== */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
           <Link to="/parent/pupils">
             <Users className="h-5 w-5" />
@@ -402,12 +402,12 @@ export default function ParentDashboard() {
           </Link>
         </Button>
         <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
-          <Link to="/parent/profile">
+          <Link to="/profile">
             <Shield className="h-5 w-5" />
             <span className="text-xs">Profil</span>
           </Link>
         </Button>
-      </div>
+      </div> */}
 
       {/* ====== STATUT GLOBAL ====== */}
       <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">

@@ -6,8 +6,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { toast } from 'sonner';
-import { PaymentObligationCard } from '../ui/paymentObligationCard';
-import type { PaymentObligation } from '@/types';
 
 interface PaymentSectionProps {
   playerId: number;
@@ -31,18 +29,6 @@ export function PaymentSection({ onValidChange }: PaymentSectionProps) {
       await updateObligation(obligationId, {status: newStatus as "pending" | "partial" | "paid" | "overdue" | "cancelled"});
 
       toast.success(`Statut mis à jour : ${newStatus}`);
-      await fetchObligations();
-    } catch (error) {
-      toast.error('Erreur lors de la mise à jour du statut');
-    } finally {
-      setUpdatingId(null);
-    }
-  };
-
-  const handlePay = async (obligation: PaymentObligation) => {
-    try {
-      toast.success(`Paiment réussi`);
-      
       await fetchObligations();
     } catch (error) {
       toast.error('Erreur lors de la mise à jour du statut');

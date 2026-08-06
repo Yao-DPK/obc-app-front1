@@ -1,5 +1,3 @@
-// apps/web/src/hooks/useInscriptionForm.ts
-import { usePaymentStore } from '@/stores/usePaymentStore';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 

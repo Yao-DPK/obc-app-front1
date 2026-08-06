@@ -35,7 +35,6 @@ const navItems: NavItem[] = [
   //{ to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin' },
 
   // Section Parent
-  { to: 'parent/profile', label: 'Profil', icon: User, roles: ['parent'], section: 'gestion'},
   { to: 'parent/pupils', label: 'Enfants', icon: Baby, roles: ['parent'], section: 'gestion'}
   
 

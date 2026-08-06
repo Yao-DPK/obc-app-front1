@@ -12,7 +12,7 @@ import type {
 } from '@/types';
 
 export interface GetObligationsOptions {
-  playerId?: number;
+  playerIds?: number[];
 }
 
 export const paymentService = {
@@ -56,11 +56,11 @@ export const paymentService = {
   },
 
   async getObligations(options: GetObligationsOptions = {}): Promise<PaymentObligation[]> {
-    const {playerId} = options
+    const { playerIds } = options
     
     const { data } = await api.get('/api/payments/obligations', {
     params: { 
-      playerId, 
+      playerIds, 
     },
   });
     return data;

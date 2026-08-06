@@ -33,7 +33,7 @@ export function RegistrationValidationPage() {
     if (userId) {
       fetchUserByIdAndRole(Number(userId), 'player');
       fetchUserDocuments(Number(userId)); 
-      fetchObligations({playerId: Number(userId)});
+      fetchObligations({playerIds: [Number(userId)]});
       fetchDocTypes({names: requiredDocs});
 
       console.log(`Payments: ${JSON.stringify(obligations)}`)

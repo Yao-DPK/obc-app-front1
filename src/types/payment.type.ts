@@ -72,7 +72,7 @@ export interface PaymentObligation {
   remainingAmount?: number;
   dueDate?: string | null;
   description?: string;
-  status?: 'pending' | 'partial' | 'paid' | 'overdue' | 'cancelled';
+  status: 'pending' | 'partial' | 'paid' | 'overdue' | 'cancelled';
   createdAt?: string;
   updatedAt?: string;
 }

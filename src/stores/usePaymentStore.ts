@@ -28,7 +28,7 @@ interface PaymentStore {
   error: string | null;
 
   // ========== ACTIONS ==========
-  fetchObligations: (params?: { playerId?: number }) => Promise<void>;
+  fetchObligations: (params?: { playerIds?: number[] }) => Promise<void>;
   fetchIntents: () => Promise<void>;
   fetchAllObligations: () => Promise<PaymentObligation[]>;
   fetchAllIntents: () => Promise<PaymentIntent[]>;
