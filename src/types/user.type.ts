@@ -42,3 +42,17 @@ export interface User {
   createdAt: string;   // ISO datetime
   updatedAt: string;
 }
+
+export interface updateProfileDto{
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  photoUrl?: string;
+}
+
+export interface updateProfileResponse{
+  user?: User;
+  message?: string;
+}

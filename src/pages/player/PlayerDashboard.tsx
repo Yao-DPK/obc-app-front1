@@ -137,8 +137,8 @@ export default function PlayerDashboard() {
       />
 
       {/* ====== STATISTIQUES RAPIDES ====== */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Prochain entraînement
@@ -149,7 +149,7 @@ export default function PlayerDashboard() {
             <div className="text-base font-semibold">{nextTraining}</div>
             <p className="text-xs text-muted-foreground mt-0.5">Salle principale</p>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -415,7 +415,7 @@ export default function PlayerDashboard() {
       </Card>
 
       {/* ====== LIENS RAPIDES ====== */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
           <Link to="/documents">
             <FileText className="h-5 w-5" />
@@ -434,12 +434,12 @@ export default function PlayerDashboard() {
             <span className="text-xs">Profil</span>
           </Link>
         </Button>
-        <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
+        {/* <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
           <Link to="/calendar">
             <Calendar className="h-5 w-5" />
             <span className="text-xs">Calendrier</span>
           </Link>
-        </Button>
+        </Button> */}
       </div>
     </motion.div>
   );

@@ -1,11 +1,16 @@
 import api from '../axios';
-import type { User } from '@/types';
+import type { updateProfileDto, updateProfileResponse, User } from '@/types';
 
 export const userService = {
   // ========== LECTURE ==========
   async fetchProfile(){
-    const { data } = await api.get('/api/auth/profile');
+    const { data } = await api.get('/api/users/me');
     //console.log(`data: ${JSON.stringify(data)}`)
+    return data;
+  },
+
+  async updateProfile(dto: updateProfileDto): Promise<{success: boolean}>{
+    const { data } = await api.patch(`/api/users/me`, dto);
     return data;
   },
 
