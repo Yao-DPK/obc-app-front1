@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  Calendar,
   FileText,
   CreditCard,
   User,
@@ -87,9 +86,6 @@ export default function PlayerDashboard() {
   const totalPaid = obligations.reduce((sum, o) => sum + Number(o.paidAmount || 0), 0);
   const remainingAmount = totalAmount - totalPaid;
 
-  // Prochain entraînement (exemple - à remplacer par API)
-  const nextTraining = 'Mercredi 14 juillet à 18h';
-
   // ========== RENDU DE CHARGEMENT ==========
   if (isLoading) {
     return (
@@ -138,18 +134,6 @@ export default function PlayerDashboard() {
 
       {/* ====== STATISTIQUES RAPIDES ====== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Prochain entraînement
-            </CardTitle>
-            <Calendar className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-base font-semibold">{nextTraining}</div>
-            <p className="text-xs text-muted-foreground mt-0.5">Salle principale</p>
-          </CardContent>
-        </Card> */}
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -434,12 +418,6 @@ export default function PlayerDashboard() {
             <span className="text-xs">Profil</span>
           </Link>
         </Button>
-        {/* <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
-          <Link to="/calendar">
-            <Calendar className="h-5 w-5" />
-            <span className="text-xs">Calendrier</span>
-          </Link>
-        </Button> */}
       </div>
     </motion.div>
   );

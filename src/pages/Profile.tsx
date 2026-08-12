@@ -23,7 +23,6 @@ import {
 import { AdultAvatar } from '@/components/CustomAdultAvatar';
 import { RoleBadge } from './RoleBadge';
 import { ROLE_CONFIG } from './RoleBadge';
-import api from '@/lib/axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -48,7 +47,6 @@ export default function ParentProfilePage() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -76,7 +74,7 @@ export default function ParentProfilePage() {
   const onSubmit = async (data: ProfileFormData) => {
     setIsSubmitting(true);
     try {
-      const response = await userService.updateProfile(data);
+      await userService.updateProfile(data);
       // Mettre à jour le store avec les nouvelles données
       setAuth({ ...user, ...data }, useAuth.getState().accessToken!);
       toast.success('Profil mis à jour avec succès !');

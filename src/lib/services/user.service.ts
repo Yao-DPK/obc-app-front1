@@ -1,5 +1,5 @@
 import api from '../axios';
-import type { updateProfileDto, updateProfileResponse, User } from '@/types';
+import type { updateProfileDto, User } from '@/types';
 
 export const userService = {
   // ========== LECTURE ==========
