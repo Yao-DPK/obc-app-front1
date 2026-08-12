@@ -63,7 +63,8 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
       set({ isLoading: true, error: null });
       try {
         const documents = await documentService.getDocuments(params);
-        set({ documents, isLoading: false });
+        set({ documents: documents, isLoading: false });
+        console.log(documents.length);
       } catch (error: any) {
         set({ error: error.message, isLoading: false });
       }

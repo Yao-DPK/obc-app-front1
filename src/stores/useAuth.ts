@@ -34,11 +34,11 @@ export const useAuth = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
-      const { accessToken } = res.data.accessToken;
+      const { accessToken } = res.data;
 
       if (accessToken) {
         // ✅ Charger le profil complet (optionnel si user est déjà complet)
-        const profile = await axios.get('/api/auth/profile', {
+        const profile = await axios.get('/api/users/me', {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
         set({ user: profile.data, accessToken, isLoading: false });

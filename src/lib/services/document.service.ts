@@ -21,13 +21,9 @@ export const documentService = {
     },
 
     async getDocuments(params?: { userId?: number; playerIds?: number[] }): Promise<Document[]> {
-    const url = new URL('/api/documents', import.meta.env.VITE_API_URL);
-    if (params?.userId) {
-      url.searchParams.append('userId', params.userId.toString());
-    } else if (params?.playerIds && params.playerIds.length) {
-      url.searchParams.append('playerIds', params.playerIds.join(','));
-    }
-    const { data } = await api.get(url.toString());
+    const { data } = await api.get('/api/documents', {
+      params: params
+    });
     return data;
   },
 

@@ -60,9 +60,11 @@ export default function PlayerDashboard() {
   // ========== CHARGEMENT DES DONNÉES ==========
   useEffect(() => {
     if (user?.id) {
-      fetchDocuments();
+      fetchDocuments({userId: user.id});
       fetchObligations();
     }
+    console.log(documents.length);
+    
   }, [user]);
 
   // ========== CALCULS ==========
