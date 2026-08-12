@@ -4,7 +4,7 @@ import type { GuardianRelationship, User } from '@/types';
 export const guardianService = {
   // ========== LECTURE ==========
   async getMyPlayers(): Promise<User[]> {
-    const { data } = await api.get(`/api/guardian/players`);
+    const { data } = await api.get(`/api/users/me/players`);
     return data; // ou data selon la réponse du backend
   },
 

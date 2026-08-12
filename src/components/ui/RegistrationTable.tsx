@@ -414,6 +414,21 @@ const cardVariants = {
                               Valider
                             </Button>
                           )}
+                          {status == 'inscrit' && (
+                            <Button
+                              size="sm"
+                              className="flex-1 bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-200"
+                              onClick={() => handleValidate(user.id)}
+                              disabled={loadingId === user.id}
+                            >
+                              {loadingId === user.id ? (
+                                <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                              ) : (
+                                <CheckCircle className="h-4 w-4 mr-1" />
+                              )}
+                              Voir
+                            </Button>
+                          )}
                           {status !== 'rejeté' && (
                             <Button
                               size="sm"

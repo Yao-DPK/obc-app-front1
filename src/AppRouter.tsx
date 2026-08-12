@@ -23,7 +23,7 @@ import {
   childPaymentsLoader,
 } from './loaders';
 import type { ReactNode } from 'react';
-import { RegistrationValidationPage } from './pages/super_admin/RegistrationValidationPage';
+import { UserValidationPage } from './pages/super_admin/RegistrationValidationPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Home from './pages/Home';
 import CustomLoader from './components/CustomLoader';
@@ -126,7 +126,7 @@ export const router = createBrowserRouter([
           {
             path: 'registrations/validate/:userId',
             element: (
-                <RegistrationValidationPage />
+                <UserValidationPage mode="validation" />
             ),
           },
         ],

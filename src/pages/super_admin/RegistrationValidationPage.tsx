@@ -1,6 +1,6 @@
 // src/pages/RegistrationValidationPage.tsx
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, FileText, CreditCard, CheckCircle, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,8 +17,14 @@ import { Badge } from '@/components/ui/badge';
 import { PlayerDocumentsTab } from '@/components/validation/PlayerDocumentTab';
 import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
 
-export function RegistrationValidationPage() {
+interface UserValidationPageProps {
+  mode: string;
+}
+
+
+export function UserValidationPage({mode}: UserValidationPageProps) {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const { user, fetchUserByIdAndRole, isLoading: userLoading } = useUserStore();
   const { isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
   const { fetchDocTypes } = useDocumentTypeStore();
@@ -50,6 +56,7 @@ export function RegistrationValidationPage() {
     try {
       await inscriptionService.validateRegistration(user!.id);
       toast.success('✅ Inscription validée avec succès');
+      navigate('/super-admin/registrations');
     } catch (error: any) {
       toast.error(error.message || 'Erreur lors de la validation');
     }
@@ -100,7 +107,7 @@ export function RegistrationValidationPage() {
         </div>
 
         {/* Bouton de validation (desktop) */}
-        <Button
+        {mode=='validation' && (<Button
           onClick={handleValidateRegistration}
           disabled={!allValidated}
           className={cn(
@@ -112,7 +119,7 @@ export function RegistrationValidationPage() {
         >
           <CheckCircle className="h-4 w-4" />
           Valider l'inscription
-        </Button>
+        </Button>)}
       </div>
 
       {/* ====== TABS ====== */}
@@ -192,7 +199,7 @@ export function RegistrationValidationPage() {
 
       {/* ====== BOUTON DE VALIDATION MOBILE ====== */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200 shadow-lg sm:hidden z-50">
-        <Button
+        {mode=='validation' && (<Button
           onClick={handleValidateRegistration}
           disabled={!allValidated}
           className={cn(
@@ -204,7 +211,7 @@ export function RegistrationValidationPage() {
         >
           <CheckCircle className="h-5 w-5" />
           {allValidated ? 'Valider l\'inscription' : `${validatedCount}/3 sections validées`}
-        </Button>
+        </Button>)}
       </div>
 
       {/* ====== STATUT GLOBAL (DESKTOP) ====== */}
