@@ -132,7 +132,7 @@ export function DocumentItem({
 
   const isUploaded = !!document?.publicUrl;
   const Icon = document?.type
-    ? DOCUMENT_ICONS[document.type.name] || DOCUMENT_ICONS['Autre']
+    ? DOCUMENT_ICONS[document.type] || DOCUMENT_ICONS['Autre']
     : DOCUMENT_ICONS['Autre'];
   const statusConfig = document?.documentStatus
     ? STATUS_CONFIG[document.documentStatus]
@@ -342,7 +342,7 @@ export function DocumentItem({
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={cn('font-medium', s.text)}>{document.type.name}</span>
+                <span className={cn('font-medium', s.text)}>{document.type}</span>
 
                 {showObligatory && document.isObligatory && (
                   <Badge variant="outline" className="text-xs text-red-500 border-red-200 bg-red-50">
@@ -520,7 +520,7 @@ export function DocumentItem({
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="text-muted-foreground">{Icon}</div>
-        <span className={cn('font-medium truncate', s.text)}>{document.type.name}</span>
+        <span className={cn('font-medium truncate', s.text)}>{document.type}</span>
 
         {showObligatory && document.isObligatory && (
           <span className="text-xs text-red-500">*</span>

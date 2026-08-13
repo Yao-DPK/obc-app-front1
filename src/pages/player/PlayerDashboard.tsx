@@ -63,8 +63,7 @@ export default function PlayerDashboard() {
       fetchDocuments({userId: user.id});
       fetchObligations();
     }
-    console.log(documents.length);
-    
+    console.log(`documents: ${documents.length}`)    
   }, [user]);
 
   // ========== CALCULS ==========
@@ -307,7 +306,7 @@ export default function PlayerDashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <FileText className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{doc.type.name}</span>
+                    <span className="text-sm font-medium">{doc.type}</span>
                   </div>
                   <Badge
                     variant="outline"

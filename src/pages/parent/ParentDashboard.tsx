@@ -310,7 +310,7 @@ export default function ParentDashboard() {
               {players.map((player) => {
                 const playerDocs = documents.filter((d) => d.userId === player.id);
                 const hasValidMedCert = playerDocs.some(
-                  (d) => d.type.name === 'Certificat Medical' && d.documentStatus === 'Validé'
+                  (d) => d.type === 'Certificat Medical' && d.documentStatus === 'Validé'
                 );
                 const hasPaymentUpToDate = obligations.some(
                   (p) => p.playerId == player.id && p.status === 'paid'

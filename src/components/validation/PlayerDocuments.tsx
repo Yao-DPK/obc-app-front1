@@ -27,17 +27,19 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [uploadingDocType, setUploadingDocType] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
-  const { documents, updateDocumentStatus, fetchUserDocuments } = useDocumentStore();
+  const { documents, updateDocumentStatus, fetchDocuments } = useDocumentStore();
   const { docTypes } = useDocumentTypeStore();
   const { user } = useAuth();
 
 
   const uploadedDocs = documents.filter((doc) =>
-    docTypes.some((dt) => dt.name === doc.type.name)
+    docTypes.some((dt) => dt.name === doc.type)
   );
 
+  
+
   const missingDocs = docTypes.filter(
-    (rd) => !uploadedDocs.some((ud) => ud.type.name === rd.name)
+    (rd) => !uploadedDocs.some((ud) => ud.type === rd.name)
   );
 
   console.log(`uploaded Docs: ${JSON.stringify(docTypes)}`);
@@ -66,7 +68,7 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
         default:
           toast.info(`Statut mis à jour : ${newStatus}`);
       }
-      await fetchUserDocuments(userId);
+      await fetchDocuments({userId: userId});
       onSuccess?.();
     } catch (err) {
       toast.error("Erreur lors de la mise à jour du statut");
@@ -88,7 +90,7 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
       await documentService.uploadDocuments(formData);
       toast.success('Document envoyé avec succès');
       setSelectedFiles((prev) => ({ ...prev, [docType]: null }));
-      await fetchUserDocuments(userId);
+      await fetchDocuments({userId: userId});
       onSuccess?.();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Erreur lors de l'envoi du fichier");
@@ -110,7 +112,7 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
     <div className="space-y-6">
       <div className="grid gap-4">
         {docTypes.map((doc) => {
-          const uploadedDoc = uploadedDocs.find((d) => d.type.name === doc.name);
+          const uploadedDoc = uploadedDocs.find((d) => d.type === doc.name);
           
           const isUploaded = !!uploadedDoc;
           const isPending = uploadedDoc?.documentStatus === DOCUMENT_STATUSES.PENDING;

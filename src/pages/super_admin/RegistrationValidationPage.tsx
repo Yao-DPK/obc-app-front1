@@ -26,7 +26,7 @@ export function UserValidationPage({mode}: UserValidationPageProps) {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user, fetchUserByIdAndRole, isLoading: userLoading } = useUserStore();
-  const { isLoading: docsLoading, fetchUserDocuments } = useDocumentStore();
+  const { isLoading: docsLoading, fetchDocuments } = useDocumentStore();
   const { fetchDocTypes } = useDocumentTypeStore();
   const { obligations, fetchObligations } = usePaymentStore();
   const requiredDocs: string[] = ["Extrait de Naissance", "Photo"];
@@ -38,13 +38,13 @@ export function UserValidationPage({mode}: UserValidationPageProps) {
   useEffect(() => {
     if (userId) {
       fetchUserByIdAndRole(Number(userId), 'player');
-      fetchUserDocuments(Number(userId)); 
+      fetchDocuments({userId: Number(userId)}); 
       fetchObligations({playerIds: [Number(userId)]});
       fetchDocTypes({names: requiredDocs});
 
       console.log(`Payments: ${JSON.stringify(obligations)}`)
     }
-  }, [userId, fetchUserByIdAndRole, fetchUserDocuments, fetchObligations]);
+  }, [userId, fetchUserByIdAndRole, fetchDocuments, fetchObligations]);
 
   if (userLoading || !user) {
     return <CustomLoader />;
@@ -184,7 +184,7 @@ export function UserValidationPage({mode}: UserValidationPageProps) {
           <PlayerDocumentsTab
             userId={user.id}
             isLoading={docsLoading}
-            onSuccess={() => fetchUserDocuments(user.id)}
+            onSuccess={() => fetchDocuments({userId: user.id})}
             onValidChange={setIsDocsValid}
           />
         </TabsContent>

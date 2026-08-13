@@ -30,7 +30,7 @@ export interface Document {
   userId?: number;
 
 
-  type: DocumentType;
+  type: string;
 
   /* Définit par le backend lorsque le fichier est uploadé */
   fileId?: string;
