@@ -31,6 +31,7 @@ import ConfirmGuardian from './pages/ConfirmGuardian/ConfirmGuardian';
 import PaymentEventsManagement from './pages/super_admin/PaymentEventsManagement';
 import DocumentTypesManagement from './pages/super_admin/DocumentTypesManagement';
 import ProfilePage from './pages/Profile';
+import { PaymentComponent } from './pages/payment';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -104,6 +105,16 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={['player', 'parent', 'admin', 'super_admin']}>
             <ProfilePage />
+          </ProtectedRoute>
+        ),
+        
+      },
+
+      {
+        path: 'payments/:id',
+        element: (
+          <ProtectedRoute allowedRoles={['player', 'parent', 'admin', 'super_admin']}>
+            <PaymentComponent />
           </ProtectedRoute>
         ),
         

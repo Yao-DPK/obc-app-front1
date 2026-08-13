@@ -65,6 +65,7 @@ export interface UpdatePaymentObligationDto extends Partial<CreatePaymentObligat
 export interface PaymentObligation {
   id?: number;
   userId?: number;
+  name?: string
   eventId?: number;
   playerId?: number;
   totalAmount?: number;
@@ -94,6 +95,8 @@ export interface PaymentIntent {
   verifiedAt?: string | null;
   createdAt?: string;
 }
+
+
 
 export interface PaymentEvent {
   id: number;

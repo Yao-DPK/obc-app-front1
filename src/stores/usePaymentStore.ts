@@ -29,13 +29,14 @@ interface PaymentStore {
 
   // ========== ACTIONS ==========
   fetchObligations: (params?: { playerIds?: number[] }) => Promise<void>;
+  setObligations: (obligations: PaymentObligation[]) => void;
   fetchIntents: () => Promise<void>;
   fetchAllObligations: () => Promise<PaymentObligation[]>;
   fetchAllIntents: () => Promise<PaymentIntent[]>;
   fetchSummary: () => Promise<void>;
   fetchUserSummary: (userId: number) => Promise<void>;
   createObligation: (dto: CreateObligationDto) => Promise<PaymentObligation>;
-  updateObligation: (id: number, data: PaymentObligation) => Promise<PaymentObligation>;
+  updateObligation: (id: number, data: Partial<PaymentObligation>) => Promise<PaymentObligation>;
   createIntent: (dto: PaymentIntent) => Promise<PaymentIntent>;
   cancelObligation: (id: number) => Promise<void>;
   verifyPayment: (dto: VerifyPaymentDto) => Promise<void>;
@@ -62,11 +63,15 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
   error: null,
 
   // ========== RÉCUPÉRATION (utilisateur connecté) ==========
+  setObligations: (obligations: PaymentObligation[]) => {
+    set({obligations: obligations});
+  },
 
   fetchObligations: async (params) => {
     set({ isLoadingObligations: true, error: null });
     try {
       const obligations = await paymentService.getObligations(params);
+      console.log(`all Obligations: ${JSON.stringify(obligations)}`);
       set({ obligations, isLoadingObligations: false });
     } catch (error: any) {
       set({ error: error.message, isLoadingObligations: false });
@@ -163,7 +168,7 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     }
   },
 
-  updateObligation: async (id: number, data: PaymentObligation) => {
+  updateObligation: async (id: number, data: Partial<PaymentObligation>) => {
   set({ isLoadingObligations: true, error: null });
   try {
     const updated = await paymentService.updateObligation(id, data);

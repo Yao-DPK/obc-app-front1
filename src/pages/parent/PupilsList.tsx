@@ -25,11 +25,11 @@ export default function PupilsList() {
 
   useEffect(() => {
     getMyPlayers();
+    console.log(`players: ${JSON.stringify(players)}`);
   }, [user])
 
   const getAge = (birthDate?: string | null): number | null => {
   if (!birthDate) return null;
-
   const birth = new Date(birthDate);
   if (isNaN(birth.getTime())) return null;
 
@@ -115,7 +115,7 @@ export default function PupilsList() {
                       {getStatusBadge(child.registrationStatus)}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {getAge(child.birthDate)} ans • {child.class}
+                      {getAge(child.playerDetails.birthDate)} ans • {child.playerDetails.class}
                     </p>
                   </div>
 

@@ -5,22 +5,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Eye, Pencil, File, Download } from 'lucide-react';
 import { useParams } from 'react-router-dom';
+import { useDocumentStore } from '@/stores/documents/useDocumentStore';
+import { useGuardianStore } from '@/stores/useGuardianStore';
 
-const MOCK_DOCUMENTS = [
-  { id: 1, name: 'Pièce d\'identité', type: 'PDF', status: 'validé', url: '/doc1.pdf', playerId: 1 },
-  { id: 2, name: 'Certificat médical', type: 'PDF', status: 'en_attente', url: '/doc2.pdf', playerId: 1 },
-  { id: 3, name: 'Photo d\'identité', type: 'JPG', status: 'validé', url: '/doc3.jpg', playerId: 2 },
-];
+
 
 export default function ChildDocumentsPage() {
-  const { id } = useParams<{ id: string }>();
-  const playerId = Number(id);
-  
-  // Filtrer les documents du bon enfant
-  const documents = MOCK_DOCUMENTS.filter(doc => doc.playerId === playerId);
-  
+  const params = useParams();
+  const {players} = useGuardianStore();
+  const id = params.id;
+  const user = players.find((u) => u.id == Number(id));
+  const {documents} = useDocumentStore();
   // Récupérer le nom de l'enfant (mocké)
-  const childName = playerId === 1 ? 'Kouadio Konan' : playerId === 2 ? 'Karine Konan' : '';
+  const childName = user?.firstName + ' ' + user?.lastName;
 
   const handleView = (url: string) => {
     window.open(url, '_blank');
@@ -37,9 +34,11 @@ export default function ChildDocumentsPage() {
 
   return (
     <div className="space-y-6 mb-20">
+      
       <PageHeader
         title="Documents"
         description={childName || 'Enfant'}
+        showBack
       />
 
       <Card>
@@ -63,15 +62,15 @@ export default function ChildDocumentsPage() {
               <TableBody>
                 {documents.map((doc) => (
                   <TableRow key={doc.id}>
-                    <TableCell className="font-medium">{doc.name}</TableCell>
+                    <TableCell className="font-medium">{doc.type}</TableCell>
                     <TableCell>{doc.type}</TableCell>
                     <TableCell>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        doc.status === 'validé' 
+                        doc.documentStatus === 'Validé' 
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-amber-100 text-amber-700'
                       }`}>
-                        {doc.status === 'validé' ? '✅ Validé' : '⏳ En attente'}
+                        {doc.documentStatus === 'Validé' ? '✅ Validé' : '⏳ En attente'}
                       </span>
                     </TableCell>
                     <TableCell className="text-right space-x-1">
@@ -80,7 +79,7 @@ export default function ChildDocumentsPage() {
                         size="icon" 
                         className="h-8 w-8" 
                         title="Voir"
-                        onClick={() => handleView(doc.url)}
+                        onClick={() => handleView(doc.publicUrl!)}
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
@@ -89,7 +88,7 @@ export default function ChildDocumentsPage() {
                         size="icon" 
                         className="h-8 w-8" 
                         title="Télécharger"
-                        onClick={() => handleDownload(doc.url, doc.name)}
+                        onClick={() => handleDownload(doc.publicUrl!, doc.type)}
                       >
                         <Download className="h-4 w-4" />
                       </Button>

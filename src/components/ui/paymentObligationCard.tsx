@@ -1,89 +1,165 @@
-// components/payments/PaymentObligationCard.tsx
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CreditCard, Calendar, DollarSign, AlertCircle } from 'lucide-react';
+import { 
+  CreditCard, 
+  Calendar, 
+  DollarSign, 
+  AlertCircle, 
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  Clock,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PaymentObligation } from '@/types/payment.type';
 
+// ========== CONFIGURATION DES STATUTS ==========
+const STATUS_CONFIG = {
+  pending: {
+    label: 'En attente',
+    icon: Clock,
+    variant: 'secondary' as const,
+    color: 'text-amber-600 bg-amber-50 border-amber-200',
+  },
+  partial: {
+    label: 'Partiel',
+    icon: AlertCircle,
+    variant: 'outline' as const,
+    color: 'text-blue-600 bg-blue-50 border-blue-200',
+  },
+  paid: {
+    label: 'Payé',
+    icon: CheckCircle2,
+    variant: 'default' as const,
+    color: 'text-green-600 bg-green-50 border-green-200',
+  },
+  overdue: {
+    label: 'En retard',
+    icon: AlertCircle,
+    variant: 'destructive' as const,
+    color: 'text-red-600 bg-red-50 border-red-200',
+  },
+  cancelled: {
+    label: 'Annulé',
+    icon: XCircle,
+    variant: 'outline' as const,
+    color: 'text-gray-500 bg-gray-100 border-gray-200',
+  },
+};
+
+// ========== PROPS ==========
 interface PaymentObligationCardProps {
   obligation: PaymentObligation;
   showPayButton?: boolean;
   onPay?: (obligation: PaymentObligation) => void;
   className?: string;
+  isPaying?: boolean;
+  showEventName?: boolean;
 }
-
-const STATUS_CONFIG: Record<
-  PaymentObligation['status'],
-  { label: string; variant: 'default' | 'destructive' | 'outline' | 'secondary' }
-> = {
-  pending: { label: 'En attente', variant: 'secondary' },
-  partial: { label: 'Partiel', variant: 'outline' },
-  paid: { label: 'Payé', variant: 'default' },
-  overdue: { label: 'En retard', variant: 'destructive' },
-  cancelled: { label: 'Annulé', variant: 'outline' },
-};
 
 export function PaymentObligationCard({
   obligation,
   showPayButton = false,
   onPay,
   className,
+  isPaying = false,
+  showEventName = true,
 }: PaymentObligationCardProps) {
-  const status = STATUS_CONFIG[obligation.status] || STATUS_CONFIG.pending;
+  const statusConfig = STATUS_CONFIG[obligation.status] || STATUS_CONFIG.pending;
+  const StatusIcon = statusConfig.icon;
+
+  // Sécurisation des montants
+  const totalAmount = obligation.totalAmount ?? 0;
+  const paidAmount = obligation.paidAmount ?? 0;
+  const remainingAmount = obligation.remainingAmount ?? totalAmount - paidAmount;
 
   const isPayable = obligation.status !== 'paid' && obligation.status !== 'cancelled';
   const showAction = showPayButton && isPayable;
+  const isOverdue = obligation.status === 'overdue';
 
   return (
-    <Card className={cn('w-full overflow-hidden transition-shadow hover:shadow-md', className)}>
+    <Card 
+      className={cn(
+        'w-full overflow-hidden transition-all duration-200 hover:shadow-md',
+        isOverdue && 'border-red-300',
+        className
+      )}
+    >
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5 text-muted-foreground" />
-            <span className="font-semibold">{obligation.description || 'Obligation de paiement'}</span>
+          <div className="flex items-center gap-2 min-w-0">
+            <div className={cn(
+              'p-1.5 rounded-lg flex-shrink-0',
+              statusConfig.color.replace(/text-\w+-\d+/g, '').trim() || 'bg-gray-100'
+            )}>
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div className="min-w-0">
+              <span className="font-semibold truncate block">
+                {obligation.description || 'Obligation de paiement'}
+              </span>
+              {showEventName && obligation.name && (
+                <span className="text-xs text-muted-foreground block truncate">
+                  {obligation.name}
+                </span>
+              )}
+            </div>
           </div>
-          <Badge variant={status.variant} className="whitespace-nowrap">
-            {status.label}
+
+          <Badge 
+            variant={statusConfig.variant} 
+            className={cn(
+              'flex items-center gap-1.5 whitespace-nowrap flex-shrink-0',
+              statusConfig.color
+            )}
+          >
+            <StatusIcon className="h-3.5 w-3.5" />
+            {statusConfig.label}
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-1 pb-3">
+      <CardContent className="space-y-2 pb-3">
+        {/* Montants */}
         <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
-          {/* Montant total */}
           <div className="flex items-center gap-1.5">
             <DollarSign className="h-4 w-4 text-muted-foreground" />
             <span>
-              <span className="font-medium">{obligation.totalAmount!.toLocaleString()} FCFA</span>
-              {obligation.paidAmount! > 0 && (
-                <span className="text-muted-foreground">
-                  {' '}
-                  (payé : {obligation.paidAmount!.toLocaleString()} FCFA)
+              <span className="font-medium">{totalAmount.toLocaleString()} FCFA</span>
+              {paidAmount > 0 && (
+                <span className="text-muted-foreground ml-1">
+                  (payé : {paidAmount.toLocaleString()} FCFA)
                 </span>
               )}
             </span>
           </div>
 
-          {/* Date d'échéance */}
           {obligation.dueDate && (
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+            <div className={cn(
+              'flex items-center gap-1.5',
+              isOverdue && 'text-red-600 font-medium'
+            )}>
+              <Calendar className="h-4 w-4" />
               <span>
-                Échéance :{' '}
-                <span className="font-medium">
-                  {new Date(obligation.dueDate).toLocaleDateString('fr-FR')}
-                </span>
+                Échéance : {new Date(obligation.dueDate).toLocaleDateString('fr-FR')}
               </span>
             </div>
           )}
         </div>
 
-        {/* Reste à payer (si non payé) */}
-        {obligation.remainingAmount != null && obligation.remainingAmount > 0 && (
-          <div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+        {/* Reste à payer */}
+        {remainingAmount > 0 && (
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <AlertCircle className="h-4 w-4" />
-            <span>Reste : {obligation.remainingAmount.toLocaleString()} FCFA</span>
+            <span>Reste à payer : <strong>{remainingAmount.toLocaleString()} FCFA</strong></span>
+          </div>
+        )}
+
+        {/* Indicateur si déjà payé */}
+        {obligation.status === 'paid' && obligation.updatedAt && (
+          <div className="flex items-center gap-1.5 text-xs text-green-600">
+            <CheckCircle2 className="h-3.5 w-3.5" />
           </div>
         )}
       </CardContent>
@@ -94,9 +170,19 @@ export function PaymentObligationCard({
             onClick={() => onPay?.(obligation)}
             className="w-full sm:w-auto gap-2"
             size="sm"
+            disabled={isPaying}
           >
-            <CreditCard className="h-4 w-4" />
-            Payer
+            {isPaying ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Paiement en cours...
+              </>
+            ) : (
+              <>
+                <CreditCard className="h-4 w-4" />
+                Payer {remainingAmount > 0 && `(${remainingAmount.toLocaleString()} FCFA)`}
+              </>
+            )}
           </Button>
         </CardFooter>
       )}

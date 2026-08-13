@@ -63,7 +63,6 @@ export default function PlayerDashboard() {
       fetchDocuments({userId: user.id});
       fetchObligations();
     }
-    console.log(`documents: ${documents.length}`)    
   }, [user]);
 
   // ========== CALCULS ==========
@@ -340,7 +339,7 @@ export default function PlayerDashboard() {
             Paiements récents
           </CardTitle>
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/payments">
+            <Link to={`/payments/${user?.id}`}>
               Voir tous
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>

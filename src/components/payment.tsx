@@ -4,6 +4,7 @@ import { useKadev, type PaymentDetails } from "@/hooks/useKadev";
 import type { PaymentObligation } from "@/types";
 import { usePaymentStore } from "@/stores/usePaymentStore";
 import { PaymentObligationCard } from "./ui/paymentObligationCard";
+import { useAuth } from "@/stores/useAuth";
 
 // Déclarer KadevPay globalement pour TypeScript
 declare global {
@@ -33,6 +34,7 @@ export function PaymentComponent() {
     handlePayment,
   } = useKadev();
 
+  const { user } = useAuth();
   const { obligations, fetchObligations, updateObligation } = usePaymentStore();
   
   useEffect(() => {
@@ -63,6 +65,7 @@ export function PaymentComponent() {
       }
         //console.log('4');
       const response: any = await handlePayment(paymentDetails);
+      console.log(`response: ${JSON.stringify(response)}`)
 
       if(response.status == 'success'){
         const obligationInfo: PaymentObligation = {
