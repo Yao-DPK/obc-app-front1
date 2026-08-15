@@ -1,6 +1,6 @@
 // src/pages/parent/ChildDocuments.tsx
 import { useEffect, useState } from 'react';
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { FileText, Plus, Loader2, Eye, Download, Trash2, Upload } from 'lucide-react';
 
@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDocumentStore } from '@/stores/documents/useDocumentStore';
