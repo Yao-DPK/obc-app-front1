@@ -39,7 +39,7 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
-export default function ParentProfilePage() {
+export default function ProfilePage() {
   const { user, setAuth } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,6 +95,8 @@ export default function ParentProfilePage() {
       <PageHeader
         title={`${user.firstName || ''} ${user.lastName || ''}`}
         description="Votre profil et vos informations personnelles"
+        showBack={true}
+        
       >
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>

@@ -285,7 +285,7 @@ export default function PlayerDashboard() {
             Documents
           </CardTitle>
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/documents">
+            <Link to="/player/documents">
               Voir tous
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
@@ -339,7 +339,7 @@ export default function PlayerDashboard() {
             Paiements récents
           </CardTitle>
           <Button variant="ghost" size="sm" asChild>
-            <Link to={`/payments/${user?.id}`}>
+            <Link to={`/player/payments/`}>
               Voir tous
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
@@ -401,13 +401,13 @@ export default function PlayerDashboard() {
       {/* ====== LIENS RAPIDES ====== */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
-          <Link to="/documents">
+          <Link to="/player/documents">
             <FileText className="h-5 w-5" />
             <span className="text-xs">Documents</span>
           </Link>
         </Button>
         <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
-          <Link to="/payments">
+          <Link to="/player/payments">
             <CreditCard className="h-5 w-5" />
             <span className="text-xs">Paiements</span>
           </Link>

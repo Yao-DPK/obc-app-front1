@@ -32,6 +32,8 @@ import PaymentEventsManagement from './pages/super_admin/PaymentEventsManagement
 import DocumentTypesManagement from './pages/super_admin/DocumentTypesManagement';
 import ProfilePage from './pages/Profile';
 import { PaymentComponent } from './pages/payment';
+import PlayerDocumentsPage from './pages/player/PlayerDocuments';
+import PlayerPaymentsPage from './pages/player/PlayerPayments';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -180,6 +182,28 @@ export const router = createBrowserRouter([
             path: 'pupils/:id/payments',
             element: <ChildPaymentsPage />,
             loader: childPaymentsLoader,
+            errorElement: <ErrorBoundary />,
+          },
+        ],
+      },
+
+      // Player (avec loaders)
+      {
+        path: 'player',
+        element: (
+          <ProtectedRoute allowedRoles={['player']}>
+            <Outlet />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: 'documents',
+            element: <PlayerDocumentsPage />,
+            errorElement: <ErrorBoundary />,
+          },
+          {
+            path: 'payments',
+            element: <PlayerPaymentsPage />,
             errorElement: <ErrorBoundary />,
           },
         ],

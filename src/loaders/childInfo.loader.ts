@@ -7,7 +7,7 @@ export const childInfoLoader: LoaderFunction = async ({ params }) => {
   
   if (!id) {
     throw new Response('ID manquant', { status: 400 });
-  }
+  } 
 
   try {
     const  data  = await guardianService.getMyPlayersById(id as unknown as number);

@@ -14,7 +14,7 @@ export interface GetDocumentTypesOptions {
 
 export const documentService = {
     async uploadDocuments(payload: FormData){
-        const { data } = await api.post("/api/documents/upload", payload, {
+        const { data } = await api.post("/api/documents", payload, {
             headers: {'Content-Type' : 'multipart/form-data'},
         });
         return { data };
@@ -33,6 +33,11 @@ export const documentService = {
 
   async getDocumentsByPlayerIds(playerIds: number[]): Promise<Document[]> {
     return this.getDocuments({ playerIds });
+  },
+
+  async getSignedUrl(id: number){
+    const { data } = await api.get(`/api/documents/${id}/signed-url`);
+    return data;
   },
 
    // ========== TYPES DE DOCUMENTS ==========

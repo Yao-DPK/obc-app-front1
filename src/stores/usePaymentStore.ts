@@ -71,7 +71,6 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     set({ isLoadingObligations: true, error: null });
     try {
       const obligations = await paymentService.getObligations(params);
-      console.log(`all Obligations: ${JSON.stringify(obligations)}`);
       set({ obligations, isLoadingObligations: false });
     } catch (error: any) {
       set({ error: error.message, isLoadingObligations: false });

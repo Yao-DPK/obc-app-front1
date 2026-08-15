@@ -13,10 +13,12 @@ interface DocumentStore {
   fetchPendingDocuments: (userId?: number) => Promise<void>;
   validateDocument: (documentId: number, validated: boolean, adminId?: number) => Promise<void>;
   updateDocumentStatus: (documentId: number, status: DocumentStatus, adminId?: number) => Promise<void>;
+  uploadDocument: (data: { userId: number; file: File; type: string; isObligatory?: boolean }) => Promise<Document>;
+  deleteDocument: (id: number) => Promise<void>;
   clear: () => void;
 }
 
-export const useDocumentStore = create<DocumentStore>((set) => ({
+export const useDocumentStore = create<DocumentStore>((set, get) => ({
   documents: [],
   isLoading: false,
   pendingDocuments: 0,
@@ -53,6 +55,22 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
         set({ error: error.message, isLoading: false });
       }
     },
+
+    uploadDocument: async ({ userId, file, type }) => {
+    const formData = new FormData();
+    /* formData.append('data', JSON.stringify({ userId, docType }));
+    formData.append(docType, file); */
+    formData.append('data', JSON.stringify({userId}));
+    formData.append(type, file);
+
+    const { data } = await documentService.uploadDocuments(formData);
+    await get().fetchDocuments({userId: userId});
+    return data;
+  },
+
+  deleteDocument: async (id: number) => {
+    await api.delete(`/api/documents/${id}`);
+  },
 
     clear: () => {
       set({ documents: [], isLoading: false, error: null });
