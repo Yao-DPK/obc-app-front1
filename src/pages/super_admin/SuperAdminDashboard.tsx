@@ -13,44 +13,37 @@ import {
   Activity,
 } from 'lucide-react';
 import { StatCard } from '@/components/ui/StatCard';
-import { useUserStore } from '@/stores/useUserStore';
-import { useDocumentStore } from '@/stores/documents/useDocumentStore';
-import { usePaymentStore } from '@/stores/usePaymentStore';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAdminStore } from '@/stores/useAdminStore';
 
 export default function SuperAdminDashboard() {
   // ========== STORES ==========
-  const { users, isLoading: usersLoading } = useUserStore();
-  const { pendingDocuments, isLoading: docsLoading} = useDocumentStore();
-  const {
-    summary,
-    isLoadingObligations,
-    isLoadingIntents,
-  } = usePaymentStore();
+  const { stats, isLoading, fetchStats } = useAdminStore();
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
 
   // ========== CHARGEMENT ==========
   useEffect(() => {
   }, []);
 
   // ========== CALCULS ==========
-  const totalUsers = users.length;
-  const totalAdmins = users.filter(u => u.role === 'admin' || u.role === 'super_admin').length;
-  const totalPlayers = users.filter(u => u.role === 'player').length;
-  const totalParents = users.filter(u => u.role === 'parent').length;
+  const totalUsers = stats?.totalUsers!;
+  const totalAdmins = stats?.totalAdmins!;
+  const totalPlayers = stats?.totalPlayers!;
+  const totalParents = stats?.totalParents!;
 
-  const pendingRegistrations = users.filter(
-    u => u.registrationStatus === 'pre_inscrit' || u.registrationStatus === 'attestation_signee'
-  ).length;
+  const pendingRegistrations = stats?.pendingRegistrations!;
+  const pendingDocuments = stats?.pendingDocuments!;
+  const totalObligations = stats?.totalObligations!;
+  const totalAmountPaid = stats?.totalAmountPaid!;
+  const totalAmountRemaining = stats?.totalAmountRemaining!;
+  const paidCount = stats?.paidCount!;
+  const pendingPaymentsCount = stats?.pendingPaymentsCount!;
+  const overdueCount = stats?.overdueCount!;
 
-  const totalObligations = summary?.totalObligations || 0;
-  const totalAmountPaid = summary?.totalPaid || 0;
-  const totalAmountRemaining = summary?.totalRemaining || 0;
-  const paidCount = summary?.statusCounts?.paid || 0;
-  const pendingPaymentsCount = summary?.statusCounts?.pending || 0;
-  const overdueCount = summary?.statusCounts?.overdue || 0;
-
-  const isLoading = usersLoading || docsLoading || isLoadingObligations || isLoadingIntents;
 
   if (isLoading) {
     return (
@@ -114,14 +107,14 @@ export default function SuperAdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Montant total payé"
-            value={`${totalAmountPaid.toLocaleString()} FCFA`}
+            value={`${totalAmountPaid} FCFA`}
             icon={DollarSign}
             color="text-green-500"
             subtitle={`${paidCount} paiements validés`}
           />
           <StatCard
             title="Reste à payer"
-            value={`${totalAmountRemaining.toLocaleString()} FCFA`}
+            value={`${totalAmountRemaining} FCFA`}
             icon={TrendingUp}
             color="text-blue-500"
             subtitle={`${totalObligations} obligations totales`}

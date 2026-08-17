@@ -13,7 +13,7 @@ interface PaymentSectionProps {
   disabled?: boolean;
 }
 
-export function PaymentSection({ onValidChange }: PaymentSectionProps) {
+export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps) {
   const { obligations, isLoadingObligations, fetchObligations, updateObligation } = usePaymentStore();
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const invalid_obligations = obligations.filter(o => o.status !== 'paid');
@@ -29,7 +29,7 @@ export function PaymentSection({ onValidChange }: PaymentSectionProps) {
       await updateObligation(obligationId, {status: newStatus as "pending" | "partial" | "paid" | "overdue" | "cancelled"});
 
       toast.success(`Statut mis à jour : ${newStatus}`);
-      await fetchObligations();
+      await fetchObligations({playerIds: [playerId]});
     } catch (error) {
       toast.error('Erreur lors de la mise à jour du statut');
     } finally {

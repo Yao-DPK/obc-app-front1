@@ -29,7 +29,7 @@ export function UserValidationPage({mode}: UserValidationPageProps) {
   const { isLoading: docsLoading, fetchDocuments } = useDocumentStore();
   const { fetchDocTypes } = useDocumentTypeStore();
   const { obligations, fetchObligations } = usePaymentStore();
-  const requiredDocs: string[] = ["Extrait de Naissance", "Photo"];
+  const requiredDocs: string[] = ["Extrait de Naissance", "Photo", "Signature Attestation"];
   const [isInfoValid, setIsInfoValid] = useState(false);
   const [isDocsValid, setIsDocsValid] = useState(false);
   const [isPaymentValid, setIsPaymentValid] = useState(false);

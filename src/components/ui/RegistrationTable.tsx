@@ -88,6 +88,22 @@ export function RegistrationTable({ status }: RegistrationTableProps) {
     }
   };
 
+  const handleView = async (userId: number) => {
+    setLoadingId(userId);
+    try {
+      const selectedUser = users.find((u) => u.id === userId);
+      if (!selectedUser) {
+        toast.error("Cet utilisateur n'existe pas");
+        return;
+      }
+      navigate(`view/${userId}`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Erreur');
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   const handleReject = async (userId: number) => {
     setLoadingId(userId);
     try {
@@ -299,6 +315,21 @@ const cardVariants = {
                                   <CheckCircle className="h-4 w-4 mr-1" />
                                 )}
                                 <span className="hidden sm:inline">Valider</span>
+                              </Button>
+                            )}
+                            {status == 'inscrit' && (
+                              <Button
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-200"
+                                onClick={() => handleView(user.id)}
+                                disabled={loadingId === user.id}
+                              >
+                                {loadingId === user.id ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                )}
+                                <span className="hidden sm:inline">Voir</span>
                               </Button>
                             )}
                             {status !== 'rejeté' && (

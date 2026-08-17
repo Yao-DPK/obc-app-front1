@@ -34,6 +34,8 @@ import ProfilePage from './pages/Profile';
 import { PaymentComponent } from './pages/payment';
 import PlayerDocumentsPage from './pages/player/PlayerDocuments';
 import PlayerPaymentsPage from './pages/player/PlayerPayments';
+import EventManagement from './pages/super_admin/EventManagement';
+import PupilOverview from './pages/parent/PupilOverview';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -136,10 +138,17 @@ export const router = createBrowserRouter([
           { path: 'registrations', element: <SuperAdminRegistrations /> },
           { path: 'payment_events', element: <PaymentEventsManagement /> },
           { path: 'document-types', element: <DocumentTypesManagement />},
+          { path: 'events', element: <EventManagement />},
           {
             path: 'registrations/validate/:userId',
             element: (
                 <UserValidationPage mode="validation" />
+            ),
+          },
+          {
+            path: 'registrations/view/:userId',
+            element: (
+                <UserValidationPage mode="view" />
             ),
           },
         ],
@@ -166,6 +175,11 @@ export const router = createBrowserRouter([
         ),
         children: [
           { path: 'pupils', element: <PupilsList /> },
+          {
+            path: 'pupils/:id',
+            element: <PupilOverview />,
+            errorElement: <ErrorBoundary />,
+          },
           {
             path: 'pupils/:id/infos',
             element: <ChildInfoPage />,

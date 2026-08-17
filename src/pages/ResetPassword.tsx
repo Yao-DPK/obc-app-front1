@@ -40,6 +40,7 @@ interface TokenStatus {
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
+  const purpose = searchParams.get('purpose');
   const navigate = useNavigate();
 
   // 3. États de validation du token
@@ -73,7 +74,7 @@ export default function ResetPassword() {
       try {
         // 5. Appel API pour vérifier la validité du token
         const response = await api.get('/api/auth/verify-reset-token', {
-          params: { token },
+          params: { token, purpose },
         });
 
         console.log(`response: ${JSON.stringify(response.data)}`);

@@ -326,7 +326,7 @@ export default function ParentDashboard() {
                 return (
                   <Link
                     key={player.id}
-                    to={`/parent/pupils/${player.id}/infos`}
+                    to={`/parent/pupils/${player.id}`}
                     className="block"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg hover:bg-gray-50 hover:border-primary/30 transition-all duration-200 gap-3">

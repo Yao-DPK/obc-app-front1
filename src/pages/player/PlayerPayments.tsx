@@ -61,7 +61,7 @@ export default function PlayerPaymentsPage() {
     try {
       const paymentDetails: PaymentDetails = {
         montant: obligation.totalAmount,
-        email: 'yao.konan2709@gmail.com', // À remplacer par l'email du parent connecté
+        email: user?.email!, // À remplacer par l'email du parent connecté
         method: 'momo',
         metadata: { obligationId: obligation.id! },
       };

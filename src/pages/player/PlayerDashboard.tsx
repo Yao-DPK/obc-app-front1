@@ -61,7 +61,7 @@ export default function PlayerDashboard() {
   useEffect(() => {
     if (user?.id) {
       fetchDocuments({userId: user.id});
-      fetchObligations();
+      fetchObligations({playerIds: [user.id]});
     }
   }, [user]);
 
@@ -75,7 +75,7 @@ export default function PlayerDashboard() {
   const totalDocs = documents.length;
 
   const pendingObligations = obligations.filter(
-    (o) => o.status === 'pending' || o.status === 'partial'
+    (o) => o.status === 'pending' || o.status === 'partial' || o.status === "overdue"
   ).length;
 
   const overdueObligations = obligations.filter(

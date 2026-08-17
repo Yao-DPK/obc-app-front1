@@ -69,7 +69,6 @@ export const paymentService = {
   async updateObligation(id: number, obligation:  Partial<PaymentObligation>): Promise<PaymentObligation> {
     console.log(`obligation info: ${JSON.stringify(obligation)}`);
     const {data}  = await api.patch(`/api/payments/obligations/${id}`, { obligation });
-    console.log(`received Data: ${JSON.stringify(data)}`);
     return data;
   },
 

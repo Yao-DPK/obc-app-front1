@@ -3,7 +3,7 @@ import type { UserRole } from '@/types/user.type';
 import { 
   Baby,
   LayoutDashboard, User, UserPlus, File, 
-  type LucideIcon, CreditCard
+  type LucideIcon, CreditCard, /* Calendar */
 } from 'lucide-react';
 
 export interface NavItem {
@@ -32,6 +32,7 @@ const navItems: NavItem[] = [
   // Section Administration (réservée super admin)
   { to: '/super-admin/payment_events', label: 'Définition Paiements', icon: CreditCard, roles: ['super_admin'], section: 'admin' },
   { to: '/super-admin/document-types', label: 'Définition Documents', icon: File, roles: ['super_admin'], section: 'admin' }, 
+  //{ to: '/super-admin/events', label: 'Définition Evènements', icon: Calendar, roles: ['super_admin'], section: 'admin' }, 
   //{ to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin' },
 
   // Section Parent
