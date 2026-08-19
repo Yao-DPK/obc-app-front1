@@ -57,7 +57,6 @@ export default function PlayerDocumentsPage() {
 
   const handleView = async (id: number) => {
     const data = await documentService.getSignedUrl(id);
-    console.log(`data: ${data.signedUrl}`);
     window.open(data.signedUrl, '_blank')?.focus();
   };
 

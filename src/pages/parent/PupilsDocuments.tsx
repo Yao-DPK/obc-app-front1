@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { useGuardianStore } from '@/stores/useGuardianStore';
 import type { Document } from '@/types';
+import { documentService } from '@/lib/services/document.service';
 
 // ============================================================
 // 1. INITIALISATION
@@ -51,9 +52,13 @@ export default function ChildDocumentsPage() {
   // 2. HANDLERS
   // ============================================================
 
-  const handleView = (url: string) => {
-    window.open(url, '_blank');
-  };
+  const handleView = async (id: number) => {
+      const data = await documentService.getSignedUrl(id);
+      console.log(`data: ${data.signedUrl}`);
+      window.open(data.signedUrl, '_blank')?.focus();
+    };
+
+  
 
   const handleDownload = async (doc: Document) => {
     try {
@@ -185,7 +190,7 @@ export default function ChildDocumentsPage() {
                         size="icon"
                         className="h-8 w-8 text-blue-600 hover:bg-blue-50"
                         title="Voir"
-                        onClick={() => handleView(doc.publicUrl!)}
+                        onClick={() => handleView(doc.id!)}
                       >
                         <Eye className="h-4 w-4" />
                       </Button>

@@ -2,7 +2,7 @@
 import { DOCUMENT_STATUSES, type DocumentStatus } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileCheck, FileX, Clock, AlertTriangle } from 'lucide-react';
+import { FileCheck, FileX, Clock, AlertTriangle, Eye } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { useDocumentStore } from '@/stores/documents/useDocumentStore';
@@ -98,6 +98,12 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
       setUploadingDocType(null);
     }
   };
+
+  const handleView = async (id: number) => {
+      const data = await documentService.getSignedUrl(id);
+      console.log(`data: ${data.signedUrl}`);
+      window.open(data.signedUrl, '_blank')?.focus();
+    };
 
   if (isLoading) {
     return (
@@ -201,10 +207,9 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
                   </div>
                 )}
                 {isUploaded && uploadedDoc && (
-                  <FilePreview
-                    url={uploadedDoc.publicUrl!}
-                    fileName={`${doc.name} - ${uploadedDoc.fileId}`}
-                  />
+                  <Button variant="ghost" size="sm" onClick={() => handleView(uploadedDoc.id!)}>
+                    <Eye className="h-4 w-4 mr-1" /> Voir
+                  </Button>
                 )}
               </CardContent>
             </Card>
