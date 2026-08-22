@@ -104,7 +104,7 @@ export function SidebarContent({ mobile, onClose }: SidebarContentProps) {
       {/* Profil + déconnexion */}
       <div className="border-t border-gray-200 p-4 bg-white">
         <div className="flex items-center gap-3 mb-3">
-          <AdultAvatar photoUrl={user!.photoUrl!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
+          <AdultAvatar userId={user!.id!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-gray-800 truncate">
               {user.firstName} {user.lastName}
