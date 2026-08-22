@@ -12,7 +12,7 @@ interface AdultAvatarProps {
 }
 
 export const AdultAvatar = ({ userId, firstName, lastName, sexe, photoUrl: initialPhotoUrl }: AdultAvatarProps) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(true);
   const [photoUrl, setPhotoUrl] = useState<string | null>(initialPhotoUrl || null);
   const [isLoading, setIsLoading] = useState(!initialPhotoUrl);
 
