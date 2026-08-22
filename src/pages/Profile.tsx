@@ -27,6 +27,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { userService } from '@/lib/services/user.service';
+import { useUserStore } from '@/stores/useUserStore';
 
 // Schéma de validation pour le formulaire
 const profileSchema = z.object({
@@ -43,6 +44,9 @@ export default function ProfilePage() {
   const { user, setAuth } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPhotoUploading, setIsPhotoUploading] = useState(false);
+  const { uploadProfilePicture } = useUserStore();
+
 
   const {
     register,
@@ -86,6 +90,35 @@ export default function ProfilePage() {
     }
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      // Vérifier la taille et le type (optionnel)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('La photo ne doit pas dépasser 5 Mo');
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        toast.error('Veuillez sélectionner une image');
+        return;
+      }
+
+      setIsPhotoUploading(true);
+      try {
+        await uploadProfilePicture(file);
+        toast.success('Photo de profil mise à jour');
+        // Optionnel : fermer le modal ou rafraîchir les données
+        // Si le store recharge le profil, la photo sera mise à jour
+      } catch (error) {
+        toast.error('Erreur lors du téléchargement de la photo');
+      } finally {
+        setIsPhotoUploading(false);
+        // Réinitialiser l'input pour permettre de sélectionner le même fichier
+        e.target.value = '';
+      }
+    };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -109,6 +142,46 @@ export default function ProfilePage() {
             <DialogHeader>
               <DialogTitle>Modifier mes informations</DialogTitle>
             </DialogHeader>
+
+          {/* ====== SECTION PHOTO ====== */}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="relative h-20 w-20 rounded-full overflow-hidden border-2 border-primary/20 flex-shrink-0">
+                {user?.photoUrl ? (
+                  <img
+                    src={user.photoUrl}
+                    alt="Photo de profil"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center text-2xl font-semibold text-gray-500">
+                    {user?.firstName?.[0]}{user?.lastName?.[0]}
+                  </div>
+                )}
+              </div>
+              <div className="flex-1">
+                <Label
+                  htmlFor="photo-upload"
+                  className="cursor-pointer bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition inline-block"
+                >
+                  Changer la photo
+                </Label>
+                <Input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                  disabled={isPhotoUploading}
+                />
+                {isPhotoUploading && (
+                  <Loader2 className="h-4 w-4 animate-spin ml-2 inline-block" />
+                )}
+                <p className="text-xs text-muted-foreground mt-1">
+                  Formats acceptés : JPG, PNG, GIF. Max 5 Mo.
+                </p>
+              </div>
+            </div>            
+
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -187,7 +260,7 @@ export default function ProfilePage() {
           <CardContent className="space-y-6">
             <div className="flex items-center gap-4">
               <AdultAvatar
-                photoUrl={user.photoUrl || null}
+                userId={user.id!}
                 firstName={user.firstName || ''}
                 lastName={user.lastName || ''}
                 sexe={user.gender as 'M' | 'F'}

@@ -92,7 +92,7 @@ export default function PupilsList() {
   };
 
   const handleDocuments = (id: number) => navigate(`${id}/documents`);
-  const handleInfos = (id: number) => navigate(`${id}/infos`);
+  const handleInfos = (id: number) => navigate(`${id}`);
   const handlePayments = (id: number) => navigate(`${id}/payments`);
 
   return (
@@ -127,10 +127,12 @@ export default function PupilsList() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
+                className="cursor-pointer"
+                onClick={() => handleInfos(child.id)}
               >
                 <Card className="hover:shadow-md transition-shadow duration-200">
                   <CardContent className="p-4 flex items-center gap-4">
-                    {/* Avatar avec gestion du chargement */}
+                    {/* Avatar */}
                     <div className="relative">
                       {isLoadingPhoto ? (
                         <div className="h-14 w-14 rounded-full bg-gray-200 flex items-center justify-center">
@@ -167,7 +169,10 @@ export default function PupilsList() {
                           size="icon"
                           className="h-9 w-9 text-muted-foreground hover:text-blue-600 hover:bg-blue-50"
                           title="Documents"
-                          onClick={() => handleDocuments(child.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDocuments(child.id);
+                          }}
                         >
                           <FileText className="h-5 w-5" />
                         </Button>
@@ -176,18 +181,12 @@ export default function PupilsList() {
                           size="icon"
                           className="h-9 w-9 text-muted-foreground hover:text-green-600 hover:bg-green-50"
                           title="Paiements"
-                          onClick={() => handlePayments(child.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePayments(child.id);
+                          }}
                         >
                           <CreditCard className="h-5 w-5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 text-muted-foreground hover:text-purple-600 hover:bg-purple-50"
-                          title="Informations personnelles"
-                          onClick={() => handleInfos(child.id)}
-                        >
-                          <Info className="h-5 w-5" />
                         </Button>
                       </div>
 
@@ -199,13 +198,28 @@ export default function PupilsList() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuItem onClick={() => handleDocuments(child.id)}>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDocuments(child.id);
+                              }}
+                            >
                               <FileText className="h-4 w-4 mr-2" /> Documents
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handlePayments(child.id)}>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePayments(child.id);
+                              }}
+                            >
                               <CreditCard className="h-4 w-4 mr-2" /> Paiements
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleInfos(child.id)}>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleInfos(child.id);
+                              }}
+                            >
                               <Info className="h-4 w-4 mr-2" /> Infos personnelles
                             </DropdownMenuItem>
                           </DropdownMenuContent>
