@@ -138,7 +138,7 @@ export function Sidebar() {
       <div className="border-t border-gray-200 p-3 shrink-0 bg-white">
         {!isCollapsed ? (
           <div className="flex items-center gap-3 mb-2">
-            <AdultAvatar photoUrl={user!.photoUrl!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
+            <AdultAvatar userId={user!.id!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
           <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-800 truncate">
                 {user.firstName} {user.lastName}
@@ -152,7 +152,7 @@ export function Sidebar() {
           </div>
         ) : (
           <div className="flex justify-center mb-2">
-            <AdultAvatar photoUrl={user!.photoUrl!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
+            <AdultAvatar userId={user!.id!} firstName={user!.firstName! || "firstname"} lastName={user.lastName! || "firstname"} sexe={user!.gender! as "M"|"F"}  />
           </div>
         )}
         <Button

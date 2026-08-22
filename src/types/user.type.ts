@@ -43,7 +43,7 @@ export interface User {
   updatedAt: string;
 }
 
-export interface updateProfileDto{
+export interface UpdateProfileDto{
   firstName?: string;
   lastName?: string;
   email?: string;

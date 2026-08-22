@@ -1,6 +1,7 @@
+// src/stores/useUserStore.ts
 import { create } from 'zustand';
 import type { User } from '@/types/user.type';
-import { userService } from '@/lib/services/user.service';
+import { userService, type UserFilters } from '@/lib/services/user.service';
 
 interface UserStore {
   users: User[];
@@ -10,8 +11,8 @@ interface UserStore {
 
   // ========== ACTIONS ==========
 
-  fetchUsers: () => Promise<void>;
-  fetchUserByIdAndRole: (userId: number, role: string) => Promise<void>
+  fetchUsers: (filters?: UserFilters) => Promise<void>;
+  fetchUserByIdAndRole: (userId: number, role: string) => Promise<void>;
   fetchPlayers: () => Promise<void>;
   fetchAdmins: () => Promise<void>;
   fetchParents: () => Promise<void>;
@@ -20,6 +21,8 @@ interface UserStore {
 
   updateUser: (userId: number, data: Partial<User>) => Promise<void>;
   updateStatus: (userId: number, status: string) => Promise<void>;
+
+  uploadProfilePicture: (file: File) => Promise<void>;
 
   clear: () => void;
 }
@@ -32,20 +35,20 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   // ========== RÉCUPÉRATION ==========
 
-  fetchUsers: async () => {
+  fetchUsers: async (filters?: UserFilters) => {
     set({ isLoading: true, error: null });
     try {
-      const users = await userService.fetchUsers();
+      const users = await userService.fetchUsers(filters);
       set({ users, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
   },
 
-  fetchUserByIdAndRole: async (userId) => {
+  fetchUserByIdAndRole: async (userId: number, role: string) => {
     set({ isLoading: true, error: null });
     try {
-      const user = await userService.fetchUserByRoleAndId(userId, 'player');
+      const user = await userService.fetchUserByRoleAndId(userId, role);
       set({ user, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
@@ -53,33 +56,15 @@ export const useUserStore = create<UserStore>((set, get) => ({
   },
 
   fetchPlayers: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const users = await userService.fetchPlayers();
-      set({ users, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
+    await get().fetchUsers({ role: 'player' });
   },
 
   fetchAdmins: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const users = await userService.fetchAdmins();
-      set({ users, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
+    await get().fetchUsers({ role: 'admin' });
   },
 
   fetchParents: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const users = await userService.fetchParents();
-      set({ users, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
+    await get().fetchUsers({ role: 'parent' });
   },
 
   fetchUsersByIds: async (ids: number[]) => {
@@ -125,9 +110,26 @@ export const useUserStore = create<UserStore>((set, get) => ({
     await get().fetchUsers(); // Rafraîchir la liste
   },
 
+  // ========== UPLOAD PHOTO ==========
+
+  uploadProfilePicture: async (file: File) => {
+    set({ isLoading: true, error: null });
+    try {
+      await userService.uploadProfilePicture(file);
+      // Recharger le profil utilisateur (si le store gère un user)
+      const updatedUser = await userService.fetchProfile();
+      set({ user: updatedUser, isLoading: false });
+      // Optionnel : on peut aussi rafraîchir la liste des users si nécessaire
+      await get().fetchUsers();
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+      throw error;
+    }
+  },
+
   // ========== UTILITAIRES ==========
 
   clear: () => {
-    set({ users: [], isLoading: false, error: null });
+    set({ users: [], user: null, isLoading: false, error: null });
   },
 }));
