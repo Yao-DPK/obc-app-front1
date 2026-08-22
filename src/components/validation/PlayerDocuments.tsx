@@ -6,7 +6,6 @@ import { FileCheck, FileX, Clock, AlertTriangle, Eye } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { useDocumentStore } from '@/stores/documents/useDocumentStore';
-import { FilePreview } from '@/components/ui/FilePreview';
 import { useEffect, useState } from 'react';
 import { Input } from '../ui/input';
 import { documentService } from '@/lib/services/document.service';
@@ -34,9 +33,7 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
 
   const uploadedDocs = documents.filter((doc) =>
     docTypes.some((dt) => dt.name === doc.type)
-  );
-
-  
+  );  
 
   const missingDocs = docTypes.filter(
     (rd) => !uploadedDocs.some((ud) => ud.type === rd.name)
