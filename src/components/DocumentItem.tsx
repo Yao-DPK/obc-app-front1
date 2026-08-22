@@ -1,4 +1,3 @@
-// components/documents/DocumentItem.tsx
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,7 +20,7 @@ import {
 } from 'lucide-react';
 import { type DocumentStatus, type Document, type DocumentType } from '@/types';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Input } from './ui/input';
 import { Progress } from './ui/progress';
 
@@ -85,11 +84,12 @@ interface DocumentItemProps {
 
   // ─── AFFICHAGE ───
   showActions?: boolean;
-  showValidationActions?: boolean; // Afficher les boutons Valider/Rejeter
+  showValidationActions?: boolean;
   showStatus?: boolean;
   showUploadDate?: boolean;
   showObligatory?: boolean;
-  showUploadButton?: boolean; // Afficher le bouton "Télécharger" séparé
+  showUploadButton?: boolean;
+  showPreview?: boolean; // 👈 Nouveau : afficher l'aperçu
   mode?: 'view' | 'upload' | 'mixed';
   className?: string;
   size?: 'sm' | 'md' | 'lg';
@@ -117,6 +117,7 @@ export function DocumentItem({
   showUploadDate = false,
   showObligatory = false,
   showUploadButton = false,
+  showPreview = true, // 👈 Activé par défaut
   mode = 'mixed',
   className,
   size = 'md',
@@ -128,6 +129,7 @@ export function DocumentItem({
   const [isValidating, setIsValidating] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
   const [isUploadingLocal, setIsUploadingLocal] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isUploaded = !!document?.publicUrl;
@@ -145,6 +147,27 @@ export function DocumentItem({
     lg: { text: 'text-lg', icon: 'h-6 w-6', padding: 'p-5' },
   };
   const s = sizeClasses[size];
+
+  // ========== GÉNÉRER UN APERÇU ==========
+  useEffect(() => {
+    // Si un document est uploadé et a une URL, on crée un aperçu
+    if (document?.publicUrl) {
+      // Si c'est une image, on peut utiliser l'URL directement
+      // Sinon, on pourrait afficher une icône
+      setPreviewUrl(document.publicUrl);
+    } else if (selectedFile) {
+      // Pour un fichier sélectionné, on crée un objet URL (pour les images)
+      if (selectedFile.type.startsWith('image/')) {
+        const url = URL.createObjectURL(selectedFile);
+        setPreviewUrl(url);
+        return () => URL.revokeObjectURL(url); // Nettoyage
+      } else {
+        setPreviewUrl(null);
+      }
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [document, selectedFile]);
 
   // ========== GESTIONNAIRES ==========
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,6 +224,35 @@ export function DocumentItem({
 
   const isPending = document?.documentStatus === 'En attente de Validation';
   const isLocked = document?.documentStatus === 'Validé' || document?.documentStatus === 'Rejeté';
+
+  // ========== RENDU DE L'APERÇU ==========
+  const renderPreview = () => {
+    if (!showPreview) return null;
+
+    if (previewUrl && (previewUrl.startsWith('blob:') || previewUrl.startsWith('http'))) {
+      // Tenter d'afficher une image
+      return (
+        <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 bg-gray-50">
+          <img
+            src={previewUrl}
+            alt="Aperçu"
+            className="w-full h-full object-cover"
+            onError={() => {
+              // Si l'image ne peut pas être chargée, on affiche une icône
+              setPreviewUrl(null);
+            }}
+          />
+        </div>
+      );
+    }
+
+    // Fallback : afficher l'icône du document
+    return (
+      <div className="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+        {Icon}
+      </div>
+    );
+  };
 
   // ========== RENDU : ÉTAT VIDE (non uploadé) ==========
   if (!isUploaded || mode === 'upload') {
@@ -266,6 +318,16 @@ export function DocumentItem({
               </div>
             ) : hasFile ? (
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-green-50/50 p-3 rounded-lg border border-green-200">
+                {showPreview && previewUrl && (
+                  <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+                    <img
+                      src={previewUrl}
+                      alt="Aperçu"
+                      className="w-full h-full object-cover"
+                      onError={() => setPreviewUrl(null)}
+                    />
+                  </div>
+                )}
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <File className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="text-sm font-medium truncate">{selectedFile.name}</span>
@@ -329,16 +391,13 @@ export function DocumentItem({
         )}
       >
         <div className={cn('flex flex-col sm:flex-row sm:items-center justify-between gap-4', s.padding)}>
-          {/* ====== GAUCHE : ICÔNE + INFOS ====== */}
+          {/* ====== GAUCHE : APERÇU + INFOS ====== */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
-            <div
-              className={cn(
-                'p-2 rounded-lg',
-                isUploaded ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'
-              )}
-            >
-              {Icon}
-            </div>
+            {showPreview && (
+              <div className="flex-shrink-0">
+                {renderPreview()}
+              </div>
+            )}
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
@@ -498,7 +557,6 @@ export function DocumentItem({
               </>
             )}
 
-            {/* Document déjà validé/rejeté → pas d'action */}
             {showValidationActions && isLocked && (
               <span className="text-xs text-muted-foreground italic">
                 {document.documentStatus === 'Validé' ? '✅ Validé' : '❌ Rejeté'}
@@ -519,7 +577,19 @@ export function DocumentItem({
       )}
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
-        <div className="text-muted-foreground">{Icon}</div>
+        {showPreview && previewUrl && (
+          <div className="relative w-8 h-8 rounded overflow-hidden flex-shrink-0">
+            <img
+              src={previewUrl}
+              alt="Aperçu"
+              className="w-full h-full object-cover"
+              onError={() => setPreviewUrl(null)}
+            />
+          </div>
+        )}
+        {!showPreview || !previewUrl ? (
+          <div className="text-muted-foreground">{Icon}</div>
+        ) : null}
         <span className={cn('font-medium truncate', s.text)}>{document.type}</span>
 
         {showObligatory && document.isObligatory && (

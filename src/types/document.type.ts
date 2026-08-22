@@ -59,6 +59,7 @@ export interface inscriptionFile{
 export interface DocumentType {
   id: number;
   name: string;
+  isPhoto: string;
   description: string | null;
   isObligatory: boolean;
   applicableCategories: string[];

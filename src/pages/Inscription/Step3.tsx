@@ -1,20 +1,22 @@
 // apps/web/src/components/inscription/Step3.tsx
-import { Upload,  AlertCircle } from 'lucide-react';
+import { Upload, AlertCircle } from 'lucide-react';
 import type { DocumentType } from '@/types';
 import { DocumentItem } from '@/components/DocumentItem';
+import { PhotoDocumentItem } from '@/components/PhotoDocumentItem';
 
 interface Step3Props {
-  requiredDocTypes: DocumentType[],
+  requiredDocTypes: DocumentType[];
   updateRequiredFile: (fileType: DocumentType, file: File | null) => void;
 }
 
 export function Step3({ requiredDocTypes, updateRequiredFile }: Step3Props) {
-
   const handleFileSelect = (fileType: DocumentType, file: File | null) => {
     updateRequiredFile(fileType, file);
-    
   };
 
+  // On sépare les photos des autres documents
+  const photoDocs = requiredDocTypes.filter((doc) => doc.isPhoto);
+  const otherDocs = requiredDocTypes.filter((doc) => !doc.isPhoto);
 
   return (
     <div className="space-y-8">
@@ -27,16 +29,45 @@ export function Step3({ requiredDocTypes, updateRequiredFile }: Step3Props) {
         </p>
       </div>
 
-      {/* Liste des documents */}
-      <div className="space-y-4">
-        {requiredDocTypes.map((doc) => (
-        <DocumentItem
-          docType={doc}
-          onFileChange={(file, doc) => handleFileSelect(doc as DocumentType, file)}
-          showObligatory
-        />
-      ))}
-      </div>
+      {/* Photos */}
+      {photoDocs.length > 0 && (
+        <div>
+          <h4 className="text-sm font-semibold text-primary mb-3">📸 Photos</h4>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {photoDocs.map((doc) => (
+              <PhotoDocumentItem
+                key={doc.id}
+                docType={doc}
+                onFileChange={(file) => handleFileSelect(doc, file)}
+                showObligatory={doc.isObligatory}
+                showStatus={false}
+                showActions={false} // En mode inscription, pas de suppression
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Autres documents */}
+      {otherDocs.length > 0 && (
+        <div>
+          <h4 className="text-sm font-semibold text-primary mb-3">📄 Documents</h4>
+          <div className="space-y-4">
+            {otherDocs.map((doc) => (
+              <DocumentItem
+                key={doc.id}
+                docType={doc}
+                onFileChange={(file) => handleFileSelect(doc, file)}
+                showObligatory={doc.isObligatory}
+                showStatus={false}
+                showActions={false}
+                showUploadButton={true}
+                mode="upload"
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Informations supplémentaires */}
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
