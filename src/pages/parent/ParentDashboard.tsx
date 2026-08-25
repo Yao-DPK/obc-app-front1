@@ -250,12 +250,12 @@ export default function ParentDashboard() {
                 Veuillez fournir les documents requis pour vos enfants.
               </p>
             </div>
-            <Button variant="outline" size="sm" className="border-orange-300 text-orange-700 hover:bg-orange-100" asChild>
+            {/* <Button variant="outline" size="sm" className="border-orange-300 text-orange-700 hover:bg-orange-100" asChild>
               <Link to="/parent/documents">
                 Voir les documents
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Link>
-            </Button>
+            </Button> */}
           </CardContent>
         </Card>
       )}

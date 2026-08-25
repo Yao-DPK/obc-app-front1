@@ -36,6 +36,7 @@ import PlayerDocumentsPage from './pages/player/PlayerDocuments';
 import PlayerPaymentsPage from './pages/player/PlayerPayments';
 import EventManagement from './pages/super_admin/EventManagement';
 import PupilOverview from './pages/parent/PupilOverview';
+import LandingPage from './pages/LandingPage';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -72,10 +73,10 @@ export const router = createBrowserRouter([
   {
     element: <PublicRoute />,
     children: [
+      { index: true, element: <LandingPage /> },
       {
         element: <PublicLayout />,
         children: [
-          { index: true, element: <Navigate to="/dashboard" replace /> },
           { path: 'home', element: <Home /> },
           { path: 'login', element: <Login /> },
           { path: 'inscription/joueur', element: <InscriptionJoueur /> },
