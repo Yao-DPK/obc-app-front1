@@ -47,7 +47,7 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: ReactNode; allow
   }
 
   if (!user) {
-    return <Navigate to="/home" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
