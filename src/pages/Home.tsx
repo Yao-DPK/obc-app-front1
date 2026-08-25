@@ -15,7 +15,7 @@ const OPTIONS = [
     icon: UserPlus,
     title: 'Inscription Joueur',
     description: 'Créez votre compte et inscrivez-vous aux activités du club.',
-    link: 'register',
+    link: '/register',
     label: "S'inscrire",
     color: 'primary',
   },
