@@ -1,5 +1,4 @@
-import { CreditCard, Smartphone } from 'lucide-react'; // ou toute autre lib d'icônes
-
+import { CreditCard, Smartphone } from 'lucide-react';
 function PaymentMethodSelector({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   const methods = [
     { id: 'momo', label: 'Mobile Money', icon: Smartphone, description: 'Paiement via MTN Money' },

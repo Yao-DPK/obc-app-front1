@@ -1,4 +1,3 @@
-// router.tsx
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { Layout } from './components/layout/Layout';

@@ -1,4 +1,3 @@
-// src/stores/useDocumentTypeStore.ts
 import { create } from 'zustand';
 import { documentService } from '@/lib/services/document.service';
 import type { DocumentType, CreateDocumentTypeDto, UpdateDocumentTypeDto } from '@/types';

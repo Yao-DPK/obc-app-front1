@@ -1,4 +1,3 @@
-// components/player/PlayerDocuments.tsx
 import { DOCUMENT_STATUSES, type DocumentStatus } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

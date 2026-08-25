@@ -1,4 +1,3 @@
-// src/components/CustomAdultAvatar.tsx
 import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { userService } from '@/lib/services/user.service';

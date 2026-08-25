@@ -1,4 +1,3 @@
-// src/pages/ForgotPassword.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';

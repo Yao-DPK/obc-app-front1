@@ -1,4 +1,3 @@
-// src/components/ui/RoleBadge.tsx
 import { Badge } from '@/components/ui/badge';
 import {
   Crown,

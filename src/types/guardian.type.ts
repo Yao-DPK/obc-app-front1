@@ -1,4 +1,3 @@
-// packages/shared/src/types/guardian.types.ts
 
 export type Relationship = 'Mère' | 'Père' | 'Tuteur';
 

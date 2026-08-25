@@ -1,4 +1,3 @@
-// src/pages/RegistrationValidationPage.tsx
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

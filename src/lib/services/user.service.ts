@@ -1,4 +1,3 @@
-// src/lib/services/user.service.ts
 import api from '../axios';
 import type { UpdateProfileDto, User } from '@/types';
 

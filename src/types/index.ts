@@ -1,4 +1,3 @@
-// packages/shared/src/types/index.ts
 
 export * from './user.type';
 export * from './document.type';

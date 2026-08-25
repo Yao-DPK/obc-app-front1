@@ -1,4 +1,3 @@
-// ========== loaders/childDocuments.loader.ts ==========
 import type { LoaderFunction } from 'react-router-dom';
 import { documentService } from '@/lib/services/document.service';
 

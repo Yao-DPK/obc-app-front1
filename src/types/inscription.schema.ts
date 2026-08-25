@@ -1,4 +1,3 @@
-// apps/web/src/schemas/inscription.schema.ts
 import { z } from 'zod';
 
 export const joueurInfoSchema = z.object({

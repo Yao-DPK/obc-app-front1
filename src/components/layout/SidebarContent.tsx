@@ -1,4 +1,3 @@
-// src/components/layout/SidebarContent.tsx
 // Ce composant reprend le contenu du Sidebar (navigation + profil) sans les fonctionnalités de collapse
 // pour être utilisé dans le Sheet mobile.
 import { NavLink, useNavigate } from 'react-router-dom';

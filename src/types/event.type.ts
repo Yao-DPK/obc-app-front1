@@ -1,4 +1,3 @@
-// src/types/event.type.ts
 export interface Event {
   id: number;
   name: string;

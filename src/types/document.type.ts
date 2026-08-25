@@ -1,8 +1,6 @@
-// packages/shared/src/types/document.types.ts
 
 import z from "zod";
 
-//export type DocumentType = 'Certificat Medical' | 'Photo d\'identite' | 'Recu de Paiement' | 'Extrait de Naissance' | 'Autorisation Parentale' | 'Pièce d\'identité' | 'autre';
 
 /* Pour la validation des string en document type. */
 export const DocumentTypeSchema = z.enum([

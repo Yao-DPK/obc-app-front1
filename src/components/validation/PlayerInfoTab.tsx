@@ -1,4 +1,3 @@
-// src/components/validation/PlayerInfoTab.tsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PlayerInfoForm } from './PlayerInfoForm';

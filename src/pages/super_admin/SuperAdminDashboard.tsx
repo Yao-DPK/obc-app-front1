@@ -1,4 +1,3 @@
-// src/pages/dashboard/SuperAdminDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {

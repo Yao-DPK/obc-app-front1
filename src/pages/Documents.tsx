@@ -11,7 +11,6 @@ import { toast } from 'sonner';
 import { Upload, CheckCircle, Clock } from 'lucide-react';
 import axios from 'axios';
 
-// Types locaux (à adapter selon votre schéma)
 interface Document {
   id: number;
   type: string;

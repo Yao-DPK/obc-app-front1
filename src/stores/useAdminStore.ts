@@ -1,4 +1,3 @@
-// src/stores/useAdminStore.ts
 import { create } from 'zustand';
 import { adminService } from '@/lib/services/admin.service';
 import type { DashboardStats } from '@/types';

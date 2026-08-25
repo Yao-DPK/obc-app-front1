@@ -1,4 +1,3 @@
-// components/ErrorBoundary.tsx
 import { useRouteError } from 'react-router-dom';
 
 export function ErrorBoundary() {

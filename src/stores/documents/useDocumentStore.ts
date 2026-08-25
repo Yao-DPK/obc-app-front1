@@ -1,4 +1,3 @@
-// apps/web/src/stores/useDocumentStore.ts
 import { create } from 'zustand';
 import type { Document, DocumentStatus } from '@/types/document.type'
 import api from '@/lib/axios';

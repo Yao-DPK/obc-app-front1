@@ -1,4 +1,3 @@
-// apps/web/src/pages/LandingPage.tsx
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link, Navigate } from 'react-router-dom';
 import {

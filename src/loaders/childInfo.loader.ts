@@ -1,4 +1,3 @@
-// ========== loaders/childInfo.loader.ts ==========
 import type { LoaderFunction } from 'react-router-dom';
 import { guardianService } from '@/lib/services/guardian.service';
 

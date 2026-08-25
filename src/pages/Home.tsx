@@ -1,4 +1,3 @@
-// src/pages/Login.tsx (ou Home.tsx)
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserPlus, LogIn, KeyRound, ArrowRight, Clock, ChevronDown } from 'lucide-react';

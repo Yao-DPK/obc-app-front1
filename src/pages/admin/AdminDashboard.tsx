@@ -1,4 +1,3 @@
-// apps/web/src/pages/dashboard/SuperAdminDashboard.tsx
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, UserPlus, FileText, CreditCard } from 'lucide-react';
@@ -19,7 +18,7 @@ export default function AdminDashboard() {
 
   const totalUsers = users.length;
   const pendingRegistrations = users.filter(
-    u => u.registrationStatus === 'pre_inscrit' || u.registrationStatus === 'attestation_signee'
+    u => u.registrationStatus === 'pre_inscrit'
   ).length;
   const pendingPayments = obligations.filter(p => p.status === 'pending').length;
 

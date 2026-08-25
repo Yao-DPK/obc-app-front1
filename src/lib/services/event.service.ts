@@ -1,4 +1,3 @@
-// src/lib/services/event.service.ts
 import api from '@/lib/axios';
 import type { Event, CreateEventDto, UpdateEventDto, DocumentType, PaymentEvent } from '@/types';
 

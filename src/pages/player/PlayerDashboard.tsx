@@ -1,4 +1,3 @@
-// src/pages/dashboard/PlayerDashboard.tsx
 import { useAuth } from '@/stores/useAuth';
 import { PlayerOverview } from './PlayerOverview';
 

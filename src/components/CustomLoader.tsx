@@ -1,4 +1,3 @@
-// CustomLoader.jsx
 const CustomLoader = () => {
   return (
     <>

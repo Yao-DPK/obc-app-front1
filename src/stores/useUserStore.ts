@@ -1,4 +1,3 @@
-// src/stores/useUserStore.ts
 import { create } from 'zustand';
 import type { User } from '@/types/user.type';
 import { userService, type UserFilters } from '@/lib/services/user.service';

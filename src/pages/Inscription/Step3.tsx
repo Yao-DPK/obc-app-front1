@@ -1,4 +1,3 @@
-// apps/web/src/components/inscription/Step3.tsx
 import { Upload, AlertCircle } from 'lucide-react';
 import type { DocumentType } from '@/types';
 import { DocumentItem } from '@/components/DocumentItem';

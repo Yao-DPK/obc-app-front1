@@ -1,4 +1,3 @@
-// packages/shared/src/types/payment.types.ts
 
 export type PaymentMethod = 'momo' | 'card' | 'cash';
 export type PaymentStatus = 'pending' | 'verified' | 'rejected';

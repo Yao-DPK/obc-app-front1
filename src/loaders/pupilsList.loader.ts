@@ -1,4 +1,3 @@
-// ========== loaders/pupilsList.loader.ts ==========
 import type { LoaderFunction } from 'react-router-dom';
 import api from '@/lib/axios';
 import type { User } from '@/types';

@@ -1,4 +1,3 @@
-// src/lib/services/payment.service.ts
 import api from '@/lib/axios';
 import type {
   PaymentObligation,

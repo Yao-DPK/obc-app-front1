@@ -1,4 +1,3 @@
-// src/pages/parent/ChildPayments.tsx
 import { useEffect, useState } from 'react';
 import { useLoaderData, useParams } from 'react-router-dom';
 import { toast } from 'sonner';

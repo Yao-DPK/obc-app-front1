@@ -1,4 +1,3 @@
-// src/pages/admin/EventManagement.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, Search, Loader2 } from 'lucide-react';

@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-//import PlayerDashboard from "./player/PlayerDashboard";
 import ParentDashboard from "./parent/ParentDashboard";
 import AdminDashboard from "./admin/AdminDashboard";
 import { useAuth } from "../stores/useAuth";

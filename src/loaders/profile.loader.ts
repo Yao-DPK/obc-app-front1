@@ -1,4 +1,3 @@
-// ========== loaders/profile.loader.ts ==========
 import type { LoaderFunction } from 'react-router-dom';
 
 import { userService } from '@/lib/services/user.service';

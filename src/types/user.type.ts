@@ -1,9 +1,6 @@
 
-// packages/shared/src/types/user.types.ts
-
 export type UserRole = 'parent' | 'player' | 'admin' | 'super_admin';
-export type RegistrationStatus = 'pre_inscrit' | 'inscrit' | 'actif' | 'suspendu' | 'parent_invité' | 'validé' | 'attestation_signee';
-export type RegistrationStep = 'formulaire' | 'attestation_signee' | 'validation_admin' | 'complet';
+export type RegistrationStatus = 'pre_inscrit' | 'inscrit' | 'actif' | 'suspendu' | 'parent_invité' | 'validé';
 
 export interface NotificationPreferences {
   email: boolean;
@@ -36,7 +33,6 @@ export interface User {
   emergencyContactName?: string | null;
   emergencyContactPhone?: string | null;
   registrationStatus: RegistrationStatus;
-  registrationStep: RegistrationStep;
   notificationPreferences: NotificationPreferences;
   attestationData?: AttestationData | null;
   createdAt: string;   // ISO datetime

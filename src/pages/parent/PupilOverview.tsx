@@ -1,4 +1,3 @@
-// src/pages/dashboard/PlayerDashboard.tsx
 import { useParams } from 'react-router-dom';
 import { PlayerOverview } from '../player/PlayerOverview';
 

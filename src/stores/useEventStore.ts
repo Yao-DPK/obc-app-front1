@@ -1,4 +1,3 @@
-// src/stores/useEventStore.ts
 import { create } from 'zustand';
 import { eventService } from '@/lib/services/event.service';
 import type { Event, DocumentType, PaymentEvent, CreateEventDto, UpdateEventDto } from '@/types';

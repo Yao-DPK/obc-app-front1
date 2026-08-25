@@ -1,4 +1,3 @@
-// src/pages/admin/PaymentEventsManagement.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, CheckCircle, XCircle } from 'lucide-react';

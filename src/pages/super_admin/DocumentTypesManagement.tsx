@@ -1,4 +1,3 @@
-// src/pages/admin/DocumentTypesManagement.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Pencil, Trash2, FileText } from 'lucide-react';

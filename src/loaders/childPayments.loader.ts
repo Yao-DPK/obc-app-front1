@@ -1,4 +1,3 @@
-// ========== loaders/childPayments.loader.ts ==========
 import type { LoaderFunction } from 'react-router-dom';
 import { paymentService } from '@/lib/services/payment.service';
 export const childPaymentsLoader: LoaderFunction = async ({ params }) => {

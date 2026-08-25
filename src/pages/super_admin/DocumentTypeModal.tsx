@@ -1,5 +1,4 @@
 
-// src/components/admin/DocumentTypeModal.tsx
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

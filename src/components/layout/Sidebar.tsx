@@ -1,4 +1,3 @@
-// src/components/layout/Sidebar.tsx
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ChevronDown, LogOut } from 'lucide-react';
