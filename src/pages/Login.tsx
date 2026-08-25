@@ -28,7 +28,7 @@ export default function Login() {
       } else {
         toast.error('Une erreur est survenue, veuillez réessayer.');
       }
-      setIsLogging(false); // ✅ toujours réinitialiser
+      setIsLogging(false); 
     }
   };
 

@@ -45,7 +45,6 @@ export default function LandingPage() {
   }
 
   const navLinks = [
-    { label: 'Accueil', href: '#hero' },
     { label: 'Fonctionnement', href: '#how-it-works' },
     { label: 'Documents', href: '#documents' },
     { label: 'Tarifs', href: '#pricing' },
@@ -75,14 +74,14 @@ export default function LandingPage() {
 
           <div className="hidden md:flex items-center gap-3">
             <Link 
-              to="/login" 
+              to="/home" 
               className="text-sm text-gray-600 hover:text-primary transition-colors font-medium"
             >
-              Connexion
+              Acceuil
             </Link>
             <span className="text-gray-300">|</span>
             <Link 
-              to="/inscription/joueur" 
+              to="/register" 
               className="text-sm bg-primary text-white px-4 py-1.5 rounded-lg hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20"
             >
               S'inscrire
@@ -124,14 +123,14 @@ export default function LandingPage() {
                 ))}
                 <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
                   <Link
-                    to="/login"
+                    to="/home"
                     className="block w-full text-center text-gray-700 hover:text-primary font-medium py-2.5 px-4 rounded-lg hover:bg-primary/5 transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Connexion
+                    Acceuil
                   </Link>
                   <Link
-                    to="/inscription/joueur"
+                    to="/register"
                     className="block w-full text-center bg-primary text-white font-medium py-2.5 px-4 rounded-lg hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20"
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -161,15 +160,10 @@ export default function LandingPage() {
               Une plateforme pensée pour les parents et les joueurs du centre OBC.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
-              <Link to="/inscription/joueur">
+              <Link to="/register">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
                   Commencer l'inscription
                   <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="#how-it-works">
-                <Button size="lg" variant="outline">
-                  En savoir plus
                 </Button>
               </Link>
             </div>
@@ -365,7 +359,7 @@ export default function LandingPage() {
           <p className="text-lg text-white/80 max-w-lg mx-auto mb-8">
             Lancez-vous dès maintenant, l'inscription ne prend que quelques minutes.
           </p>
-          <Link to="/inscription/joueur">
+          <Link to="/register">
             <Button
               size="lg"
               variant="secondary"
@@ -394,10 +388,9 @@ export default function LandingPage() {
           <div>
             <h4 className="text-white font-semibold mb-3">Liens rapides</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/inscription/joueur" className="hover:text-white transition">Inscription</Link></li>
+              <li><a href="/home" className="hover:text-white transition">Acceuil</a></li>
+              <li><Link to="/register" className="hover:text-white transition">Inscription</Link></li>
               <li><Link to="/login" className="hover:text-white transition">Connexion</Link></li>
-              <li><a href="#how-it-works" className="hover:text-white transition">Fonctionnement</a></li>
-              <li><a href="#documents" className="hover:text-white transition">Documents</a></li>
             </ul>
           </div>
 

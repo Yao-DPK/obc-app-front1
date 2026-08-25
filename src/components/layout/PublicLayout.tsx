@@ -11,9 +11,9 @@ export function PublicLayout() {
   return (
     <>
       <ScrollRestoration />
-      <div className="flex flex-col bg-white">
+      <div className="flex flex-col min-h-screen overflow-hidden bg-white">
         {/* Lien d'accessibilité */}
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white p-2 rounded z-50">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary  text-white p-2 rounded z-50">
           Aller au contenu principal
         </a>
 
@@ -37,7 +37,7 @@ export function PublicLayout() {
               </Link>
               <span className="text-gray-300">|</span>
               <Link 
-                to="/inscription/joueur" 
+                to="/register" 
                 className="text-sm bg-primary text-white px-4 py-1.5 rounded-lg hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20"
               >
                 S'inscrire
@@ -71,7 +71,7 @@ export function PublicLayout() {
               Connexion
             </Link>
             <Link 
-              to="/inscription/joueur" 
+              to="/register" 
               className="block w-full text-center bg-primary text-white font-medium py-2.5 px-4 rounded-lg hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20"
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -81,8 +81,8 @@ export function PublicLayout() {
         </header>
 
         {/* Contenu principal */}
-        <main id="main-content" className="flex-1 flex min-h-screen min-w-screen items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-white via-white to-secondary">
-          <div className="w-full">
+        <main id="main-content" className="flex-1 items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-white via-white to-secondary">
+          <div className="w-full h-full">
             <Outlet />
           </div>
         </main>
