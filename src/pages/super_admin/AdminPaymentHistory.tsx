@@ -12,7 +12,6 @@ import {
   Eye,
   CheckCircle,
   XCircle,
-  Loader2,
   Calendar,
   DollarSign,
   Clock,
@@ -24,7 +23,6 @@ import { cn } from '@/lib/utils';
 import { usePaymentIntentStore } from '@/stores/usePaymentIntentStore';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { JustificationViewer } from '@/components/payment/JustificationViewer';
-import type { PaymentIntent } from '@/types';
 
 const STATUS_CONFIG = {
   pending: {

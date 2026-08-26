@@ -11,9 +11,8 @@ interface PlayerPaymentsOverviewProps{
     userName: string;
     isLoading: boolean;
     isPaying: number | null;
-    
-    handlePay: (obligation: PaymentObligation) => Promise<void>,
-    handlePaymentSubmit: ({ obligation, method, screenshot }: {
+    handlePay?: (obligation: PaymentObligation) => Promise<void>,
+    handlePaymentSubmit?: ({ obligation, method, screenshot }: {
     obligation: PaymentObligation,   
     method: PaymentOperator;
     screenshot: File; }) => Promise<void>
@@ -22,8 +21,11 @@ interface PlayerPaymentsOverviewProps{
 export default function PlayerPaymentsOverview({obligations, userName, isLoading, isPaying, handlePay, handlePaymentSubmit}: PlayerPaymentsOverviewProps){
     
     const [paymentOpen, setPaymentOpen] = useState(false);
-
+    
     const handleOpenDialog = () => {
+      if(typeof handlePay !=undefined){
+        console.log('Good')
+      }
       setPaymentOpen(true);
     };
 
@@ -53,7 +55,7 @@ export default function PlayerPaymentsOverview({obligations, userName, isLoading
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {obligations.map((ob) => (
-            <>
+            (<>
             <PaymentObligationCard
               obligation={ob}
               showPayButton
@@ -66,9 +68,9 @@ export default function PlayerPaymentsOverview({obligations, userName, isLoading
               open={paymentOpen}
               onOpenChange={setPaymentOpen}
               obligation={ob}
-              onPaymentSubmit={handlePaymentSubmit}
+              onPaymentSubmit={handlePaymentSubmit!}
             />
-            </>
+            </>)
             
           ))}
         </div>

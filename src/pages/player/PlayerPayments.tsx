@@ -6,7 +6,6 @@ import { usePaymentStore } from '@/stores/usePaymentStore';
 import type { PaymentObligation, PaymentOperator } from '@/types';
 import { useAuth } from '@/stores/useAuth';
 import PlayerPaymentsOverview from './PlayerPaymentsOverview';
-import api from '@/lib/axios';
 import { paymentIntentService } from '@/lib/services/paymentIntent.service';
 
 // ============================================================
@@ -22,7 +21,7 @@ export default function PlayerPaymentsPage() {
     usePaymentStore();
   // État local
   const [isPaying, setIsPaying] = useState<number | null>(null);
-  const [selectedObligation, setSelectedObligation] = useState<PaymentObligation | null>(null);
+  //const [selectedObligation, setSelectedObligation] = useState<PaymentObligation | null>(null);
   const { scriptLoaded, handlePayment } = useKadev();
 
   // Trouver l'enfant concerné
