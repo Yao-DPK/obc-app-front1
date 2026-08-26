@@ -1,5 +1,7 @@
 
 export type PaymentMethod = 'momo' | 'card' | 'cash';
+export type PaymentOperator ='mtn' | 'orange' | 'wave';
+
 export type PaymentStatus = 'pending' | 'verified' | 'rejected';
 export type PaymentObligationStatus = 'pending' | 'paid' | 'overdue' | 'cancelled';
 
@@ -136,3 +138,11 @@ export interface VerifyPaymentDto {
   status: 'verified' | 'rejected';
 }
 
+export interface PaymentData {
+  method: PaymentMethod;
+  phone: string;
+  amount: number;
+  reference?: string;
+  screenshot?: File;
+  status: PaymentStatus;
+}

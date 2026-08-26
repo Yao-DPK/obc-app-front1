@@ -21,7 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { usePlayer } from '@/hooks/usePlayer';
+import { usePlayerInfo } from '@/hooks/usePlayerInfo';
 
 interface PlayerOverviewProps {
   userId?: number; // optionnel, permet à un parent/admin de visualiser un joueur spécifique
@@ -43,7 +43,7 @@ export function PlayerOverview({ userId, isPlayer }: PlayerOverviewProps) {
     remainingAmount,
     documents,
     obligations,
-  } = usePlayer({ userId });
+  } = usePlayerInfo({ userId });
 
   // ========== RENDU DE CHARGEMENT ==========
   if (isLoading) {

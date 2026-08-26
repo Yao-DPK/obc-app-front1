@@ -6,11 +6,11 @@ import { usePaymentStore } from '@/stores/usePaymentStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { userService } from '@/lib/services/user.service';
 
-interface UsePlayerProps {
+interface UsePlayerInfoProps {
   userId?: number; // optionnel : si non fourni, utilise l'utilisateur connecté
 }
 
-export function usePlayer({ userId }: UsePlayerProps = {}) {
+export function usePlayerInfo({ userId }: UsePlayerInfoProps = {}) {
   const { user: authUser } = useAuth();
   const {
     user,

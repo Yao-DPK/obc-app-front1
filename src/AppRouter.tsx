@@ -36,6 +36,7 @@ import PlayerPaymentsPage from './pages/player/PlayerPayments';
 import EventManagement from './pages/super_admin/EventManagement';
 import PupilOverview from './pages/parent/PupilOverview';
 import LandingPage from './pages/LandingPage';
+import AdminPaymentHistory from './pages/super_admin/AdminPaymentHistory';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -139,6 +140,7 @@ export const router = createBrowserRouter([
           { path: 'payment_events', element: <PaymentEventsManagement /> },
           { path: 'document-types', element: <DocumentTypesManagement />},
           { path: 'events', element: <EventManagement />},
+          { path: 'payment-history', element: <AdminPaymentHistory />},
           {
             path: 'registrations/validate/:userId',
             element: (

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Eye } from 'lucide-react';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { toast } from 'sonner';
 
@@ -13,10 +16,11 @@ interface PaymentSectionProps {
 }
 
 export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps) {
+  const navigate = useNavigate();
   const { obligations, isLoadingObligations, fetchObligations, updateObligation } = usePaymentStore();
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const invalid_obligations = obligations.filter(o => o.status !== 'paid');
-  const isSectionValid = invalid_obligations.length === 0; // valid si aucune non payée 
+  const isSectionValid = invalid_obligations.length === 0;
 
   useEffect(() => {
     onValidChange?.(isSectionValid);
@@ -25,10 +29,9 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
   const handleStatusChange = async (obligationId: number, newStatus: string) => {
     setUpdatingId(obligationId);
     try {
-      await updateObligation(obligationId, {status: newStatus as "pending" | "partial" | "paid" | "overdue" | "cancelled"});
-
+      await updateObligation(obligationId, { status: newStatus as "pending" | "partial" | "paid" | "overdue" | "cancelled" });
       toast.success(`Statut mis à jour : ${newStatus}`);
-      await fetchObligations({playerIds: [playerId]});
+      await fetchObligations({ playerIds: [playerId] });
     } catch (error) {
       toast.error('Erreur lors de la mise à jour du statut');
     } finally {
@@ -60,9 +63,9 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
       {obligations.map((obligation) => (
         <Card key={obligation.id}>
           <CardHeader className="pb-2">
-            <div className="flex justify-between items-start">
+            <div className="flex flex-wrap items-start justify-between gap-2">
               <CardTitle className="text-lg">{obligation.description}</CardTitle>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   variant={
                     obligation.status === 'paid'
@@ -95,19 +98,30 @@ export function PaymentSection({ playerId, onValidChange }: PaymentSectionProps)
                     <SelectItem value="cancelled">Annulé</SelectItem>
                   </SelectContent>
                 </Select>
+
+                {/* 👇 Nouveau bouton : Voir les paiements */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    navigate(`/super-admin/payment-history?obligationId=${obligation.id}`)
+                  }
+                  className="gap-1"
+                >
+                  <Eye className="h-4 w-4" />
+                  <span className="hidden sm:inline">Paiements</span>
+                </Button>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex justify-between text-sm">
+            <div className="flex flex-wrap justify-between text-sm gap-2">
               <span>Montant : {obligation.totalAmount!.toLocaleString()} FCFA</span>
               <span>Date limite : {obligation.dueDate ? new Date(obligation.dueDate).toLocaleDateString() : 'Non définie'}</span>
             </div>
           </CardContent>
         </Card>
       ))}
-
-      
     </div>
   );
 }

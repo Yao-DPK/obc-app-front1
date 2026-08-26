@@ -1,3 +1,4 @@
+// src/components/ui/PaymentObligationCard.tsx
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -52,7 +53,10 @@ const STATUS_CONFIG = {
 interface PaymentObligationCardProps {
   obligation: PaymentObligation;
   showPayButton?: boolean;
+  // Mode 1 : paiement direct (ex: via Kadev)
   onPay?: (obligation: PaymentObligation) => void;
+  // Mode 2 : ouverture d'un dialogue de paiement (avec capture)
+  onSubmit?: () => void;
   className?: string;
   isPaying?: boolean;
   showEventName?: boolean;
@@ -62,6 +66,7 @@ export function PaymentObligationCard({
   obligation,
   showPayButton = false,
   onPay,
+  onSubmit,
   className,
   isPaying = false,
   showEventName = true,
@@ -77,6 +82,17 @@ export function PaymentObligationCard({
   const isPayable = obligation.status !== 'paid' && obligation.status !== 'cancelled';
   const showAction = showPayButton && isPayable;
   const isOverdue = obligation.status === 'overdue';
+
+  // Gestion du clic sur "Payer"
+  const handlePay = () => {
+    if (onSubmit) {
+      // Si onSubmit est fournie, on l'utilise (mode dialogue)
+      onSubmit();
+    } else if (onPay) {
+      // Sinon, on utilise onPay (mode direct)
+      onPay(obligation);
+    }
+  };
 
   return (
     <Card 
@@ -167,7 +183,7 @@ export function PaymentObligationCard({
       {showAction && (
         <CardFooter className="border-t bg-muted/30 pt-3">
           <Button
-            onClick={() => onPay?.(obligation)}
+            onClick={handlePay}
             className="w-full sm:w-auto gap-2"
             size="sm"
             disabled={isPaying}
