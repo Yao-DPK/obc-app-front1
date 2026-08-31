@@ -9,3 +9,10 @@ export const Roles = {
     "admin" : "Administrateur",
     "super_admin": "Superviseur"
 }
+
+export const ROLE_LABELS: Record<string, string> = {
+    super_admin: 'Administrateur',
+    admin: 'Superviseur',
+    parent: 'Parent',
+    player: 'Joueur',
+};

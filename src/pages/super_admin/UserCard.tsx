@@ -15,18 +15,12 @@ import {
 } from 'lucide-react';
 import type { User } from '@/types';
 import { cn } from '@/lib/utils';
+import { ROLE_LABELS } from '@/types/role.type';
 
 interface UserCardProps {
   user: User;
   className?: string;
 }
-
-const ROLE_LABELS: Record<string, string> = {
-  super_admin: 'Super Admin',
-  admin: 'Administrateur',
-  parent: 'Parent',
-  player: 'Joueur',
-};
 
 export function UserCard({ user, className }: UserCardProps) {
   const isPlayer = user.role === 'player';
@@ -84,7 +78,7 @@ export function UserCard({ user, className }: UserCardProps) {
                   className="h-9 w-9 text-muted-foreground hover:text-blue-600 hover:bg-blue-50"
                   asChild
                 >
-                  <Link to={`/admin/users/${user.id}`}>
+                  <Link to={`/super-admin/users/${user.id}`}>
                     <Info className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -140,7 +134,7 @@ export function UserCard({ user, className }: UserCardProps) {
                     className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
                     asChild
                   >
-                    <Link to={`/super_admin/registrations/validate/${user.id}`}>
+                    <Link to={`/super-admin/registrations/validate/${user.id}`}>
                       <UserCheck className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -150,7 +144,7 @@ export function UserCard({ user, className }: UserCardProps) {
             )}
 
             {/* Admin : Gestion des rôles (réservé super_admin) */}
-            {user.role !== 'super_admin' && (
+            {/* {user.role !== 'super_admin' && (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -166,7 +160,7 @@ export function UserCard({ user, className }: UserCardProps) {
                 </TooltipTrigger>
                 <TooltipContent>Gérer le rôle</TooltipContent>
               </Tooltip>
-            )}
+            )} */}
           </TooltipProvider>
 
           <div className="flex-1" />
