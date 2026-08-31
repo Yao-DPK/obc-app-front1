@@ -1,23 +1,39 @@
 import { create } from 'zustand';
 import axios from 'src/lib/axios';
 import type { User } from '@/types';
+import { userService } from '@/lib/services/user.service';
 
 interface AuthStore {
   user: User | null;
+  userProfilePicture: string | null;
   accessToken: string | null;
   isLoading: boolean;
+  fetchProfilePicture: () => Promise<void>;
   setAuth: (user: User, token: string) => void;
   logout: () => Promise<void>;
   restoreSession: () => Promise<void>;
 }
 
-export const useAuth = create<AuthStore>((set) => ({
+export const useAuth = create<AuthStore>((set, get) => ({
   user: null,
   accessToken: null,
   isLoading: true,
+  userProfilePicture: null, 
 
   setAuth: (user, accessToken) => {
     set({ user, accessToken });
+  },
+
+  fetchProfilePicture: async () => {
+        set({ isLoading: true });
+        try {
+          const { signedUrl } = await userService.fetchUserPicture(get().user?.id!);
+          set({ userProfilePicture: signedUrl });
+        } catch {
+          set({ userProfilePicture: null });
+        } finally {
+          set({ isLoading: true });
+        }
   },
 
   logout: async () => {

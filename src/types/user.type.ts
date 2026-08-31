@@ -1,6 +1,6 @@
 
 export type UserRole = 'parent' | 'player' | 'admin' | 'super_admin';
-export type RegistrationStatus = 'pre_inscrit' | 'inscrit' | 'actif' | 'suspendu' | 'parent_invité' | 'validé';
+export type RegistrationStatus = 'pre_inscrit' | 'inscrit' | 'actif' | 'suspendu' | 'parent_invité' | 'validé' | 'rejeté' | 'admin_actif' ;
 
 export interface NotificationPreferences {
   email: boolean;

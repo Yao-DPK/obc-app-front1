@@ -321,7 +321,7 @@ export default function AdminPaymentHistory() {
                   {obligations.slice(0, 20).map((ob) => (
                     <Link
                       key={ob.id}
-                      to={`/admin/payment-history?obligationId=${ob.id}`}
+                      to={`/super-admin/payment-history?obligationId=${ob.id}`}
                       className="block"
                     >
                       <div className="flex flex-wrap items-center justify-between p-4 border rounded-lg hover:bg-gray-50 hover:border-primary/30 transition-all gap-2">

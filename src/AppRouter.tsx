@@ -37,6 +37,7 @@ import EventManagement from './pages/super_admin/EventManagement';
 import PupilOverview from './pages/parent/PupilOverview';
 import LandingPage from './pages/LandingPage';
 import AdminPaymentHistory from './pages/super_admin/AdminPaymentHistory';
+import AdminUsers from './pages/super_admin/AdminUser';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -141,6 +142,7 @@ export const router = createBrowserRouter([
           { path: 'document-types', element: <DocumentTypesManagement />},
           { path: 'events', element: <EventManagement />},
           { path: 'payment-history', element: <AdminPaymentHistory />},
+          { path: 'users', element: <AdminUsers />},
           {
             path: 'registrations/validate/:userId',
             element: (

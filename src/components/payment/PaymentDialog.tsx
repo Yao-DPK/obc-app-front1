@@ -38,7 +38,7 @@ const PAYMENT_INSTRUCTIONS: Record<PaymentOperator, {
   icon: React.ReactNode;
 }> = {
   mtn: {
-    account: '01 23 45 67 89',
+    account: '05 54 76 78 48',
     instructions: [
       'Composez *126# sur votre téléphone MTN',
       'Sélectionnez "Payer" dans le menu',
@@ -49,7 +49,7 @@ const PAYMENT_INSTRUCTIONS: Record<PaymentOperator, {
     icon: <Phone className="h-5 w-5" />,
   },
   orange: {
-    account: '07 89 65 43 21',
+    account: '07 57 99 05 48',
     instructions: [
       'Composez #144# sur votre téléphone Orange',
       'Choisissez l\'option "Payer"',
@@ -60,7 +60,7 @@ const PAYMENT_INSTRUCTIONS: Record<PaymentOperator, {
     icon: <Phone className="h-5 w-5" />,
   },
   wave: {
-    account: '77 55 11 22 33',
+    account: '07 57 99 05 48',
     instructions: [
       'Ouvrez l\'application Wave',
       'Sélectionnez "Envoyer de l\'argent"',

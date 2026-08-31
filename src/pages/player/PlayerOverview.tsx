@@ -95,8 +95,9 @@ export function PlayerOverview({ userId, isPlayer }: PlayerOverviewProps) {
     >
       {/* ====== EN-TÊTE ====== */}
       <PageHeader
-        title={`Bonjour ${user?.firstName || ''} 👋`}
+        title={isPlayer ? `Bonjour ${user?.firstName || ''} 👋` : `${user?.firstName + ' ' + user?.lastName}`}
         description={isPlayer ? `Bienvenue sur votre espace personnel` : `Bienvenue sur l'espace de votre enfant`}
+        showBack={!isPlayer}
       />
 
       {/* ====== STATISTIQUES RAPIDES ====== */}
@@ -196,12 +197,12 @@ export function PlayerOverview({ userId, isPlayer }: PlayerOverviewProps) {
               Mes informations
             </CardTitle>
           </div>
-          <Button variant="ghost" size="sm" asChild>
+          {isPlayer && (<Button variant="ghost" size="sm" asChild>
             <Link to="/profile">
               Modifier
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
-          </Button>
+          </Button>)}
         </CardHeader>
         <CardContent>
           {/* ====== AVATAR + NOM ====== */}
@@ -390,7 +391,7 @@ export function PlayerOverview({ userId, isPlayer }: PlayerOverviewProps) {
       </Card>
 
       {/* ====== LIENS RAPIDES ====== */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className={`grid grid-cols-2 gap-3 ${isPlayer ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
         <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
           <Link to={isPlayer ? `/player/documents` : `documents`}>
             <FileText className="h-5 w-5" />
@@ -403,12 +404,12 @@ export function PlayerOverview({ userId, isPlayer }: PlayerOverviewProps) {
             <span className="text-xs">Paiements</span>
           </Link>
         </Button>
-        <Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
+        {isPlayer && (<Button variant="outline" className="h-auto py-4 flex-col gap-1" asChild>
           <Link to="/profile">
             <UserRoundCheck className="h-5 w-5" />
             <span className="text-xs">Profil</span>
           </Link>
-        </Button>
+        </Button>)}
       </div>
     </motion.div>
   );
