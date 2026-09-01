@@ -74,7 +74,7 @@ export default function PlayerPaymentsOverview({obligations, userName, isLoading
         <PaymentDialog
               open={paymentOpen}
               onOpenChange={setPaymentOpen}
-              obligation={selectedObligation!y}
+              obligation={selectedObligation!}
               onPaymentSubmit={handlePaymentSubmit!}
             />
         </div>
