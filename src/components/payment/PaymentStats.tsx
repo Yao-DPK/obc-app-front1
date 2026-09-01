@@ -1,6 +1,6 @@
 // src/components/payments/PaymentStats.tsx
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign, CreditCard, Clock, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react';
+import { DollarSign, CreditCard, Clock, CheckCircle, TrendingUp } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 

@@ -1,7 +1,6 @@
 // src/lib/services/paymentIntent.service.ts
 import api from '../axios';
 import type { PaymentIntent } from '@/types';
-import type { UserFilters } from './user.service';
 
 export type IntentFilters = {
   id?: number;

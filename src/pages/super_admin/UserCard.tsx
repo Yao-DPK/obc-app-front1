@@ -10,8 +10,6 @@ import {
   CreditCard,
   Info,
   UserCheck,
-  UserCog,
-  Users,
 } from 'lucide-react';
 import type { User } from '@/types';
 import { cn } from '@/lib/utils';
@@ -24,8 +22,8 @@ interface UserCardProps {
 
 export function UserCard({ user, className }: UserCardProps) {
   const isPlayer = user.role === 'player';
-  const isParent = user.role === 'parent';
-  const isAdmin = user.role === 'admin' || user.role === 'super_admin';
+  //const isParent = user.role === 'parent';
+  //const isAdmin = user.role === 'admin' || user.role === 'super_admin';
 
   const getStatusColor = () => {
     if (user.registrationStatus === 'inscrit') return 'bg-green-100 text-green-700 border-green-200';
