@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Save, CircleUserRound, Mail, Phone, MapPin, Calendar, Users, CheckCircle } from 'lucide-react';
+import { Loader2, Save, Mail, Phone, MapPin, Calendar, Users, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

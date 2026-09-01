@@ -10,7 +10,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Search, X, Users as UsersIcon, Loader2 } from 'lucide-react';
 import { useUserStore } from '@/stores/useUserStore';
 import { UserCard } from './UserCard';
-import { cn } from '@/lib/utils';
 
 export default function AdminUsers() {
   const { users, fetchUsers, isLoading } = useUserStore();
