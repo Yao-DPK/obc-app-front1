@@ -1,6 +1,6 @@
 // src/stores/usePaymentIntentStore.ts
 import { create } from 'zustand';
-import { paymentIntentService } from '@/lib/services/paymentIntent.service';
+import { paymentIntentService, type IntentFilters } from '@/lib/services/paymentIntent.service';
 import type { PaymentIntent } from '@/types';
 
 interface PaymentIntentStore {
@@ -8,8 +8,7 @@ interface PaymentIntentStore {
   isLoading: boolean;
   error: string | null;
 
-  fetchByObligation: (obligationId: number) => Promise<void>;
-  fetchPending: () => Promise<void>;
+  fetchIntents: (filters?: IntentFilters) => Promise<void>;
   verifyIntent: (id: number, status: 'paid' | 'failed', rejectionReason?: string) => Promise<void>;
   clear: () => void;
 }
@@ -19,20 +18,11 @@ export const usePaymentIntentStore = create<PaymentIntentStore>((set) => ({
   isLoading: false,
   error: null,
 
-  fetchByObligation: async (obligationId: number) => {
-    set({ isLoading: true, error: null });
-    try {
-      const intents = await paymentIntentService.getByObligation(obligationId);
-      set({ intents, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
-  },
 
-  fetchPending: async () => {
+  fetchIntents: async (filters?: IntentFilters) => {
     set({ isLoading: true, error: null });
     try {
-      const intents = await paymentIntentService.getPending();
+      const intents = await paymentIntentService.fetchIntents(filters);
       set({ intents, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });

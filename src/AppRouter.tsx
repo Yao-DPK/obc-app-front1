@@ -39,6 +39,7 @@ import LandingPage from './pages/LandingPage';
 import AdminPaymentHistory from './pages/super_admin/AdminPaymentHistory';
 import AdminUsers from './pages/super_admin/AdminUser';
 import AdminUsersDetail from './pages/super_admin/AdminUserDetail';
+import UserPaymentHistory from './pages/super_admin/UserPaymentHistory';
 /* import { Test } from './pages/Test'; */
 
 // ========== PROTECTED ROUTE WRAPPER ==========
@@ -145,6 +146,7 @@ export const router = createBrowserRouter([
           { path: 'payment-history', element: <AdminPaymentHistory />},
           { path: 'users', element: <AdminUsers />},
           { path: 'users/:id', element: <AdminUsersDetail />},
+          { path: 'users/:userId/payments', element: <UserPaymentHistory />},
           {
             path: 'registrations/validate/:userId',
             element: (

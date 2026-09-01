@@ -7,21 +7,21 @@ import {
   ShieldCheck,
   UserCog,
   Heart,
-  Baby,
+  UserRound,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // ========== CONFIGURATION DES RÔLES ==========
-// Ordre hiérarchique : Superviseur > Admin > Parent > Joueur
+// Ordre hiérarchique : Admin > Superviseur > Parent > Joueur
 export const ROLE_CONFIG = {
   super_admin: {
-    label: 'Superviseur',
+    label: 'Administrateur',
     icon: Crown,
     color: 'bg-amber-100 text-amber-700 border-amber-200',
     hoverColor: 'hover:bg-amber-200',
   },
   admin: {
-    label: 'Administrateur',
+    label: 'Superviseur',
     icon: Shield,
     color: 'bg-blue-100 text-blue-700 border-blue-200',
     hoverColor: 'hover:bg-blue-200',
@@ -46,7 +46,7 @@ export const ROLE_ICON_ALT = {
   super_admin: ShieldCheck,
   admin: UserCog,
   parent: Heart,
-  player: Baby,
+  player: UserRound,
 } as const;
 
 // ========== COMPOSANT ==========

@@ -54,7 +54,7 @@ export default function AdminPaymentHistory() {
   const {
     intents,
     isLoading: intentsLoading,
-    fetchByObligation,
+    fetchIntents,
     verifyIntent,
   } = usePaymentIntentStore();
 
@@ -76,7 +76,7 @@ export default function AdminPaymentHistory() {
   // Charger les intentions si un obligationId est présent
   useEffect(() => {
     if (obligationId) {
-      fetchByObligation(Number(obligationId));
+      fetchIntents({obligationId: Number(obligationId)});
       setActiveTab('intents');
     }
   }, [obligationId]);
@@ -87,7 +87,7 @@ export default function AdminPaymentHistory() {
       toast.success(status === 'paid' ? 'Paiement validé' : 'Paiement rejeté');
       // Recharger la liste
       if (obligationId) {
-        await fetchByObligation(Number(obligationId));
+        await fetchIntents({obligationId: Number(obligationId)});
       }
     } catch (error) {
       toast.error('Erreur lors de la mise à jour');

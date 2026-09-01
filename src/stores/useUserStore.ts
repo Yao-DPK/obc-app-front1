@@ -83,6 +83,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   fetchUserById: async (id: number) => {
     try {
       const user = await userService.fetchUserById(id);
+      set({ user: user, isLoading: false });
       return user;
     } catch (error: any) {
       set({ error: error.message });

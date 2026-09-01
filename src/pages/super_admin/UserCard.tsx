@@ -115,7 +115,7 @@ export function UserCard({ user, className }: UserCardProps) {
                     className="h-9 w-9 text-muted-foreground hover:text-green-600 hover:bg-green-50"
                     asChild
                   >
-                    <Link to={`/admin/users/${user.id}/payments`}>
+                    <Link to={`/super-admin/users/${user.id}/payments`}>
                       <CreditCard className="h-4 w-4" />
                     </Link>
                   </Button>
