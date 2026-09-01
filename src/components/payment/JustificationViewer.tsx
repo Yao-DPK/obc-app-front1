@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Loader2, ExternalLink } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface JustificationViewerProps {
   open: boolean;
@@ -12,13 +12,17 @@ interface JustificationViewerProps {
 export function JustificationViewer({ open, onOpenChange, url }: JustificationViewerProps) {
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    console.log(`url: ${url}`);
+  }, [])
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>Justificatif de paiement</DialogTitle>
+          <DialogTitle>Visionneuse</DialogTitle>
         </DialogHeader>
-        <div className="relative w-full h-[500px] bg-gray-100 rounded-lg overflow-hidden">
+        <div className="relative w-full h-[50vh] bg-gray-100 rounded-lg overflow-hidden">
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />

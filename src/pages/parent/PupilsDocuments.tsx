@@ -15,6 +15,7 @@ import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { useGuardianStore } from '@/stores/useGuardianStore';
 import type { Document } from '@/types';
 import { documentService } from '@/lib/services/document.service';
+import { JustificationViewer } from '@/components/payment/JustificationViewer';
 
 // ============================================================
 // 1. INITIALISATION
@@ -32,7 +33,10 @@ export default function ChildDocumentsPage() {
     uploadDocument,
     isLoading,
   } = useDocumentStore();
-
+  
+  
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerUrl, setViewerUrl] = useState('');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -53,11 +57,11 @@ export default function ChildDocumentsPage() {
 
   const handleView = async (id: number) => {
       const data = await documentService.getSignedUrl(id);
-      console.log(`data: ${data.signedUrl}`);
-      window.open(data.signedUrl, '_blank')?.focus();
+      console.log(`data: ${JSON.stringify(data)}`);
+      setViewerUrl(data.signedUrl);
+      setViewerOpen(true);
     };
 
-  
 
   const handleDownload = async (doc: Document) => {
     try {
@@ -220,6 +224,13 @@ export default function ChildDocumentsPage() {
         </CardContent>
       </Card>
 
+      {/* ====== VIEWER ====== */}
+      <JustificationViewer
+        open={viewerOpen}
+        onOpenChange={setViewerOpen}
+        url={viewerUrl}
+      />
+
       {/* Modal d'upload */}
       <Dialog open={isUploadModalOpen} onOpenChange={setIsUploadModalOpen}>
         <DialogContent>
@@ -264,9 +275,14 @@ export default function ChildDocumentsPage() {
                 )}
               </Button>
             </div>
+            
           </div>
         </DialogContent>
       </Dialog>
+
+      
     </div>
+
+    
   );
 }

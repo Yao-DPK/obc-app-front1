@@ -11,6 +11,7 @@ import { documentService } from '@/lib/services/document.service';
 import { useAuth } from '@/stores/useAuth';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
+import { JustificationViewer } from '../payment/JustificationViewer';
 
 interface PlayerDocumentsProps {
   userId: number;
@@ -23,10 +24,13 @@ interface PlayerDocumentsProps {
 
 export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }: PlayerDocumentsProps) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerUrl, setViewerUrl] = useState('');
   const [uploadingDocType, setUploadingDocType] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
   const { documents, updateDocumentStatus, fetchDocuments } = useDocumentStore();
   const { docTypes } = useDocumentTypeStore();
+
   const { user } = useAuth();
 
 
@@ -97,8 +101,8 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
 
   const handleView = async (id: number) => {
       const data = await documentService.getSignedUrl(id);
-      console.log(`data: ${data.signedUrl}`);
-      window.open(data.signedUrl, '_blank')?.focus();
+      setViewerUrl(data.signedUrl);
+      setViewerOpen(true);
     };
 
   if (isLoading) {
@@ -212,6 +216,13 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
           );
         })}
       </div>
+
+      {/* ====== VIEWER ====== */}
+      <JustificationViewer
+        open={viewerOpen}
+        onOpenChange={setViewerOpen}
+        url={viewerUrl}
+      />
     </div>
   );
 }

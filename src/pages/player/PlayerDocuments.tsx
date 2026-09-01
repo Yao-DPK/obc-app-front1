@@ -19,6 +19,7 @@ import { useAuth } from '@/stores/useAuth';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { UploadDocumentModal } from './UploadModal';
 import { documentService } from '@/lib/services/document.service';
+import { JustificationViewer } from '@/components/payment/JustificationViewer';
 
 // ============================================================
 // 1. INITIALISATION
@@ -36,6 +37,8 @@ export default function PlayerDocumentsPage() {
     isLoading,
   } = useDocumentStore();
 
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerUrl, setViewerUrl] = useState('');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [docType, setDocType] = useState<string>("Photo");
@@ -55,9 +58,11 @@ export default function PlayerDocumentsPage() {
   // ============================================================
 
   const handleView = async (id: number) => {
-    const data = await documentService.getSignedUrl(id);
-    window.open(data.signedUrl, '_blank')?.focus();
-  };
+      const data = await documentService.getSignedUrl(id);
+      setViewerUrl(data.signedUrl);
+      setViewerOpen(true);
+    };
+
 
   const handleDelete = async (docId: number) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) return;
@@ -293,6 +298,13 @@ export default function PlayerDocumentsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* ====== VIEWER ====== */}
+      <JustificationViewer
+        open={viewerOpen}
+        onOpenChange={setViewerOpen}
+        url={viewerUrl}
+      />
 
       {/* ====== MODAL D'UPLOAD (responsive) ====== */}
         <UploadDocumentModal
