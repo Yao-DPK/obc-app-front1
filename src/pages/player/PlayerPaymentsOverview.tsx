@@ -23,6 +23,10 @@ export default function PlayerPaymentsOverview({obligations, userName, isLoading
     const [paymentOpen, setPaymentOpen] = useState(false);
     const [selectedObligation, setSelectedObligation] = useState<PaymentObligation>();
 
+    if(typeof handlePay != undefined){
+        console.log('Good')
+      }
+
     
     const handleOpenDialog = (obligation: PaymentObligation) => {
       setSelectedObligation(obligation);
@@ -70,7 +74,7 @@ export default function PlayerPaymentsOverview({obligations, userName, isLoading
         <PaymentDialog
               open={paymentOpen}
               onOpenChange={setPaymentOpen}
-              obligation={selectedObligation!}
+              obligation={selectedObligation!y}
               onPaymentSubmit={handlePaymentSubmit!}
             />
         </div>
