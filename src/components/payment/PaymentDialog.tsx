@@ -93,7 +93,7 @@ const STATUS_CONFIG: Record<PaymentStatus, { label: string; icon: React.ReactNod
 interface PaymentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  obligation: PaymentObligation;
+  obligation?: PaymentObligation;
   onPaymentSubmit: (data: { obligation: PaymentObligation, method: PaymentOperator; screenshot: File }) => Promise<void>;
 }
 
@@ -103,10 +103,10 @@ export function PaymentDialog({ open, onOpenChange, obligation, onPaymentSubmit 
   const [selectedMethod, setSelectedMethod] = useState<PaymentOperator>('mtn');
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<PaymentStatus>('pending');
+  const [status, setStatus] = useState<PaymentStatus>('pending'); 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const totalAmount = obligation.totalAmount ?? 0;
+  const totalAmount = obligation ? obligation.totalAmount : 0;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -143,7 +143,7 @@ export function PaymentDialog({ open, onOpenChange, obligation, onPaymentSubmit 
     }
     setIsSubmitting(true);
     try {
-      await onPaymentSubmit({ obligation, method: selectedMethod, screenshot });
+      await onPaymentSubmit({ obligation: obligation!, method: selectedMethod, screenshot });
       toast.success('Paiement soumis avec succès !');
       setStatus('pending');
       removeScreenshot();
@@ -182,7 +182,7 @@ export function PaymentDialog({ open, onOpenChange, obligation, onPaymentSubmit 
           <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-3 sm:p-4 text-center border border-primary/10">
             <p className="text-xs sm:text-sm text-muted-foreground">Montant à payer</p>
             <p className="text-2xl sm:text-3xl font-bold text-primary break-words">
-              {totalAmount.toLocaleString()} FCFA
+              {totalAmount!.toLocaleString()} FCFA
             </p>
           </div>
 

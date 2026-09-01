@@ -56,7 +56,7 @@ interface PaymentObligationCardProps {
   // Mode 1 : paiement direct (ex: via Kadev)
   onPay?: (obligation: PaymentObligation) => void;
   // Mode 2 : ouverture d'un dialogue de paiement (avec capture)
-  onSubmit?: () => void;
+  onSubmit?: (obligation: PaymentObligation) => void;
   className?: string;
   isPaying?: boolean;
   showEventName?: boolean;
@@ -87,7 +87,7 @@ export function PaymentObligationCard({
   const handlePay = () => {
     if (onSubmit) {
       // Si onSubmit est fournie, on l'utilise (mode dialogue)
-      onSubmit();
+      onSubmit(obligation);
     } else if (onPay) {
       // Sinon, on utilise onPay (mode direct)
       onPay(obligation);

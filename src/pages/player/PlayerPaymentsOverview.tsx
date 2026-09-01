@@ -21,11 +21,11 @@ interface PlayerPaymentsOverviewProps{
 export default function PlayerPaymentsOverview({obligations, userName, isLoading, isPaying, handlePay, handlePaymentSubmit}: PlayerPaymentsOverviewProps){
     
     const [paymentOpen, setPaymentOpen] = useState(false);
+    const [selectedObligation, setSelectedObligation] = useState<PaymentObligation>();
+
     
-    const handleOpenDialog = () => {
-      if(typeof handlePay !=undefined){
-        console.log('Good')
-      }
+    const handleOpenDialog = (obligation: PaymentObligation) => {
+      setSelectedObligation(obligation);
       setPaymentOpen(true);
     };
 
@@ -63,16 +63,16 @@ export default function PlayerPaymentsOverview({obligations, userName, isLoading
               isPaying={isPaying === ob.id}
               showEventName
             />
-
-            <PaymentDialog
-              open={paymentOpen}
-              onOpenChange={setPaymentOpen}
-              obligation={ob}
-              onPaymentSubmit={handlePaymentSubmit!}
-            />
             </>)
             
           ))}
+
+        <PaymentDialog
+              open={paymentOpen}
+              onOpenChange={setPaymentOpen}
+              obligation={selectedObligation!}
+              onPaymentSubmit={handlePaymentSubmit!}
+            />
         </div>
       )}
     </div>
