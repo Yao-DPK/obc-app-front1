@@ -25,8 +25,12 @@ export interface CreatePaymentEventDto {
   description?: string;
   amount: number;
   allowInstallments?: boolean;
-  startDate?: string;
-  endDate?: string;
+  startDate?: Date;
+  endDate?: Date;
+  isRecurringMonthly: boolean;
+  isApplicableAtRegistration: boolean;
+  excludedMonths: number[]; // [7, 8]
+  
 }
 
 export interface UpdatePaymentEventDto extends Partial<CreatePaymentEventDto> {
@@ -57,6 +61,9 @@ export interface CreatePaymentObligationDto {
   dueDate: string;
   description: string;
   status?: PaymentObligationStatus;
+  isRecurringMonthly: boolean;
+  isApplicableAtRegistration: boolean;
+  excludedMonths: number[]; // [7, 8]
 }
 
 export interface UpdatePaymentObligationDto extends Partial<CreatePaymentObligationDto> {}
@@ -107,6 +114,9 @@ export interface PaymentEvent {
   allowInstallments: boolean;
   startDate: string | null;
   endDate: string | null;
+  isRecurringMonthly: boolean;
+  isApplicableAtRegistration: boolean;
+  excludedMonths: number[]; // [7, 8]
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
