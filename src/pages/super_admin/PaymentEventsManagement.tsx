@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, CheckCircle, XCircle, Repeat, UserPlus } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +12,7 @@ import { fr } from 'date-fns/locale';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { PaymentEventModal } from './PaymentEventModal';
 import type { PaymentEvent } from '@/types/payment.type';
+import { MONTHS } from '@/lib/constants';
 
 export default function PaymentEventsManagement() {
   const { allEvents, fetchAllEvents, isLoadingEvents, updateEvent, deleteEvent } = usePaymentStore();
@@ -180,6 +181,27 @@ export default function PaymentEventsManagement() {
                           </Button>
                         </div>
                       </TableCell>
+                      <TableCell>
+                      <div className="flex flex-wrap items-center gap-1">
+                        {event.isRecurringMonthly && (
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 gap-1">
+                            <Repeat className="h-3 w-3" />
+                            Mensuel
+                          </Badge>
+                        )}
+                        {event.isApplicableAtRegistration && (
+                          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 gap-1">
+                            <UserPlus className="h-3 w-3" />
+                            Inscription
+                          </Badge>
+                        )}
+                        {event.isRecurringMonthly && event.excludedMonths?.length > 0 && (
+                          <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
+                            Exclus : {event.excludedMonths.map((m) => MONTHS.find((x) => x.value === m)?.short).join(', ')}
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
