@@ -3,7 +3,8 @@ import {
   Baby,
   LayoutDashboard, User, UserPlus, File, 
   type LucideIcon, CreditCard,
-  FileText, /* Calendar */
+  FileText,
+  CalendarCheck, /* Calendar */
 } from 'lucide-react';
 
 export interface NavItem {
@@ -31,6 +32,8 @@ const navItems: NavItem[] = [
   { to: '/super-admin/payment_events', label: 'Définition Paiements', icon: CreditCard, roles: ['super_admin'], section: 'admin' },
   { to: '/super-admin/document-types', label: 'Définition Documents', icon: File, roles: ['super_admin'], section: 'admin' },
   { to: '/super-admin/users', label: 'Gestion Utilisateurs', icon: File, roles: ['super_admin'], section: 'gestion' },  
+  { to: '/super-admin/jobs', label: 'Gestion Tâches', icon: CalendarCheck, roles: ['super_admin'], section: 'gestion' }, 
+
   //{ to: '/super-admin/events', label: 'Définition Evènements', icon: Calendar, roles: ['super_admin'], section: 'admin' }, 
   //{ to: '/super-admin/stats', label: 'Statistiques', icon: BarChart3, roles: ['super_admin'], section: 'admin' },
 

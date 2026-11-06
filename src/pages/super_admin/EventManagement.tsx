@@ -195,6 +195,7 @@ export default function EventManagement() {
                           </Button>
                         </div>
                       </TableCell>
+                      
                     </TableRow>
                   ))}
                 </TableBody>
