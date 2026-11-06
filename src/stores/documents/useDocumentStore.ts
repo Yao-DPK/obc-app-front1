@@ -11,7 +11,7 @@ interface DocumentStore {
   fetchDocuments: (params?: { userId?: number; playerIds?: number[] }) => Promise<void>;
   fetchPendingDocuments: (userId?: number) => Promise<void>;
   validateDocument: (documentId: number, validated: boolean, adminId?: number) => Promise<void>;
-  updateDocumentStatus: (documentId: number, status: DocumentStatus, adminId?: number) => Promise<void>;
+  updateDocumentStatus: (documentId: number, status: DocumentStatus) => Promise<void>;
   uploadDocument: (data: { userId: number; file: File; type: string; isObligatory?: boolean }) => Promise<Document>;
   deleteDocument: (id: number) => Promise<void>;
   clear: () => void;
@@ -35,8 +35,8 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
     }
   },
 
-  updateDocumentStatus: async (documentId: number, status: DocumentStatus, adminId?: number) => {
-  await api.patch(`/api/documents/${documentId}/status`, { status, adminId });
+  updateDocumentStatus: async (documentId: number, status: DocumentStatus) => {
+  await api.patch(`/api/documents/${documentId}/status`, { status: status});
   // puis rafraîchissez la liste des documents (fetchUserDocuments)
 },
 
