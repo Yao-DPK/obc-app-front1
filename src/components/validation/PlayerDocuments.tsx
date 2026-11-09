@@ -31,9 +31,6 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
   const { documents, updateDocumentStatus, fetchDocuments } = useDocumentStore();
   const { docTypes } = useDocumentTypeStore();
 
-  const { user } = useAuth();
-
-
   const uploadedDocs = documents.filter((doc) =>
     docTypes.some((dt) => dt.name === doc.type)
   );  
@@ -54,7 +51,7 @@ export function PlayerDocuments({ userId, isLoading, onSuccess, onValidChange }:
   const handleStatusChange = async (documentId: number, newStatus: DocumentStatus) => {
     setUpdatingId(documentId);
     try {
-      await updateDocumentStatus(documentId, newStatus, user?.id);
+      await updateDocumentStatus(documentId, newStatus);
       switch(newStatus){
         case DOCUMENT_STATUSES.VALID:
           toast.success(`Statut mis à jour : ${newStatus}`);
