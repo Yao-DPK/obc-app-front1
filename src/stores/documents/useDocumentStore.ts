@@ -37,7 +37,6 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
 
   updateDocumentStatus: async (documentId: number, status: DocumentStatus) => {
   await api.patch(`/api/documents/${documentId}/status`, { status: status});
-  // puis rafraîchissez la liste des documents (fetchUserDocuments)
 },
 
   validateDocument: async (documentId: number, validated: boolean, adminId?: number) => {
