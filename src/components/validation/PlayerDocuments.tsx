@@ -8,7 +8,6 @@ import { useDocumentStore } from '@/stores/documents/useDocumentStore';
 import { useEffect, useState } from 'react';
 import { Input } from '../ui/input';
 import { documentService } from '@/lib/services/document.service';
-import { useAuth } from '@/stores/useAuth';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useDocumentTypeStore } from '@/stores/documents/useDocumentTypeStore';
 import { JustificationViewer } from '../payment/JustificationViewer';

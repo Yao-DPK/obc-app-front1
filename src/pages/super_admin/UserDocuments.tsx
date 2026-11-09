@@ -18,7 +18,6 @@ import { DocumentTypeList } from '@/components/documents/DocumentTypeList';
 import type { Document, DocumentType } from '@/types';
 import { JustificationViewer } from '@/components/payment/JustificationViewer';
 import { documentService } from '@/lib/services/document.service';
-import { useAuth } from '@/stores/useAuth';
 
 export default function UserDocuments() {
   const { userId } = useParams<{ userId: string }>();
