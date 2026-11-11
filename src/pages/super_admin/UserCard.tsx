@@ -29,7 +29,7 @@ export function UserCard({ user, className }: UserCardProps) {
     if (user.registrationStatus === 'inscrit') return 'bg-green-100 text-green-700 border-green-200';
     if (user.registrationStatus === 'rejeté') return 'bg-red-100 text-red-700 border-red-200';
     if (user.registrationStatus === 'admin_inscrit') return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-    if (user.registrationStatus === 'parent_invité') return 'bg-blue-100 text-blue-700 border-blue-200';
+    if (user.registrationStatus === 'parent_invité' || 'parent_inscrit') return 'bg-blue-100 text-blue-700 border-blue-200';
     return 'bg-amber-100 text-amber-700 border-amber-200';
   };
 
@@ -59,14 +59,14 @@ export function UserCard({ user, className }: UserCardProps) {
           </Badge>
           <Badge variant="outline" className={getStatusColor()}>
             {user.registrationStatus === 'inscrit'
-              ? '✅ Inscrit'
+              ? 'Inscrit'
               : user.registrationStatus === 'rejeté'
-              ? '❌ Rejeté'
+              ? 'Rejeté'
               : user.registrationStatus === 'admin_inscrit'
-              ? '❌ Admin'
-              : user.registrationStatus === 'parent_invité'
-              ? '❌ Parent'
-              : '📋 Pré-inscrit'}
+              ? 'Admin'
+              : user.registrationStatus === 'parent_invité' || 'parent_inscrit'
+              ? 'Parent'
+              : 'Pré-inscrit'}
           </Badge>
         </div>
 
