@@ -30,6 +30,8 @@ export function UserCard({ user, className }: UserCardProps) {
     if (user.registrationStatus === 'rejeté') return 'bg-red-100 text-red-700 border-red-200';
     if (user.registrationStatus === 'admin_inscrit') return 'bg-yellow-100 text-yellow-700 border-yellow-200';
     if (user.registrationStatus === 'parent_invité' || 'parent_inscrit') return 'bg-blue-100 text-blue-700 border-blue-200';
+    if (user.registrationStatus === 'pre_inscrit') return 'bg-amber-100 text-amber-700 border-amber-200';
+
     return 'bg-amber-100 text-amber-700 border-amber-200';
   };
 
@@ -66,6 +68,8 @@ export function UserCard({ user, className }: UserCardProps) {
               ? 'Admin'
               : user.registrationStatus === 'parent_invité' || 'parent_inscrit'
               ? 'Parent'
+              : user.registrationStatus === 'pre_inscrit'
+              ? 'Pré-inscrit'
               : 'Pré-inscrit'}
           </Badge>
         </div>
