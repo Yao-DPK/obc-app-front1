@@ -7,7 +7,7 @@ interface DocumentTypeStore {
   isLoading: boolean;
   error: string | null;
 
-  fetchDocTypes: ({id, name, names, includeInactive}: {id?: string, name?: string, names?: string[], includeInactive?: boolean}) => Promise<void>;
+  fetchDocTypes: ({id, name, names, includeInactive}: {id?: string, name?: string, names?: string[], isObligatory?: boolean, includeInactive?: boolean}) => Promise<void>;
   createDocType: (data: CreateDocumentTypeDto) => Promise<DocumentType>;
   updateDocType: (id: number, data: UpdateDocumentTypeDto) => Promise<DocumentType>;
   deleteDocType: (id: number) => Promise<void>;
@@ -20,10 +20,10 @@ export const useDocumentTypeStore = create<DocumentTypeStore>((set, get) => ({
   isLoading: false,
   error: null,
 
-  fetchDocTypes: async ({id, name, names, includeInactive}: {id?: string, name?: string, names?: string[], includeInactive?: boolean}) => {
+  fetchDocTypes: async ({id, name, names, isObligatory, includeInactive}: {id?: string, name?: string, names?: string[], isObligatory?: boolean, includeInactive?: boolean}) => {
     set({ isLoading: true, error: null });
     try {
-      const docTypes = await documentService.getDocumentTypes({id, name, names, includeInactive});
+      const docTypes = await documentService.getDocumentTypes({id, name, names, isObligatory, includeInactive});
       set({ docTypes: docTypes, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });

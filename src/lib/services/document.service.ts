@@ -9,6 +9,7 @@ export interface GetDocumentTypesOptions {
   id?: string;
   name?: string;
   names?: string[];
+  isObligatory?: boolean;
   includeInactive?: boolean; // Optionnel, par défaut false
 }
 
@@ -44,13 +45,14 @@ export const documentService = {
 
   async getDocumentTypes(options: GetDocumentTypesOptions = {}): Promise<DocumentType[]> {
   // Destructuration avec une valeur par défaut pour includeInactive
-  const { id, name, names, includeInactive = false } = options;
+  const { id, name, names, isObligatory, includeInactive = false } = options;
 
   const { data } = await api.get('/api/documents/types', {
     params: { 
       id, 
       name, 
       names, 
+      isObligatory,
       includeInactive 
     },
   });
