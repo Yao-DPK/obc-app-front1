@@ -1,6 +1,6 @@
 
 export type UserRole = 'parent' | 'player' | 'admin' | 'super_admin';
-export type RegistrationStatus = 'pre_inscrit' | 'inscrit' | 'actif' | 'suspendu' | 'parent_invité' | 'validé' | 'rejeté' | 'admin_actif' ;
+export type RegistrationStatus = 'pre_inscrit' | 'inscrit' | 'actif' | 'suspendu' | 'parent_invité' | 'validé' | 'rejeté' | 'admin_inscrit' ;
 
 export interface NotificationPreferences {
   email: boolean;
@@ -16,7 +16,7 @@ export interface AttestationData {
   signatureUrl: string;
 }
 
-export interface User {
+export interface User { 
   playerDetails: any;
   id: number;
   email: string;
