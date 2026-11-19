@@ -72,7 +72,7 @@ export const updateProfileSchema = z.object({
     sms: z.boolean().optional(),
     push: z.boolean().optional(),
   }).optional(),
-  registrationStatus: z.enum(['pre_inscrit', 'inscrit', 'rejeté', 'suspendu', 'parent_invité', 'parent_inscrit', 'admin_actif', 'actif', 'validé']).optional(),
+  registrationStatus: z.enum(['pre_inscrit', 'inscrit', 'rejeté', 'suspendu', 'parent_invité', 'parent_inscrit', 'admin_inscrit', 'actif', 'validé']).optional(),
 
   // Champs joueur (uniquement pour les joueurs)
   birthDate: z.string().optional(),
