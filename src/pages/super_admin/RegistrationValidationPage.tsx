@@ -39,7 +39,7 @@ export function UserValidationPage({mode}: UserValidationPageProps) {
       fetchUserByIdAndRole(Number(userId), 'player');
       fetchDocuments({userId: Number(userId)}); 
       fetchObligations({playerIds: [Number(userId)]});
-      fetchDocTypes({names: requiredDocs});
+      fetchDocTypes({isObligatory: true});
 
       console.log(`Payments: ${JSON.stringify(obligations)}`)
     }
